@@ -45,8 +45,8 @@ class MyContents  {
         this.candleDisplacement = new THREE.Vector3(0, 2, 0)
 
         // plane related attributes
-        this.diffusePlaneColor = "#00ffff"
-        this.specularPlaneColor = "#777777"
+        this.diffusePlaneColor = "#9a9996"
+        this.specularPlaneColor = "#ffffff"
         this.planeShininess = 30
         this.planeMaterial = new THREE.MeshPhongMaterial({ color: this.diffusePlaneColor, 
             specular: this.diffusePlaneColor, emissive: "#000000", shininess: this.planeShininess })
@@ -122,13 +122,13 @@ class MyContents  {
 
         let plane4 = new THREE.PlaneGeometry(10, 10);
         this.planeMesh4 = new THREE.Mesh(plane4, this.planeMaterial);
-        this.planeMesh4.rotation.y = -Math.PI;
+        this.planeMesh4.rotation.y = Math.PI;
         this.planeMesh4.position.y = 5;
         this.planeMesh4.position.z = -5;
 
         let plane5 = new THREE.PlaneGeometry(10, 10);
         this.planeMesh5 = new THREE.Mesh(plane5, this.planeMaterial);
-        this.planeMesh5.rotation.y = -Math.PI / 2;
+        this.planeMesh5.rotation.y = Math.PI / 2;
         this.planeMesh5.position.y = 5;
         this.planeMesh5.position.x = 5;
 
