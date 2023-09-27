@@ -32,7 +32,7 @@ class MyContents  {
             specular: this.diffusePlaneColor, emissive: "#000000", shininess: this.planeShininess
         })
         
-                // cake related attributes
+        // cake related attributes
         this.cakeMesh = null
         this.cakeMeshSize = 1.0
         this.cakeEnabled = true
@@ -70,23 +70,23 @@ class MyContents  {
         this.tableMesh = new THREE.Mesh( table, tableMaterial );
         this.tableMesh.rotation.x = -Math.PI / 2;
 
-        // add the table to the scene
-        this.app.scene.add( this.tableMesh );
-
         // Create each leg Mesh with basic material
         let leg = new THREE.CylinderGeometry( 0.1, 0.1, 1, 8);
         for (let i = 0; i < 4; i++) {
-            this.LegsMesh[i] = new THREE.Mesh( leg, legMaterial ); 
-            this.LegsMesh[i].position.x = (i % 2) ? -0.4 : 0.4;
-            this.LegsMesh[i].position.z = (i < 2) ? -0.6 : 0.6;
-            this.LegsMesh[i].position.y = -0.5;
-
             // add each leg(child) to the table(parent)
-            this.tableMesh.add(this.LegsMesh[i]);
+            this.tableMesh.add(new THREE.Mesh( leg, legMaterial ));
+        }
 
-            // add each leg to the scene
-            this.app.scene.add(this.LegsMesh[i]);
-        } 
+        // adjust the legs position
+        for (let i = 0; i < 4; i++) {
+            this.tableMesh.children[i].rotation.x = -Math.PI / 2;
+            this.tableMesh.children[i].position.z -= 0.5;
+            this.tableMesh.children[i].position.x = (i % 2) ? -0.4 : 0.4;
+            this.tableMesh.children[i].position.y = (i < 2) ? -0.6 : 0.6;
+        }
+
+        // add the table to the scene
+        this.app.scene.add( this.tableMesh );
     }
 
     /**
@@ -101,9 +101,9 @@ class MyContents  {
             shininess: 90
         })
 
-        let cake = new THREE.CylinderGeometry(this.cakeMeshSize, this.cakeMeshSize, this.cakeMeshSize, 32, 1, false, 0, 3*Math.PI/2);
+        let cake = new THREE.CylinderGeometry(0.1, 0.1, 0.2, 32, 1, false, 0, 3*Math.PI/2);
         this.cakeMesh = new THREE.Mesh(cake, cakeMaterial);
-        this.cakeMesh.position.y = this.cakeDisplacement.y;
+        //this.cakeMesh.position.y = ;
         this.app.scene.add(this.cakeMesh);
 
     }
@@ -192,11 +192,8 @@ class MyContents  {
 
         // build the table mesh
         this.buildTable();
-        // adjust the table position
-        this.tableMesh.position.y += 1;
-        for (let i = 0; i < this.LegsMesh.length; i++) {
-            this.LegsMesh[i].position.y += 1
-        }
+
+        this.tableMesh.position.x += 1;
 
         // build the plate mesh
         let plateGeometry = new THREE.CylinderGeometry( 0.2, 0.4, 0.3);
@@ -207,7 +204,7 @@ class MyContents  {
         // adjust the plate position
         this.plateMesh.position.y = 1.1;
 
-        this.buildBox()
+        //this.buildBox()
         this.buildWalls()
         this.buildCake()
         this.buildCandle()
