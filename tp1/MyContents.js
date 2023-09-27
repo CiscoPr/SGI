@@ -29,6 +29,29 @@ class MyContents  {
         this.specularPlaneColor = "#777777"
         this.planeShininess = 30
         this.planeMaterial = new THREE.MeshPhongMaterial({ color: this.diffusePlaneColor, 
+            specular: this.diffusePlaneColor, emissive: "#000000", shininess: this.planeShininess
+        })
+        
+                // cake related attributes
+        this.cakeMesh = null
+        this.cakeMeshSize = 1.0
+        this.cakeEnabled = true
+        this.lastCakeEnabled = null
+        this.cakeDisplacement = new THREE.Vector3(0, 1, 0)
+
+        // candle related attributes
+        this.candleMesh = null
+        this.candleMeshSize = 1.0
+        this.candleMeshRadius = 0.1
+        this.candleEnabled = true
+        this.lastCandleEnabled = null
+        this.candleDisplacement = new THREE.Vector3(0, 2, 0)
+
+        // plane related attributes
+        this.diffusePlaneColor = "#9a9996"
+        this.specularPlaneColor = "#ffffff"
+        this.planeShininess = 30
+        this.planeMaterial = new THREE.MeshPhongMaterial({ color: this.diffusePlaneColor, 
             specular: this.diffusePlaneColor, emissive: "#000000", shininess: this.planeShininess })
     }
 
@@ -64,6 +87,81 @@ class MyContents  {
             // add each leg to the scene
             this.app.scene.add(this.LegsMesh[i]);
         } 
+    }
+
+    /**
+     * builds the cake cylinder with a triangular piece missing
+     */
+
+    buildCake() {
+        let cakeMaterial = new THREE.MeshPhongMaterial({
+            color: "#63452c",
+            specular: "#cdab8f",
+            emissive: "#000000",
+            shininess: 90
+        })
+
+        let cake = new THREE.CylinderGeometry(this.cakeMeshSize, this.cakeMeshSize, this.cakeMeshSize, 32, 1, false, 0, 3*Math.PI/2);
+        this.cakeMesh = new THREE.Mesh(cake, cakeMaterial);
+        this.cakeMesh.position.y = this.cakeDisplacement.y;
+        this.app.scene.add(this.cakeMesh);
+
+    }
+
+    /**
+     * builds the candle with is a cylinder
+     */
+    buildCandle() {
+        let candleMaterial = new THREE.MeshPhongMaterial({
+            color: "#9a9996",
+            specular: "#ffffff",
+            emissive: "#000000",
+            shininess: 90
+        })
+
+        let candle = new THREE.CylinderGeometry(this.candleMeshRadius, this.candleMeshRadius, this.candleMeshSize);
+        this.candleMesh = new THREE.Mesh(candle, candleMaterial);
+        this.candleMesh.position.y = this.candleDisplacement.y;
+        this.app.scene.add(this.candleMesh);
+    }
+
+    /**
+     * builds the walls group
+     */
+    buildWalls() {
+        let plane2 = new THREE.PlaneGeometry(10, 10);
+        this.planeMesh2 = new THREE.Mesh(plane2, this.planeMaterial);
+        this.planeMesh2.rotation.y = Math.PI;
+        this.planeMesh2.position.y = 5;
+        this.planeMesh2.position.z = 5;
+        
+
+        let plane3 = new THREE.PlaneGeometry(10, 10);
+        this.planeMesh3 = new THREE.Mesh(plane3, this.planeMaterial);
+        this.planeMesh3.rotation.y = Math.PI / 2;
+        this.planeMesh3.position.y = 5;
+        this.planeMesh3.position.x = -5;
+
+
+        let plane4 = new THREE.PlaneGeometry(10, 10);
+        this.planeMesh4 = new THREE.Mesh(plane4, this.planeMaterial);
+        this.planeMesh4.rotation.y = Math.PI;
+        this.planeMesh4.position.y = 5;
+        this.planeMesh4.position.z = -5;
+
+        let plane5 = new THREE.PlaneGeometry(10, 10);
+        this.planeMesh5 = new THREE.Mesh(plane5, this.planeMaterial);
+        this.planeMesh5.rotation.y = Math.PI / 2;
+        this.planeMesh5.position.y = 5;
+        this.planeMesh5.position.x = 5;
+
+        const walls = new THREE.Group();
+        walls.add(this.planeMesh2);
+        walls.add(this.planeMesh3);
+        walls.add(this.planeMesh4);
+        walls.add(this.planeMesh5);
+
+        this.app.scene.add(walls);
     }
 
     /**
@@ -108,7 +206,11 @@ class MyContents  {
         
         // adjust the plate position
         this.plateMesh.position.y = 1.1;
-        
+
+        this.buildBox()
+        this.buildWalls()
+        this.buildCake()
+        this.buildCandle()
         
         // Create a Plane Mesh with basic material
         
