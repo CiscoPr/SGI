@@ -14,12 +14,15 @@ class MyContents  {
         this.app = app
         this.axis = null
 
-        // box related attributes
-        this.boxMesh = null
-        this.boxMeshSize = 1.0
-        this.boxEnabled = true
-        this.lastBoxEnabled = null
-        this.boxDisplacement = new THREE.Vector3(0,2,0)
+        // table related attributes
+        this.tableMesh = null
+        this.LegsMesh = new Array(4)
+
+        // plate related attributes
+        this.plateMesh = null
+        this.plateMaterial = new THREE.MeshPhongMaterial({ color: "#ffff77", 
+        specular: "#000000", emissive: "#000000", shininess: 90 })
+
 
         // plane related attributes
         this.diffusePlaneColor = "#00ffff"
@@ -30,17 +33,37 @@ class MyContents  {
     }
 
     /**
-     * builds the box mesh with material assigned
+     * builds the table mesh with material assigned
      */
-    buildBox() {    
-        let boxMaterial = new THREE.MeshPhongMaterial({ color: "#ffff77", 
+    buildTable() {    
+        let tableMaterial = new THREE.MeshPhongMaterial({ color: "#ffff77", 
         specular: "#000000", emissive: "#000000", shininess: 90 })
 
-        // Create a Cube Mesh with basic material
-        let box = new THREE.BoxGeometry(  this.boxMeshSize,  this.boxMeshSize,  this.boxMeshSize );
-        this.boxMesh = new THREE.Mesh( box, boxMaterial );
-        this.boxMesh.rotation.x = -Math.PI / 2;
-        this.boxMesh.position.y = this.boxDisplacement.y;
+        let legMaterial = new THREE.MeshPhongMaterial({ color: "#ffff77",
+        specular: "#000000", emissive: "#000000", shininess: 90 })
+
+        // Create a table Mesh with basic material
+        let table = new THREE.BoxGeometry( 1, 1.5, 0.1);
+        this.tableMesh = new THREE.Mesh( table, tableMaterial );
+        this.tableMesh.rotation.x = -Math.PI / 2;
+
+        // add the table to the scene
+        this.app.scene.add( this.tableMesh );
+
+        // Create each leg Mesh with basic material
+        let leg = new THREE.CylinderGeometry( 0.1, 0.1, 1, 8);
+        for (let i = 0; i < 4; i++) {
+            this.LegsMesh[i] = new THREE.Mesh( leg, legMaterial ); 
+            this.LegsMesh[i].position.x = (i % 2) ? -0.4 : 0.4;
+            this.LegsMesh[i].position.z = (i < 2) ? -0.6 : 0.6;
+            this.LegsMesh[i].position.y = -0.5;
+
+            // add each leg(child) to the table(parent)
+            this.tableMesh.add(this.LegsMesh[i]);
+
+            // add each leg to the scene
+            this.app.scene.add(this.LegsMesh[i]);
+        } 
     }
 
     /**
@@ -69,7 +92,23 @@ class MyContents  {
         const ambientLight = new THREE.AmbientLight( 0x555555 );
         this.app.scene.add( ambientLight );
 
-        this.buildBox()
+        // build the table mesh
+        this.buildTable();
+        // adjust the table position
+        this.tableMesh.position.y += 1;
+        for (let i = 0; i < this.LegsMesh.length; i++) {
+            this.LegsMesh[i].position.y += 1
+        }
+
+        // build the plate mesh
+        let plateGeometry = new THREE.CylinderGeometry( 0.2, 0.4, 0.3);
+        this.plateMesh = new THREE.Mesh( plateGeometry, this.plateMaterial );
+        this.plateMesh.rotation.x = -Math.PI;
+        this.app.scene.add( this.plateMesh );
+        
+        // adjust the plate position
+        this.plateMesh.position.y = 1.1;
+        
         
         // Create a Plane Mesh with basic material
         
@@ -109,21 +148,21 @@ class MyContents  {
      * rebuilds the box mesh if required
      * this method is called from the gui interface
      */
-    rebuildBox() {
+    /* rebuildBox() {
         // remove boxMesh if exists
         if (this.boxMesh !== undefined && this.boxMesh !== null) {  
             this.app.scene.remove(this.boxMesh)
         }
         this.buildBox();
         this.lastBoxEnabled = null
-    }
+    } */
     
     /**
      * updates the box mesh if required
      * this method is called from the render method of the app
      * updates are trigered by boxEnabled property changes
      */
-    updateBoxIfRequired() {
+    /* updateBoxIfRequired() {
         if (this.boxEnabled !== this.lastBoxEnabled) {
             this.lastBoxEnabled = this.boxEnabled
             if (this.boxEnabled) {
@@ -133,7 +172,7 @@ class MyContents  {
                 this.app.scene.remove(this.boxMesh)
             }
         }
-    }
+    } */
 
     /**
      * updates the contents
@@ -142,12 +181,12 @@ class MyContents  {
      */
     update() {
         // check if box mesh needs to be updated
-        this.updateBoxIfRequired()
+        //this.updateBoxIfRequired()
 
         // sets the box mesh position based on the displacement vector
-        this.boxMesh.position.x = this.boxDisplacement.x
+        /* this.boxMesh.position.x = this.boxDisplacement.x
         this.boxMesh.position.y = this.boxDisplacement.y
-        this.boxMesh.position.z = this.boxDisplacement.z
+        this.boxMesh.position.z = this.boxDisplacement.z */
         
     }
 
