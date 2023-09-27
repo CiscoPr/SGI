@@ -16,7 +16,6 @@ class MyContents  {
 
         // table related attributes
         this.tableMesh = null
-        this.LegsMesh = new Array(4)
 
         // plate related attributes
         this.plateMesh = null
@@ -68,25 +67,32 @@ class MyContents  {
         // Create a table Mesh with basic material
         let table = new THREE.BoxGeometry( 1, 1.5, 0.1);
         this.tableMesh = new THREE.Mesh( table, tableMaterial );
-        this.tableMesh.rotation.x = -Math.PI / 2;
 
         // Create each leg Mesh with basic material
-        let leg = new THREE.CylinderGeometry( 0.1, 0.1, 1, 8);
+        const leg = new THREE.CylinderGeometry( 0.1, 0.1, 1, 8);
         for (let i = 0; i < 4; i++) {
-            // add each leg(child) to the table(parent)
-            this.tableMesh.add(new THREE.Mesh( leg, legMaterial ));
+            let legMesh = new THREE.Mesh( leg, legMaterial );
+            legMesh.rotation.x = -Math.PI / 2;
+            legMesh.position.x = (i % 2) ? -0.4 : 0.4;
+            legMesh.position.y = (i < 2) ? -0.6 : 0.6;
+            legMesh.position.z = -0.5;
+
+            this.tableMesh.add(legMesh);
         }
 
-        // adjust the legs position
-        for (let i = 0; i < 4; i++) {
-            this.tableMesh.children[i].rotation.x = -Math.PI / 2;
-            this.tableMesh.children[i].position.z -= 0.5;
-            this.tableMesh.children[i].position.x = (i % 2) ? -0.4 : 0.4;
-            this.tableMesh.children[i].position.y = (i < 2) ? -0.6 : 0.6;
-        }
+        // adjust the table position
+        this.tableMesh.rotation.x = -Math.PI / 2;
 
         // add the table to the scene
         this.app.scene.add( this.tableMesh );
+    }
+
+    buildPlate() {
+        // build the plate mesh
+        let plateGeometry = new THREE.CylinderGeometry( 0.2, 0.4, 0.3);
+        this.plateMesh = new THREE.Mesh( plateGeometry, this.plateMaterial );
+        this.plateMesh.rotation.x = -Math.PI;
+        this.app.scene.add( this.plateMesh );
     }
 
     /**
@@ -190,24 +196,19 @@ class MyContents  {
         const ambientLight = new THREE.AmbientLight( 0x555555 );
         this.app.scene.add( ambientLight );
 
-        // build the table mesh
+        // build objects scenario
         this.buildTable();
+        this.buildPlate();
+        this.buildWalls();
+        this.buildCake();
+        this.buildCandle();
 
-        this.tableMesh.position.x += 1;
+        // adjust the table position
+        this.tableMesh.position.y += 1;
 
-        // build the plate mesh
-        let plateGeometry = new THREE.CylinderGeometry( 0.2, 0.4, 0.3);
-        this.plateMesh = new THREE.Mesh( plateGeometry, this.plateMaterial );
-        this.plateMesh.rotation.x = -Math.PI;
-        this.app.scene.add( this.plateMesh );
-        
         // adjust the plate position
         this.plateMesh.position.y = 1.1;
 
-        //this.buildBox()
-        this.buildWalls()
-        this.buildCake()
-        this.buildCandle()
         
         // Create a Plane Mesh with basic material
         
