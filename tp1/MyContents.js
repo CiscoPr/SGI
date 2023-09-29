@@ -19,9 +19,6 @@ class MyContents  {
 
         // plate related attributes
         this.plateMesh = null
-        this.plateMaterial = new THREE.MeshPhongMaterial({ color: "#ffff77", 
-        specular: "#000000", emissive: "#000000", shininess: 90 })
-
 
         // plane related attributes
         this.diffusePlaneColor = "#00ffff"
@@ -33,18 +30,9 @@ class MyContents  {
         
         // cake related attributes
         this.cakeMesh = null
-        this.cakeMeshSize = 1.0
-        this.cakeEnabled = true
-        this.lastCakeEnabled = null
-        this.cakeDisplacement = new THREE.Vector3(0, 1, 0)
 
         // candle related attributes
         this.candleMesh = null
-        this.candleMeshSize = 1.0
-        this.candleMeshRadius = 0.1
-        this.candleEnabled = true
-        this.lastCandleEnabled = null
-        this.candleDisplacement = new THREE.Vector3(0, 2, 0)
 
         // plane related attributes
         this.diffusePlaneColor = "#9a9996"
@@ -58,23 +46,20 @@ class MyContents  {
      * builds the table mesh with material assigned
      */
     buildTable() {    
-        let tableMaterial = new THREE.MeshPhongMaterial({ color: "#ffff77", 
-        specular: "#000000", emissive: "#000000", shininess: 90 })
-
-        let legMaterial = new THREE.MeshPhongMaterial({ color: "#ffff77",
-        specular: "#000000", emissive: "#000000", shininess: 90 })
+        let tableMaterial = new THREE.MeshPhongMaterial({ color: "#684303", 
+        specular: "#000000", emissive: "#000000", shininess: 90 });
 
         // Create a table Mesh with basic material
-        let table = new THREE.BoxGeometry( 1, 1.5, 0.1);
+        let table = new THREE.BoxGeometry( 1.5, 2.0, 0.1);
         this.tableMesh = new THREE.Mesh( table, tableMaterial );
 
         // Create each leg Mesh with basic material
         const leg = new THREE.CylinderGeometry( 0.1, 0.1, 1, 8);
         for (let i = 0; i < 4; i++) {
-            let legMesh = new THREE.Mesh( leg, legMaterial );
+            let legMesh = new THREE.Mesh( leg, tableMaterial );
             legMesh.rotation.x = -Math.PI / 2;
-            legMesh.position.x = (i % 2) ? -0.4 : 0.4;
-            legMesh.position.y = (i < 2) ? -0.6 : 0.6;
+            legMesh.position.x = (i % 2) ? -0.6 : 0.6;
+            legMesh.position.y = (i < 2) ? -0.8 : 0.8;
             legMesh.position.z = -0.5;
 
             this.tableMesh.add(legMesh);
@@ -88,10 +73,14 @@ class MyContents  {
     }
 
     buildPlate() {
+        let plateMaterial = new THREE.MeshPhongMaterial({ color: "#ffffff", 
+        specular: "#000000", emissive: "#000000", shininess: 90 });
+
         // build the plate mesh
-        let plateGeometry = new THREE.CylinderGeometry( 0.2, 0.4, 0.3);
-        this.plateMesh = new THREE.Mesh( plateGeometry, this.plateMaterial );
-        this.plateMesh.rotation.x = -Math.PI;
+        let plateGeometry = new THREE.CylinderGeometry( 0.35, 0.25, 0.1);
+        this.plateMesh = new THREE.Mesh( plateGeometry, plateMaterial );
+
+        // add plate to the scene
         this.app.scene.add( this.plateMesh );
     }
 
@@ -100,34 +89,68 @@ class MyContents  {
      */
 
     buildCake() {
-        let cakeMaterial = new THREE.MeshPhongMaterial({
-            color: "#63452c",
-            specular: "#cdab8f",
-            emissive: "#000000",
-            shininess: 90
-        })
+        let cakeMaterial = new THREE.MeshPhongMaterial({ color: "#63452c",
+            specular: "#cdab8f", emissive: "#000000", shininess: 90 });
 
-        let cake = new THREE.CylinderGeometry(0.1, 0.1, 0.2, 32, 1, false, 0, 3*Math.PI/2);
+        // build the cake mesh
+        let cake = new THREE.CylinderGeometry(0.3, 0.3, 0.2, 32, 1, false, 0, 7*Math.PI/4);
         this.cakeMesh = new THREE.Mesh(cake, cakeMaterial);
-        //this.cakeMesh.position.y = ;
-        this.app.scene.add(this.cakeMesh);
+        
+        // create child geometry
+        let plane = new THREE.PlaneGeometry(0.2, 0.6);
+        
+        let planeMesh1 = new THREE.Mesh(plane, cakeMaterial);
+        planeMesh1.rotation.z = Math.PI / 2;
+        planeMesh1.rotation.y = Math.PI / 4;
+        
+        let planeMesh2 = new THREE.Mesh(plane, cakeMaterial);
+        planeMesh2.rotation.z = Math.PI / 2;
+        planeMesh2.rotation.y = -Math.PI / 2;
 
+        // add plane to the cake mesh
+        this.cakeMesh.add(planeMesh1);
+        this.cakeMesh.add(planeMesh2);
+        
+        // add the cake to the scene
+        this.app.scene.add(this.cakeMesh);
     }
 
     /**
      * builds the candle with is a cylinder
      */
     buildCandle() {
-        let candleMaterial = new THREE.MeshPhongMaterial({
-            color: "#9a9996",
-            specular: "#ffffff",
-            emissive: "#000000",
-            shininess: 90
-        })
+        let flameMaterial = new THREE.MeshPhongMaterial({ color: "#ffff77", 
+        specular: "#ff0000", emissive: "#ff0000", shininess: 90 });
 
-        let candle = new THREE.CylinderGeometry(this.candleMeshRadius, this.candleMeshRadius, this.candleMeshSize);
+        let wickMaterial = new THREE.MeshPhongMaterial({ color: "#ffffff",
+        specular: "#ff0000", emissive: "#ffffff", shininess: 90 });
+
+        let candleMaterial = new THREE.MeshPhongMaterial({ color: "#8ac6ff",
+        specular: "#000000", emissive: "#8ac6ff", shininess: 90 });
+
+        // build the flame mesh
+        let flame = new THREE.CapsuleGeometry( 0.016, 0.026);
+        let flameMesh = new THREE.Mesh(flame, flameMaterial);
+        flameMesh.position.y = 0.05;
+
+        // build the wick mesh
+        let wick = new THREE.CylinderGeometry( 0.005, 0.005, 0.13);
+        let wickMesh = new THREE.Mesh(wick, wickMaterial);
+
+        // add flame to the wick
+        wickMesh.add(flameMesh);
+
+        // adjust the wick position
+        wickMesh.position.y = 0.16;
+
+        // build the candle mesh
+        let candle = new THREE.CylinderGeometry( 0.016, 0.016, 0.3);
         this.candleMesh = new THREE.Mesh(candle, candleMaterial);
-        this.candleMesh.position.y = this.candleDisplacement.y;
+
+        // add wick to the candle
+        this.candleMesh.add(wickMesh);
+
+        // add flameMesh to the scene
         this.app.scene.add(this.candleMesh);
     }
 
@@ -208,6 +231,14 @@ class MyContents  {
 
         // adjust the plate position
         this.plateMesh.position.y = 1.1;
+
+        // adjust the cake position
+        this.cakeMesh.position.y = 1.2;
+
+        // adjust the candle position
+        this.candleMesh.position.y = 1.3;
+        this.candleMesh.position.x = 0.1;
+        this.candleMesh.position.z = -0.1;
 
         
         // Create a Plane Mesh with basic material
