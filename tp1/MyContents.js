@@ -34,12 +34,8 @@ class MyContents  {
         // candle related attributes
         this.candleMesh = null
 
-        // plane related attributes
-        this.diffusePlaneColor = "#9a9996"
-        this.specularPlaneColor = "#ffffff"
-        this.planeShininess = 30
-        this.planeMaterial = new THREE.MeshPhongMaterial({ color: this.diffusePlaneColor, 
-            specular: this.diffusePlaneColor, emissive: "#000000", shininess: this.planeShininess })
+        // walls related attributes
+        this.walls = null
     }
 
     /**
@@ -158,39 +154,42 @@ class MyContents  {
      * builds the walls group
      */
     buildWalls() {
-        let plane2 = new THREE.PlaneGeometry(10, 10);
-        this.planeMesh2 = new THREE.Mesh(plane2, this.planeMaterial);
-        this.planeMesh2.rotation.y = Math.PI;
-        this.planeMesh2.position.y = 5;
-        this.planeMesh2.position.z = 5;
+         // wall related attributes
+         let planeMaterial = new THREE.MeshPhongMaterial({ color: "#9a9996", 
+             specular: "#ffffff", emissive: "#000000", shininess: 30 })
+
+        let plane1 = new THREE.PlaneGeometry(10, 10);
+        let planeMesh1 = new THREE.Mesh(plane1, planeMaterial);
+        planeMesh1.rotation.y = Math.PI;
+        planeMesh1.position.y = 5;
+        planeMesh1.position.z = 5;
         
 
-        let plane3 = new THREE.PlaneGeometry(10, 10);
-        this.planeMesh3 = new THREE.Mesh(plane3, this.planeMaterial);
-        this.planeMesh3.rotation.y = Math.PI / 2;
-        this.planeMesh3.position.y = 5;
-        this.planeMesh3.position.x = -5;
+        let plane2 = new THREE.PlaneGeometry(10, 10);
+        let planeMesh2 = new THREE.Mesh(plane2, planeMaterial);
+        planeMesh2.rotation.y = Math.PI / 2;
+        planeMesh2.position.y = 5;
+        planeMesh2.position.x = -5;
 
+
+        let plane3 = new THREE.PlaneGeometry(10, 10);
+        let planeMesh3 = new THREE.Mesh(plane3, planeMaterial);
+        planeMesh3.position.y = 5;
+        planeMesh3.position.z = -5;
 
         let plane4 = new THREE.PlaneGeometry(10, 10);
-        this.planeMesh4 = new THREE.Mesh(plane4, this.planeMaterial);
-        this.planeMesh4.rotation.y = Math.PI;
-        this.planeMesh4.position.y = 5;
-        this.planeMesh4.position.z = -5;
+        let planeMesh4 = new THREE.Mesh(plane4, planeMaterial);
+        planeMesh4.rotation.y = -Math.PI / 2;
+        planeMesh4.position.y = 5;
+        planeMesh4.position.x = 5;
 
-        let plane5 = new THREE.PlaneGeometry(10, 10);
-        this.planeMesh5 = new THREE.Mesh(plane5, this.planeMaterial);
-        this.planeMesh5.rotation.y = Math.PI / 2;
-        this.planeMesh5.position.y = 5;
-        this.planeMesh5.position.x = 5;
+        this.walls = new THREE.Group();
+        this.walls.add(planeMesh1);
+        this.walls.add(planeMesh2);
+        this.walls.add(planeMesh3);
+        this.walls.add(planeMesh4);
 
-        const walls = new THREE.Group();
-        walls.add(this.planeMesh2);
-        walls.add(this.planeMesh3);
-        walls.add(this.planeMesh4);
-        walls.add(this.planeMesh5);
-
-        this.app.scene.add(walls);
+        this.app.scene.add(this.walls);
     }
 
     /**
@@ -220,9 +219,9 @@ class MyContents  {
         this.app.scene.add( ambientLight );
 
         // build objects scenario
+        this.buildWalls();
         this.buildTable();
         this.buildPlate();
-        this.buildWalls();
         this.buildCake();
         this.buildCandle();
 
@@ -312,7 +311,7 @@ class MyContents  {
      */
     update() {
         // check if box mesh needs to be updated
-        //this.updateBoxIfRequired()
+        // this.updateBoxIfRequired()
 
         // sets the box mesh position based on the displacement vector
         /* this.boxMesh.position.x = this.boxDisplacement.x
