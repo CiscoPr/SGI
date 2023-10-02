@@ -9,7 +9,7 @@ class MyContents  {
     /**
        constructs the object
        @param {MyApp} app The application object
-    */ 
+    */
     constructor(app) {
         this.app = app
         this.axis = null
@@ -21,13 +21,57 @@ class MyContents  {
         this.plateMesh = null
 
         // plane related attributes
-        this.diffusePlaneColor = "#00ffff"
-        this.specularPlaneColor = "#777777"
-        this.planeShininess = 30
-        this.planeMaterial = new THREE.MeshPhongMaterial({ color: this.diffusePlaneColor, 
-            specular: this.diffusePlaneColor, emissive: "#000000", shininess: this.planeShininess
-        })
-        
+
+            //texture
+
+            this.planeTexture =
+            new THREE.TextureLoader().load('textures/feup_b.jpg');
+
+         this.planeTexture.wrapS = THREE.RepeatWrapping;
+
+         this.planeTexture.wrapT = THREE.RepeatWrapping;
+
+
+                 // material
+
+         this.diffusePlaneColor =  "rgb(128,128,128)"
+
+         this.specularPlaneColor = "rgb(0,0,0)"
+
+         this.planeShininess = 0
+
+
+                 // relating texture and material:
+
+                     // two alternatives with different results
+
+
+                         // alternative 1
+
+         this.planeMaterial = new THREE.MeshPhongMaterial({
+
+            color: this.diffusePlaneColor,
+
+            specular: this.specularPlaneColor,
+
+            emissive: "#000000", shininess: this.planeShininess,
+
+            map: this.planeTexture })
+
+            // end of alternative 1
+
+
+            // alternative 2
+
+            // this.planeMaterial = new THREE.MeshLambertMaterial({
+
+            // map : this.planeTexture });
+
+            // end of alternative 2
+
+
+            let plane = new THREE.PlaneGeometry( 10, 10 );
+
         // cake related attributes
         this.cakeMesh = null
 
@@ -41,8 +85,8 @@ class MyContents  {
     /**
      * builds the table mesh with material assigned
      */
-    buildTable() {    
-        let tableMaterial = new THREE.MeshPhongMaterial({ color: "#684303", 
+    buildTable() {
+        let tableMaterial = new THREE.MeshPhongMaterial({ color: "#684303",
         specular: "#000000", emissive: "#000000", shininess: 90 });
 
         // Create a table Mesh with basic material
@@ -69,7 +113,7 @@ class MyContents  {
     }
 
     buildPlate() {
-        let plateMaterial = new THREE.MeshPhongMaterial({ color: "#ffffff", 
+        let plateMaterial = new THREE.MeshPhongMaterial({ color: "#ffffff",
         specular: "#000000", emissive: "#000000", shininess: 90 });
 
         // build the plate mesh
@@ -91,14 +135,14 @@ class MyContents  {
         // build the cake mesh
         let cake = new THREE.CylinderGeometry(0.3, 0.3, 0.2, 32, 1, false, 0, 7*Math.PI/4);
         this.cakeMesh = new THREE.Mesh(cake, cakeMaterial);
-        
+
         // create child geometry
         let plane = new THREE.PlaneGeometry(0.2, 0.6);
-        
+
         let planeMesh1 = new THREE.Mesh(plane, cakeMaterial);
         planeMesh1.rotation.z = Math.PI / 2;
         planeMesh1.rotation.y = Math.PI / 4;
-        
+
         let planeMesh2 = new THREE.Mesh(plane, cakeMaterial);
         planeMesh2.rotation.z = Math.PI / 2;
         planeMesh2.rotation.y = -Math.PI / 2;
@@ -106,7 +150,7 @@ class MyContents  {
         // add plane to the cake mesh
         this.cakeMesh.add(planeMesh1);
         this.cakeMesh.add(planeMesh2);
-        
+
         // add the cake to the scene
         this.app.scene.add(this.cakeMesh);
     }
@@ -115,7 +159,7 @@ class MyContents  {
      * builds the candle with is a cylinder
      */
     buildCandle() {
-        let flameMaterial = new THREE.MeshPhongMaterial({ color: "#ffff77", 
+        let flameMaterial = new THREE.MeshPhongMaterial({ color: "#ffff77",
         specular: "#ff0000", emissive: "#ff0000", shininess: 90 });
 
         let wickMaterial = new THREE.MeshPhongMaterial({ color: "#ffffff",
@@ -155,7 +199,7 @@ class MyContents  {
      */
     buildWalls() {
          // wall related attributes
-         let planeMaterial = new THREE.MeshPhongMaterial({ color: "#9a9996", 
+         let planeMaterial = new THREE.MeshPhongMaterial({ color: "#9a9996",
              specular: "#ffffff", emissive: "#000000", shininess: 30 })
 
         let plane1 = new THREE.PlaneGeometry(10, 10);
@@ -163,7 +207,7 @@ class MyContents  {
         planeMesh1.rotation.y = Math.PI;
         planeMesh1.position.y = 5;
         planeMesh1.position.z = 5;
-        
+
 
         let plane2 = new THREE.PlaneGeometry(10, 10);
         let planeMesh2 = new THREE.Mesh(plane2, planeMaterial);
@@ -196,8 +240,8 @@ class MyContents  {
      * initializes the contents
      */
     init() {
-       
-        // create once 
+
+        // create once
         if (this.axis === null) {
             // create and attach the axis to the scene
             this.axis = new MyAxis(this)
@@ -239,19 +283,19 @@ class MyContents  {
         this.candleMesh.position.x = 0.1;
         this.candleMesh.position.z = -0.1;
 
-        
+
         // Create a Plane Mesh with basic material
-        
+
         let plane = new THREE.PlaneGeometry( 10, 10 );
         this.planeMesh = new THREE.Mesh( plane, this.planeMaterial );
         this.planeMesh.rotation.x = -Math.PI / 2;
         this.planeMesh.position.y = -0;
         this.app.scene.add( this.planeMesh );
     }
-    
+
     /**
      * updates the diffuse plane color and the material
-     * @param {THREE.Color} value 
+     * @param {THREE.Color} value
      */
     updateDiffusePlaneColor(value) {
         this.diffusePlaneColor = value
@@ -259,7 +303,7 @@ class MyContents  {
     }
     /**
      * updates the specular plane color and the material
-     * @param {THREE.Color} value 
+     * @param {THREE.Color} value
      */
     updateSpecularPlaneColor(value) {
         this.specularPlaneColor = value
@@ -267,26 +311,26 @@ class MyContents  {
     }
     /**
      * updates the plane shininess and the material
-     * @param {number} value 
+     * @param {number} value
      */
     updatePlaneShininess(value) {
         this.planeShininess = value
         this.planeMaterial.shininess = this.planeShininess
     }
-    
+
     /**
      * rebuilds the box mesh if required
      * this method is called from the gui interface
      */
     /* rebuildBox() {
         // remove boxMesh if exists
-        if (this.boxMesh !== undefined && this.boxMesh !== null) {  
+        if (this.boxMesh !== undefined && this.boxMesh !== null) {
             this.app.scene.remove(this.boxMesh)
         }
         this.buildBox();
         this.lastBoxEnabled = null
     } */
-    
+
     /**
      * updates the box mesh if required
      * this method is called from the render method of the app
@@ -307,7 +351,7 @@ class MyContents  {
     /**
      * updates the contents
      * this method is called from the render method of the app
-     * 
+     *
      */
     update() {
         // check if box mesh needs to be updated
@@ -317,7 +361,7 @@ class MyContents  {
         /* this.boxMesh.position.x = this.boxDisplacement.x
         this.boxMesh.position.y = this.boxDisplacement.y
         this.boxMesh.position.z = this.boxDisplacement.z */
-        
+
     }
 
 }
