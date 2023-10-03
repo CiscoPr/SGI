@@ -27,9 +27,9 @@ class MyContents  {
         this.planeTexture =
             new THREE.TextureLoader().load('textures/feup_b.jpg');
 
-         this.planeTexture.wrapS = THREE.MirroredRepeatWrapping;
+         this.planeTexture.wrapS = THREE.RepeatWrapping;
 
-         this.planeTexture.wrapT = THREE.MirroredRepeatWrapping;
+         this.planeTexture.wrapT = THREE.RepeatWrapping;
 
 
         // material
@@ -81,6 +81,39 @@ class MyContents  {
         // walls related attributes
         this.walls = null
     }
+
+    buildBox() {
+        this.cubeTexture =
+            new THREE.TextureLoader().load('textures/feup_entry.jpg');
+
+        this.cubeTexture.wrapS = THREE.RepeatWrapping;
+
+        this.cubeTexture.wrapT = THREE.RepeatWrapping;
+
+
+        this.diffuseCubeColor =  "rgb(128,128,128)"
+
+        this.specularCubeColor = "rgb(0,0,0)"
+
+        this.cubeShininess = 0
+
+        let boxMaterial = new THREE.MeshPhongMaterial({
+            color: this.diffuseCubeColor,
+
+            specular: this.specularCubeColor,
+
+            emissive: "#000000", shininess: this.cubeShininess,
+
+            map: this.cubeTexture
+         })
+
+        // Create a Cube Mesh with basic material
+        let box = new THREE.BoxGeometry(  this.boxMeshSize,  this.boxMeshSize,  this.boxMeshSize );
+        this.boxMesh = new THREE.Mesh( box, boxMaterial );
+        this.boxMesh.position.y =  5;
+        this.app.scene.add( this.boxMesh );
+    }
+
 
     /**
      * builds the table mesh with material assigned
@@ -268,6 +301,7 @@ class MyContents  {
         this.buildPlate();
         this.buildCake();
         this.buildCandle();
+        this.buildBox();
 
         // adjust the table position
         this.tableMesh.position.y += 1;
@@ -295,7 +329,7 @@ class MyContents  {
 
         let planeTextureUVRate = 3354 / 2385; // image dimensions
 
-        let planeTextureRepeatU = 2.5;
+        let planeTextureRepeatU = 1;
 
         let planeTextureRepeatV =
 
@@ -305,7 +339,7 @@ class MyContents  {
 
             planeTextureRepeatU, planeTextureRepeatV );
 
-        this.planeTexture.rotation = 0;
+        this.planeTexture.rotation = 30 * Math.PI / 180;
 
         this.planeTexture.offset = new THREE.Vector2(0,0);
 
