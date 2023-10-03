@@ -27,7 +27,8 @@ class MyContents  {
         this.planeTexture =
             new THREE.TextureLoader().load('textures/feup_b.jpg');
 
-         this.planeTexture.wrapS = THREE.RepeatWrapping;
+        // the wrapS must be equals to the one selected in the gui interface
+        this.planeTexture.wrapS = THREE.RepeatWrapping;
 
          this.planeTexture.wrapT = THREE.RepeatWrapping;
 
@@ -295,6 +296,7 @@ class MyContents  {
         const ambientLight = new THREE.AmbientLight( 0x555555 );
         this.app.scene.add( ambientLight );
 
+        this.updatePlaneTexture('ClampToEdgeWrapping');
         // build objects scenario
         this.buildWalls();
         this.buildTable();
@@ -339,7 +341,7 @@ class MyContents  {
 
             planeTextureRepeatU, planeTextureRepeatV );
 
-        this.planeTexture.rotation = 30 * Math.PI / 180;
+        this.planeTexture.rotation = 0;
 
         this.planeTexture.offset = new THREE.Vector2(0,0);
 
@@ -378,6 +380,20 @@ class MyContents  {
     updatePlaneShininess(value) {
         this.planeShininess = value
         this.planeMaterial.shininess = this.planeShininess
+    }
+
+    updatePlaneTexture(value){
+
+        // correct the error 'Cannot create property 'wrapS' on string 'ClampToEdgeWrapping''
+        if (value == 'ClampToEdgeWrapping') {
+            this.planeTexture.wrapS = THREE.ClampToEdgeWrapping;
+        }
+        else if (value == 'RepeatWrapping') {
+            this.planeTexture.wrapS = THREE.RepeatWrapping;
+        }
+        else if (value == 'MirroredRepeatWrapping') {
+            this.planeTexture.wrapS = THREE.MirroredRepeatWrapping;
+        }
     }
 
     /**
