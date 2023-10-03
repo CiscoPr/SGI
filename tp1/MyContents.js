@@ -27,9 +27,9 @@ class MyContents  {
         this.planeTexture =
             new THREE.TextureLoader().load('textures/feup_b.jpg');
 
-         this.planeTexture.wrapS = THREE.RepeatWrapping;
+         this.planeTexture.wrapS = THREE.MirroredRepeatWrapping;
 
-         this.planeTexture.wrapT = THREE.RepeatWrapping;
+         this.planeTexture.wrapT = THREE.MirroredRepeatWrapping;
 
 
         // material
@@ -70,7 +70,7 @@ class MyContents  {
         // end of alternative 2
 
 
-            let plane = new THREE.PlaneGeometry( 10, 10 );
+        let plane = new THREE.PlaneGeometry( 10, 3 );
 
         // cake related attributes
         this.cakeMesh = null
@@ -295,7 +295,7 @@ class MyContents  {
 
         let planeTextureUVRate = 3354 / 2385; // image dimensions
 
-        let planeTextureRepeatU = 1;
+        let planeTextureRepeatU = 2.5;
 
         let planeTextureRepeatV =
 
