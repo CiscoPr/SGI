@@ -60,8 +60,7 @@ class MyGuiInterface  {
 
         // adds a folder to the gui interface for the plane texture
         const textureFolder = this.datgui.addFolder('Texture');
-        // make a method of the texture folder so it can change the property of the plane texture wrapS, with the following properties: RepeatWrapping, ClampToEdgeWrapping, MirroredRepeatWrapping.
-        textureFolder.add(this.contents.planeTexture, 'wrapS', [ 'RepeatWrapping', 'ClampToEdgeWrapping', 'MirroredRepeatWrapping' ] ).name('wrapS');
+        textureFolder.add(this.contents.planeTexture, 'wrapS', [ 'RepeatWrapping', 'ClampToEdgeWrapping', 'MirroredRepeatWrapping' ] ).name('wrapS').onChange((value) => { this.contents.updatePlaneTexture(value) });
 
         textureFolder.open();
     }

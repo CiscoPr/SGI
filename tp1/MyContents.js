@@ -30,7 +30,7 @@ class MyContents  {
         // the wrapS must be equals to the one selected in the gui interface
         this.planeTexture.wrapS = THREE.RepeatWrapping;
 
-         this.planeTexture.wrapT = THREE.RepeatWrapping;
+        this.planeTexture.wrapT = THREE.RepeatWrapping;
 
 
         // material
@@ -384,7 +384,6 @@ class MyContents  {
 
     updatePlaneTexture(value){
 
-        // correct the error 'Cannot create property 'wrapS' on string 'ClampToEdgeWrapping''
         if (value == 'ClampToEdgeWrapping') {
             this.planeTexture.wrapS = THREE.ClampToEdgeWrapping;
         }
@@ -394,6 +393,7 @@ class MyContents  {
         else if (value == 'MirroredRepeatWrapping') {
             this.planeTexture.wrapS = THREE.MirroredRepeatWrapping;
         }
+        this.planeMaterial.needsUpdate = true;
     }
 
     /**
