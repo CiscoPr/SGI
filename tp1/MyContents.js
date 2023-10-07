@@ -372,6 +372,86 @@ class MyContents  {
 
     }
 
+    //here's a nice reference :)
+    buildWindows() {
+
+        //loads the texture
+        let windowTexture = new THREE.TextureLoader().load('textures/nostalgia.jpg');
+
+        windowTexture.wrapS = THREE.RepeatWrapping;
+
+        windowTexture.wrapT = THREE.RepeatWrapping;
+
+
+        let windowMaterial = new THREE.MeshPhongMaterial({
+            color: "#ffffff",
+
+            specular: "#000000",
+
+            emissive: "#000000", shininess: 90,
+
+            map: windowTexture })
+
+        let windowWidth = 5;
+        let windowHeight = 2.5;
+
+        let window = new THREE.PlaneGeometry( windowWidth, windowHeight );
+
+        this.windowMesh = new THREE.Mesh( window, windowMaterial );
+
+        this.windowMesh.rotation.y = Math.PI / 2;
+
+        this.windowMesh.position.y = 5;
+
+        this.windowMesh.position.x = -4.9;
+
+        //window border
+        let borderUpper = new THREE.BoxGeometry( windowWidth, 0.1, 0.1);
+        let borderLower = new THREE.BoxGeometry( windowWidth, 0.1, 0.1);
+        let borderLeft = new THREE.BoxGeometry( 0.1, windowHeight, 0.1);
+        let borderRight = new THREE.BoxGeometry( 0.1, windowHeight, 0.1);
+        let borderMiddle = new THREE.BoxGeometry( 0.1, windowHeight, 0.1);
+
+        let borderMaterial = new THREE.MeshPhongMaterial({ color: "#000000",
+        specular: "#000000", emissive: "#000000", shininess: 90 });
+
+        let borderMeshUpper = new THREE.Mesh( borderUpper, borderMaterial );
+        let borderMeshLower = new THREE.Mesh( borderLower, borderMaterial );
+        let borderMeshLeft = new THREE.Mesh( borderLeft, borderMaterial );
+        let borderMeshRight = new THREE.Mesh( borderRight, borderMaterial );
+        let borderMeshMiddle = new THREE.Mesh( borderMiddle, borderMaterial );
+
+        //defines the position of the borders
+        borderMeshUpper.rotation.y = Math.PI / 2;
+        borderMeshUpper.position.y = 5 + windowHeight / 2;
+        borderMeshUpper.position.x = -4.9;
+
+        borderMeshLower.rotation.y = Math.PI / 2;
+        borderMeshLower.position.y = 5 - windowHeight / 2;
+        borderMeshLower.position.x = -4.9;
+
+        borderMeshMiddle.position.y = 5;
+        borderMeshMiddle.position.x = -4.9;
+
+        borderMeshLeft.position.y = 5;
+        borderMeshLeft.position.x = -4.9;
+        borderMeshLeft.position.z = -windowWidth/2 + 0.05;
+
+        borderMeshRight.position.y = 5;
+        borderMeshRight.position.x = -4.9;
+        borderMeshRight.position.z = windowWidth/2 - 0.05;
+
+        //adds the borders to the scene
+        this.app.scene.add( borderMeshUpper );
+        this.app.scene.add( borderMeshLower );
+        this.app.scene.add( borderMeshMiddle );
+        this.app.scene.add( borderMeshLeft );
+        this.app.scene.add( borderMeshRight );
+
+        //adds the window to the scene
+        this.app.scene.add( this.windowMesh );
+    }
+
     /**
      * initializes the contents
      */
@@ -408,6 +488,7 @@ class MyContents  {
         this.buildBox();
         this.buildPicture('202004646.jpg');
         this.buildPicture('202004724.jpg');
+        this.buildWindows();
 
         // adjust the table position
         this.tableMesh.position.y += 1;
