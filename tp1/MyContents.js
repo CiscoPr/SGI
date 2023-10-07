@@ -81,6 +81,11 @@ class MyContents  {
 
         // walls related attributes
         this.walls = null
+
+        // spotLight related attributes
+        this.spotLight = null
+        this.spotLightTarget = null
+        this.spotLightHelper = null
     }
 
     buildBox() {
@@ -464,22 +469,43 @@ class MyContents  {
             this.app.scene.add(this.axis)
         }
 
+        //-------------------------------------------------------------------------------
+
         // add a point light on top of the model
         const pointLight = new THREE.PointLight( 0xffffff, 500, 0 );
         pointLight.position.set( 0, 20, 0 );
         this.app.scene.add( pointLight );
-
         // add a point light helper for the previous point light
         const sphereSize = 0.5;
         const pointLightHelper = new THREE.PointLightHelper( pointLight, sphereSize );
         this.app.scene.add( pointLightHelper );
 
+        //-------------------------------------------------------------------------------
+
+        // add a spot light on top of the model
+        this.spotLight = new THREE.SpotLight( 0xffffff, 4, 0.6, Math.PI/180 * 35, 0, 0 );
+        this.spotLight.position.set( 0.3, 1.55, -0.3 );
+        this.app.scene.add( this.spotLight );
+        // add a target for the previous spot light
+        this.spotLightTarget = new THREE.Object3D();
+        this.spotLightTarget.position.set( 0, 1.3, 0 );
+        this.app.scene.add( this.spotLight.target );
+        this.app.scene.add( this.spotLightTarget );
+        this.spotLight.target = this.spotLightTarget;
+        // add a spot light helper for the previous spot light
+        //this.spotLightHelper = new THREE.SpotLightHelper( this.spotLight );
+        //this.app.scene.add( this.spotLightHelper );
+
+        //--------------------------------------------------------------------------------
+
         // add an ambient light
         const ambientLight = new THREE.AmbientLight( 0x555555 );
         this.app.scene.add( ambientLight );
 
+        //--------------------------------------------------------------------------------
+
         this.updatePlaneTexture('ClampToEdgeWrapping');
-        // build objects scenario
+        // build objects
         this.buildWalls();
         this.buildTable();
         this.buildPlate();
