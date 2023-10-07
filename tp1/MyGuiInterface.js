@@ -57,6 +57,21 @@ class MyGuiInterface  {
         // note that we are using a property from the app 
         cameraFolder.add(this.app.activeCamera.position, 'x', 0, 10).name("x coord")
         cameraFolder.open()
+
+        // adds a folder to the gui interface for the lights
+        const spotLightFolder = this.datgui.addFolder('SpotLight')
+        spotLightFolder.addColor(this.contents.spotLight, 'color')
+        spotLightFolder.add(this.contents.spotLight, 'intensity', 0, 10)
+        spotLightFolder.add(this.contents.spotLight, 'distance', 0, 100).onChange( () => { this.contents.spotLightHelper.update() } );
+        spotLightFolder.add(this.contents, 'spotLightAngle', 0, 360).onChange( (value) => { this.contents.updateSpotLightAngle(value) } );
+        spotLightFolder.add(this.contents.spotLight, 'penumbra', 0, 1)
+        spotLightFolder.add(this.contents.spotLight, 'decay', 0, 2)
+        spotLightFolder.add(this.contents.spotLight.position, 'x', -10, 10).name("x coord")
+        spotLightFolder.add(this.contents.spotLight.position, 'y', -10, 10).name("y coord")
+        spotLightFolder.add(this.contents.spotLightTarget.position, 'x', -10, 10).name("x target coord").onChange( () => { this.contents.spotLightHelper.update() } );
+        spotLightFolder.add(this.contents.spotLightTarget.position, 'y', -10, 10).name("y target coord").onChange( () => { this.contents.spotLightHelper.update() } );
+        spotLightFolder.open()
+
     }
 }
 

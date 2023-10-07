@@ -27,6 +27,12 @@ class MyContents  {
         this.planeShininess = 30
         this.planeMaterial = new THREE.MeshPhongMaterial({ color: this.diffusePlaneColor, 
             specular: this.diffusePlaneColor, emissive: "#000000", shininess: this.planeShininess })
+            
+        // spotLight related attributes
+        this.spotLight = null
+        this.spotLightAngle = 35
+        this.spotLightTarget = null
+        this.spotLightHelper = null
     }
 
     /**
@@ -55,19 +61,57 @@ class MyContents  {
             this.app.scene.add(this.axis)
         }
 
-        // add a point light on top of the model
-        const pointLight = new THREE.PointLight( 0xffffff, 500, 0 );
-        pointLight.position.set( 0, 20, 0 );
-        this.app.scene.add( pointLight );
+        //------------------------------------------------------------------------------------------------
 
+        // add a point light on top of the model
+        //const pointLight = new THREE.PointLight( 0xffffff, 500, 0 );
+        //pointLight.position.set( 0, 20, 0 );
+        //this.app.scene.add( pointLight );
         // add a point light helper for the previous point light
-        const sphereSize = 0.5;
-        const pointLightHelper = new THREE.PointLightHelper( pointLight, sphereSize );
-        this.app.scene.add( pointLightHelper );
+        //const sphereSize = 0.5;
+        //const pointLightHelper = new THREE.PointLightHelper( pointLight, sphereSize );
+        //this.app.scene.add( pointLightHelper );
+
+        //------------------------------------------------------------------------------------------------
+
+        // add a directional light on top of the model
+        const light2 = new THREE.DirectionalLight( 0xffffff, 1 );
+        light2.position.set( -5, 10, -2 );
+        this.app.scene.add( light2 );
+        // add a target for the previous directional light
+        const targetObj = new THREE.Object3D();
+        targetObj.position.set( 1, 0, 0 );
+        this.app.scene.add( light2.target );
+        this.app.scene.add( targetObj );
+        light2.target = targetObj;
+        // add a directional light helper for the previous directional light
+        const squareSize = 0.5;
+        const dirLightHelper = new THREE.DirectionalLightHelper( light2, squareSize );
+        this.app.scene.add( dirLightHelper );
+
+        //------------------------------------------------------------------------------------------------
+
+        // add a spot light on top of the model
+        this.spotLight = new THREE.SpotLight( 0xffffff, 15, 8, Math.PI/180 * this.spotLightAngle, 0, 0 );
+        this.spotLight.position.set( 2, 5, 1 );
+        this.app.scene.add( this.spotLight );
+        // add a target for the previous spot light
+        this.spotLightTarget = new THREE.Object3D();
+        this.spotLightTarget.position.set( 1, 0, 1 );
+        this.app.scene.add( this.spotLight.target );
+        this.app.scene.add( this.spotLightTarget );
+        this.spotLight.target = this.spotLightTarget;
+        // add a spot light helper for the previous spot light
+        this.spotLightHelper = new THREE.SpotLightHelper( this.spotLight );
+        this.app.scene.add( this.spotLightHelper );
+
+        //------------------------------------------------------------------------------------------------
 
         // add an ambient light
-        const ambientLight = new THREE.AmbientLight( 0x555555 );
+        const ambientLight = new THREE.AmbientLight( 0x555555, 4 );
         this.app.scene.add( ambientLight );
+
+        //------------------------------------------------------------------------------------------------
 
         this.buildBox()
         
@@ -133,6 +177,15 @@ class MyContents  {
                 this.app.scene.remove(this.boxMesh)
             }
         }
+    }
+
+    /**
+     * updates the spot light angle
+     * @param {number} value 
+     */
+    updateSpotLightAngle(value) {
+        this.spotLightAngle = value
+        this.spotLight.angle = Math.PI/180 * this.spotLightAngle
     }
 
     /**
