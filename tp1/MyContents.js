@@ -302,6 +302,81 @@ class MyContents  {
         this.app.scene.add(this.walls);
     }
 
+    buildPicture(tex) {
+        /* idea of picture border
+        let borderUpper = new THREE.BoxGeometry( 1.5, 0.1, 0.1);
+        let borderLower = new THREE.BoxGeometry( 1.5, 0.1, 0.1);
+        let borderLeft = new THREE.BoxGeometry( 0.1, 1.5, 0.1);
+        let borderRight = new THREE.BoxGeometry( 0.1, 1.5, 0.1);
+
+        let borderMaterial = new THREE.MeshPhongMaterial({ color: "#000000",
+        specular: "#000000", emissive: "#000000", shininess: 90 });
+
+        let borderMeshUpper = new THREE.Mesh( borderUpper, borderMaterial );
+        let borderMeshLower = new THREE.Mesh( borderLower, borderMaterial );
+        let borderMeshLeft = new THREE.Mesh( borderLeft, borderMaterial );
+        let borderMeshRight = new THREE.Mesh( borderRight, borderMaterial );
+
+        borderMeshUpper.position.y = 5;
+        borderMeshUpper.position.z = -5;
+
+
+        borderMeshLower.position.y = 4.25;
+        borderMeshLeft.position.x = -0.75;
+        borderMeshRight.position.x = 0.75;
+
+        this.app.scene.add( borderMeshUpper );
+        this.app.scene.add( borderMeshLower );
+        this.app.scene.add( borderMeshLeft );
+        this.app.scene.add( borderMeshRight );
+        */
+
+        this.pictureTexture = new THREE.TextureLoader().load('textures/'+ tex);
+
+
+        this.pictureTexture.wrapS = THREE.RepeatWrapping;
+
+        this.pictureTexture.wrapT = THREE.RepeatWrapping;
+
+
+        this.diffusePictureColor =  "rgb(128,128,128)"
+
+        this.specularPictureColor = "rgb(0,0,0)"
+
+        this.pictureShininess = 0
+
+        let pictureMaterial = new THREE.MeshPhongMaterial({
+            color: this.diffusePictureColor,
+
+            specular: this.specularPictureColor,
+
+            emissive: "#000000", shininess: this.pictureShininess,
+
+            map: this.pictureTexture })
+
+        this.pictureWidth = 1;
+        this.pictureHeight = 1.5;
+
+        let picture = new THREE.PlaneGeometry( this.pictureWidth, this.pictureHeight );
+
+        this.pictureMesh = new THREE.Mesh( picture, pictureMaterial );
+
+        this.pictureMesh.position.y = 5;
+
+        this.pictureMesh.position.z = -4.9;
+
+        if(tex == '202004646.jpg')
+            this.pictureMesh.position.x = 1.5;
+
+        else
+            this.pictureMesh.position.x = -1.5;
+
+        this.app.scene.add( this.pictureMesh );
+
+
+
+    }
+
     /**
      * initializes the contents
      */
@@ -357,6 +432,8 @@ class MyContents  {
         this.buildCake();
         this.buildCandle();
         this.buildBox();
+        this.buildPicture('202004646.jpg');
+        this.buildPicture('202004724.jpg');
 
         // adjust the table position
         this.tableMesh.position.y += 1;
