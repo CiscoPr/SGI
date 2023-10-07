@@ -8,8 +8,8 @@ import { MyContents } from './MyContents.js';
 class MyGuiInterface  {
 
     /**
-     * 
-     * @param {MyApp} app The application object 
+     *
+     * @param {MyApp} app The application object
      */
     constructor(app) {
         this.app = app
@@ -19,7 +19,7 @@ class MyGuiInterface  {
 
     /**
      * Set the contents object
-     * @param {MyContents} contents the contents objects 
+     * @param {MyContents} contents the contents objects
      */
     setContents(contents) {
         this.contents = contents
@@ -31,15 +31,15 @@ class MyGuiInterface  {
     init() {
         // add a folder to the gui interface for the box
         //const boxFolder = this.datgui.addFolder( 'Box' );
-        // note that we are using a property from the contents object 
+        // note that we are using a property from the contents object
         /* boxFolder.add(this.contents, 'boxMeshSize', 0, 10).name("size").onChange( () => { this.contents.rebuildBox() } );
         boxFolder.add(this.contents, 'boxEnabled', true).name("enabled");
         boxFolder.add(this.contents.boxDisplacement, 'x', -5, 5)
         boxFolder.add(this.contents.boxDisplacement, 'y', -5, 5)
         boxFolder.add(this.contents.boxDisplacement, 'z', -5, 5)
         boxFolder.open() */
-        
-        const data = {  
+
+        const data = {
             'diffuse color': this.contents.diffusePlaneColor,
             'specular color': this.contents.specularPlaneColor,
         };
@@ -54,9 +54,15 @@ class MyGuiInterface  {
         // adds a folder to the gui interface for the camera
         const cameraFolder = this.datgui.addFolder('Camera')
         cameraFolder.add(this.app, 'activeCameraName', [ 'Perspective', 'Perspective2', 'Left', 'Top', 'Front', 'Back', "Right"] ).name("active camera");
-        // note that we are using a property from the app 
+        // note that we are using a property from the app
         cameraFolder.add(this.app.activeCamera.position, 'x', 0, 10).name("x coord")
         cameraFolder.open()
+
+        // adds a folder to the gui interface for the plane texture
+        const textureFolder = this.datgui.addFolder('Texture');
+        textureFolder.add(this.contents.planeTexture, 'wrapS', [ 'RepeatWrapping', 'ClampToEdgeWrapping', 'MirroredRepeatWrapping' ] ).name('wrapS').onChange((value) => { this.contents.updatePlaneTexture(value) });
+
+        textureFolder.open();
     }
 }
 
