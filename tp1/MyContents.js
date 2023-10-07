@@ -232,9 +232,22 @@ class MyContents  {
      * builds the walls group
      */
     buildWalls() {
-         // wall related attributes
-         let planeMaterial = new THREE.MeshPhongMaterial({ color: "#9a9996",
-             specular: "#ffffff", emissive: "#000000", shininess: 30 })
+
+        this.wallDiffuseColor = "rgb(154,153,150)"
+
+        //wall must not have specular component
+        this.wallSpecularColor = "rgb(0,0,0)"
+
+        this.wallShininess = 0
+
+
+
+        let planeMaterial = new THREE.MeshPhongMaterial({
+            color: this.wallDiffuseColor,
+
+            specular: this.wallSpecularColor,
+
+            emissive: "#000000", shininess: this.wallShininess})
 
         let plane1 = new THREE.PlaneGeometry(10, 10);
         let planeMesh1 = new THREE.Mesh(plane1, planeMaterial);
