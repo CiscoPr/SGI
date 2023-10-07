@@ -120,8 +120,22 @@ class MyContents  {
      * builds the table mesh with material assigned
      */
     buildTable() {
-        let tableMaterial = new THREE.MeshPhongMaterial({ color: "#684303",
-        specular: "#000000", emissive: "#000000", shininess: 90 });
+        this.tableTexture = new THREE.TextureLoader().load('textures/wood.jpg');
+        // legs must be of specular color
+        this.legSpecularColor = "rgb(128, 128, 128)"
+
+        this.legDiffuseColor = "rgb(0, 0, 0)"
+
+        this.legShininess = 90
+
+        let legMaterial = new THREE.MeshPhongMaterial({ color: this.legDiffuseColor,
+
+            specular: this.legSpecularColor,
+
+            emissive: "#000000", shininess: this.legShininess });
+
+        let tableMaterial = new THREE.MeshPhongMaterial({ color: "#684500",
+        specular: "#000000", emissive: "#000000", shininess: 90 , map: this.tableTexture});
 
         // Create a table Mesh with basic material
         let table = new THREE.BoxGeometry( 1.5, 2.0, 0.1);
@@ -130,7 +144,7 @@ class MyContents  {
         // Create each leg Mesh with basic material
         const leg = new THREE.CylinderGeometry( 0.1, 0.1, 1, 8);
         for (let i = 0; i < 4; i++) {
-            let legMesh = new THREE.Mesh( leg, tableMaterial );
+            let legMesh = new THREE.Mesh( leg, legMaterial );
             legMesh.rotation.x = -Math.PI / 2;
             legMesh.position.x = (i % 2) ? -0.6 : 0.6;
             legMesh.position.y = (i < 2) ? -0.8 : 0.8;
