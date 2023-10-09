@@ -4,13 +4,17 @@ import { MyAxis } from './MyAxis.js';
 
 import { MyNurbsBuilder } from './MyNurbsBuilder.js';
 
+
+
 /**
 
  *  This class contains the contents of out application
 
  */
 
-class MyContents {
+
+class MyContents  {
+
 
     /**
 
@@ -22,13 +26,14 @@ class MyContents {
 
     constructor(app) {
 
-        this.app = app
+        this.app = app;
 
-        this.axis = null
+        this.axis = null;
+
 
         const map =
 
-            new THREE.TextureLoader().load('textures/uv_grid_opengl.jpg');
+            new THREE.TextureLoader().load( 'textures/uv_grid_opengl.jpg' );
 
         map.wrapS = map.wrapT = THREE.RepeatWrapping;
 
@@ -36,27 +41,31 @@ class MyContents {
 
         map.colorSpace = THREE.SRGBColorSpace;
 
-        this.material = new THREE.MeshLambertMaterial({
-            map: map,
+        this.material = new THREE.MeshLambertMaterial( { map: map,
 
-            side: THREE.DoubleSide,
+                        side: THREE.DoubleSide,
 
-            transparent: true, opacity: 0.90
-        });
+                        transparent: true, opacity: 0.90 } );
 
-        this.builder = new MyNurbsBuilder()
 
-        this.meshes = []
+        this.builder = new MyNurbsBuilder();
 
-        this.samplesU = 8         // maximum defined in MyGuiInterface
 
-        this.samplesV = 8         // maximum defined in MyGuiInterface
+        this.meshes = [];
 
-        this.init()
 
-        this.createNurbsSurfaces()
+        this.samplesU = 8;        // maximum defined in MyGuiInterface
+
+        this.samplesV = 8;         // maximum defined in MyGuiInterface
+
+
+        this.init();
+
+
+        this.createNurbsSurfaces();
 
     }
+
 
    
 
@@ -76,19 +85,21 @@ class MyContents {
 
             // create and attach the axis to the scene
 
-            this.axis = new MyAxis(this)
+            this.axis = new MyAxis(this);
 
-            this.app.scene.add(this.axis)
+            this.app.scene.add(this.axis);
 
         }
 
+
         // add a point light on top of the model
 
-        const pointLight = new THREE.PointLight(0xffffff, 1000, 0);
+        const pointLight = new THREE.PointLight( 0xffffff, 1000, 0 );
 
-        pointLight.position.set(0, 20, 20);
+        pointLight.position.set( 0, 20, 20 );
 
-        this.app.scene.add(pointLight);
+        this.app.scene.add( pointLight );
+
 
         // add a point light helper for the previous point light
 
@@ -96,17 +107,19 @@ class MyContents {
 
         const pointLightHelper =
 
-            new THREE.PointLightHelper(pointLight, sphereSize);
+                   new THREE.PointLightHelper( pointLight, sphereSize );
 
-        this.app.scene.add(pointLightHelper);
+        this.app.scene.add( pointLightHelper );
+
 
         // add an ambient light
 
-        const ambientLight = new THREE.AmbientLight(0x555555);
+        const ambientLight = new THREE.AmbientLight( 0x555555 );
 
-        this.app.scene.add(ambientLight);
+        this.app.scene.add( ambientLight );
 
     }
+
 
     /**
 
@@ -114,7 +127,8 @@ class MyContents {
 
      */
 
-    createNurbsSurfaces() {
+    createNurbsSurfaces() {  
+
 
         // are there any meshes to remove?
 
@@ -122,15 +136,15 @@ class MyContents {
 
             // traverse mesh array
 
-            for (let i = 0; i < this.meshes.length; i++) {
+            for (let i=0; i<this.meshes.length; i++) {
 
                 // remove all meshes from the scene
 
-                this.app.scene.remove(this.meshes[i])
+                this.app.scene.remove(this.meshes[i]);
 
             }
 
-            this.meshes = [] // empty the array  
+            this.meshes = []; // empty the array  
 
         }
 
@@ -144,9 +158,10 @@ class MyContents {
 
         let mesh;
 
-        let orderU = 1
+        let orderU = 1;
 
-        let orderV = 1
+        let orderV = 1;
+
 
         // build nurb #1
 
@@ -156,9 +171,9 @@ class MyContents {
 
                 [ // V = 0..1;
 
-                    [-2.0, -2.0, 0.0, 1],
+                    [-2.0, -2.0, 0.0, 1 ],
 
-                    [-2.0, 2.0, 0.0, 1]
+                    [-2.0,  2.0, 0.0, 1 ]
 
                 ],
 
@@ -166,9 +181,9 @@ class MyContents {
 
                 [ // V = 0..1
 
-                    [2.0, -2.0, 0.0, 1],
+                    [ 2.0, -2.0, 0.0, 1 ],
 
-                    [2.0, 2.0, 0.0, 1]
+                    [ 2.0,  2.0, 0.0, 1 ]                                                
 
                 ]
 
@@ -178,43 +193,282 @@ class MyContents {
 
         surfaceData = this.builder.build(controlPoints,
 
-            orderU, orderV, this.samplesU,
+                      orderU, orderV, this.samplesU,
 
-            this.samplesV, this.material)
+                      this.samplesV, this.material);
 
-        mesh = new THREE.Mesh(surfaceData, this.material);
+        mesh = new THREE.Mesh( surfaceData, this.material );
 
-        mesh.rotation.x = 0
+        mesh.rotation.x = 0;
 
-        mesh.rotation.y = 0
+        mesh.rotation.y = 0;
 
-        mesh.rotation.z = 0
+        mesh.rotation.z = 0;
 
-        mesh.scale.set(1, 1, 1)
+        mesh.scale.set( 1,1,1 );
 
-        mesh.position.set(0, 0, 0)
+        mesh.position.set( -4,3,0 );
 
-        this.app.scene.add(mesh)
+        this.app.scene.add( mesh );
 
-        this.meshes.push(mesh)
+        this.meshes.push (mesh);
 
-   
+        // new build -------------------------------------------------------------------------
+
+        // correct the order
+
+        orderU = 2;
+
+        orderV = 1;
+
+        this.samplesU = 8;
+
+        this.samplesV = 8;
+
+        // build nurb #2
+
+        controlPoints =
+
+            [   // U = 0
+
+                [ // V = 0..1;
+
+                    [ -1.5, -1.5, 0.0, 1 ],
+
+                    [ -1.5,  1.5, 0.0, 1 ]
+
+                ],
+
+                // U = 1
+
+                [  // V = 0..1
+
+                    [ 0, -1.5, 3.0, 1 ],
+
+                    [ 0,  1.5, 3.0, 1 ]
+
+                ],
+
+                // U = 2
+
+                [ // V = 0..1
+
+                    [ 1.5, -1.5, 0.0, 1 ],
+
+                    [ 1.5,  1.5, 0.0, 1 ]
+
+                ]
+
+            ]
+
+        surfaceData = this.builder.build(controlPoints,
+
+                      orderU, orderV, this.samplesU,
+
+                      this.samplesV, this.material);
+
+        mesh = new THREE.Mesh( surfaceData, this.material );
+
+        mesh.rotation.x = 0;
+
+        mesh.rotation.y = 0;
+
+        mesh.rotation.z = 0;
+
+        mesh.scale.set( 1,1,1 );
+
+        mesh.position.set( 4,3,0 );
+
+        this.app.scene.add( mesh );
+
+        this.meshes.push (mesh);
+
+        // new build -------------------------------------------------------------------------
+
+        // correct the order
+
+        orderU = 2;
+
+        orderV = 3;
+
+        this.samplesU = 8;
+
+        this.samplesV = 8;
+
+        // build nurb #3
+
+        controlPoints =
+
+            [   // U = 0
+
+                [ // V = 0..3;
+
+                    [ -1.5, -1.5, 0.0, 1 ],
+
+                    [ -2.0, -2.0, 2.0, 1 ],
+
+                    [ -2.0,  2.0, 2.0, 1 ],
+
+                    [ -1.5,  1.5, 0.0, 1 ]
+
+                ],
+
+                // U = 1
+
+                [ // V = 0..3
+
+                    [ 0.0,  0.0, 3.0, 1 ],
+
+                    [ 0.0, -2.0, 3.0, 1 ],
+
+                    [ 0.0,  2.0, 3.0, 1 ],
+
+                    [ 0.0,  0.0, 3.0, 1 ]        
+
+                ],
+
+                // U = 2
+
+                [ // V = 0..3
+
+                    [ 1.5, -1.5, 0.0, 1 ],
+
+                    [ 2.0, -2.0, 2.0, 1 ],
+
+                    [ 2.0,  2.0, 2.0, 1 ],
+
+                    [ 1.5,  1.5, 0.0, 1 ]
+
+                ]
+
+            ]
+
+        surfaceData = this.builder.build(controlPoints,
+
+                      orderU, orderV, this.samplesU,
+
+                      this.samplesV, this.material);
+
+        mesh = new THREE.Mesh( surfaceData, this.material );
+
+        mesh.rotation.x = 0;
+
+        mesh.rotation.y = 0;
+
+        mesh.rotation.z = 0;
+
+        mesh.scale.set( 1,1,1 );
+
+        mesh.position.set( -4,-3,0 );
+
+        this.app.scene.add( mesh );
+
+        this.meshes.push (mesh);
+
+        // new build -------------------------------------------------------------------------
+
+        // correct the order
+
+        orderU = 3;
+
+        orderV = 2;
+
+        this.samplesU = 8;
+
+        this.samplesV = 8;
+
+        // build nurb #4
+
+        controlPoints =
+
+            [   // U = 0
+
+                [ // V = 0..2;
+    
+                    [ -2.0, -2.0, 1.0, 1 ],
+    
+                    [  0, -2.0, 0, 1 ],
+    
+                    [ 2.0, -2.0, -1.0, 1 ]
+    
+                ],
+    
+                // U = 1
+    
+                [ // V = 0..2
+    
+                    [  -2.0, -1.0, -2.0, 1 ],
+    
+                    [ 0, -1.0, -1.0, 1  ],
+    
+                    [ 2.0, -1.0, 2.0, 1 ]
+    
+                ],
+    
+                // U = 2
+    
+                [ // V = 0..2
+    
+                    [ -2.0, 1.0, 5.0, 1 ],
+    
+                    [  0, 1.0, 1.5, 1 ],
+    
+                    [ 2.0, 1.0, -5.0, 1 ]
+    
+                ],
+    
+                // U = 3
+    
+                [ // V = 0..2
+    
+                    [ -2.0, 2.0, -1.0, 1 ],
+    
+                    [ 0, 2.0, 0, 1  ],
+    
+                    [  2.0, 2.0, 1.0, 1 ]
+    
+                ]    
+    
+            ]
+
+        surfaceData = this.builder.build(controlPoints,
+
+                      orderU, orderV, this.samplesU,
+
+                      this.samplesV, this.material);
+
+        mesh = new THREE.Mesh( surfaceData, this.material );
+
+        mesh.rotation.x = 0;
+
+        mesh.rotation.y = 0;
+
+        mesh.rotation.z = 0;
+
+        mesh.scale.set( 1,1,1 );
+
+        mesh.position.set( 4,-3,0 );
+
+        this.app.scene.add( mesh );
+
+        this.meshes.push (mesh);
     }
+
     /**
 
-        * updates the contents
+     * updates the contents
 
-        * this method is called from the render method of the app
+     * this method is called from the render method of the app
 
-        *
+     *
 
-        */
+     */
+
     update() {
 
+       
     
-
     }
-
 }
 
 
