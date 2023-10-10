@@ -457,6 +457,82 @@ class MyContents  {
         this.app.scene.add( this.windowMesh );
     }
 
+    buildKirby(){
+        //loads the texture
+        let kirbyTexture = new THREE.TextureLoader().load('textures/kirby.jpg');
+
+        kirbyTexture.wrapS = THREE.RepeatWrapping;
+
+        kirbyTexture.wrapT = THREE.RepeatWrapping;
+
+        let kirbyMaterial = new THREE.MeshPhongMaterial({
+            color: "#ffffff",
+
+            specular: "#000000",
+
+            emissive: "#000000", shininess: 90,
+
+            map: kirbyTexture })
+
+        let kirbyHandsMaterial = new THREE.MeshPhongMaterial({
+            color: "#d5afaf",
+
+            specular: "#000000",
+
+            emissive: "#000000", shininess: 90})
+
+        let kirbyFeetMaterial = new THREE.MeshPhongMaterial({
+            color: "#800051",
+
+            specular: "#000000",
+
+            emissive: "#000000", shininess: 90})
+
+        let kirby = new THREE.SphereGeometry(1, 32, 32);
+        let kirbyHands = new THREE.SphereGeometry(0.3, 32, 32);
+        let kirbyFeet = new THREE.CylinderGeometry(0.4, 0.5, 0.3, 32);
+
+        this.kirbyMesh = new THREE.Mesh( kirby, kirbyMaterial );
+
+        this.kirbyMesh.position.y = 1;
+
+        this.kirbyMesh.position.x = 3;
+
+        let rightHand = new THREE.Mesh( kirbyHands, kirbyHandsMaterial );
+        rightHand.position.y = 0.7;
+        rightHand.position.x = 3;
+        rightHand.position.z = 0.9;
+
+        let leftHand = new THREE.Mesh( kirbyHands, kirbyHandsMaterial );
+        leftHand.position.y = 0.7;
+        leftHand.position.x = 3;
+        leftHand.position.z = -0.9;
+
+        let rightFoot = new THREE.Mesh( kirbyFeet, kirbyFeetMaterial );
+        rightFoot.position.y = 0.1;
+        rightFoot.position.x = 3;
+        rightFoot.position.z = 0.65;
+                                                                                                                                                                                                                                                                                                                                                                               ;
+
+        let leftFoot = new THREE.Mesh( kirbyFeet, kirbyFeetMaterial );
+        leftFoot.position.y = 0.1;
+        leftFoot.position.x = 3;
+        leftFoot.position.z = -0.65;
+
+
+        let kirbyGroup = new THREE.Group();
+        kirbyGroup.add(this.kirbyMesh);
+        kirbyGroup.add(rightHand);
+        kirbyGroup.add(leftHand);
+        kirbyGroup.add(rightFoot);
+        kirbyGroup.add(leftFoot);
+
+        this.app.scene.add( kirbyGroup );
+
+
+
+    }
+
     /**
      * initializes the contents
      */
@@ -515,6 +591,7 @@ class MyContents  {
         this.buildPicture('202004646.jpg');
         this.buildPicture('202004724.jpg');
         this.buildWindows();
+        this.buildKirby();
 
         // adjust the table position
         this.tableMesh.position.y += 1;
