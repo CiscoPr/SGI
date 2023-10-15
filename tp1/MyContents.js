@@ -180,6 +180,8 @@ class MyContents {
       legMesh.position.x = i % 2 ? -0.6 : 0.6;
       legMesh.position.y = i < 2 ? -0.8 : 0.8;
       legMesh.position.z = -0.5;
+      legMesh.castShadow = true;
+      legMesh.receiveShadow = true;
 
       this.tableMesh.add(legMesh);
     }
@@ -590,6 +592,14 @@ class MyContents {
     leftFoot.position.x = 3;
     leftFoot.position.z = -0.65;
 
+    this.kirbyMesh.castShadow = true;
+    this.kirbyMesh.receiveShadow = true;
+    rightHand.castShadow = true;
+    rightHand.receiveShadow = true;
+    leftHand.castShadow = true;
+    leftHand.receiveShadow = true;
+
+
     let kirbyGroup = new THREE.Group();
     kirbyGroup.add(this.kirbyMesh);
     kirbyGroup.add(rightHand);
@@ -599,6 +609,7 @@ class MyContents {
 
     kirbyGroup.scale.set(0.5, 0.5, 0.5);
     kirbyGroup.position.x = -3.5;
+
     this.app.scene.add(kirbyGroup);
   }
 
@@ -653,7 +664,7 @@ class MyContents {
                 [ 0.5, 0.0, 0.0, 1 ],
 
                 [ 0.0,  -1.0, 0.0, 1 ],
-                
+
                 [ -0.5,  0.0, 0.0, 1 ]
 
             ],
@@ -661,18 +672,18 @@ class MyContents {
             // U = 2
 
             [ // V = 0..2
-                
+
                 [ 0.5, 0.0, 1.0, 1 ],
 
                 [ 0.0, -1.0, 1.0, 1 ],
-                
+
                 [ -0.5,  0.0, 1.0, 1 ]
 
             ]
 
         ]
 
-   
+
 
     surfaceData = builder.build(controlPoints,
 
@@ -725,7 +736,7 @@ class MyContents {
                 [ 0.1, -1.0, 0.0, 1 ],
 
                 [ 0.0,  -1.0, -0.2, 1 ],
-                
+
                 [ -0.1,  -1.0, 0.0, 1 ]
 
             ],
@@ -733,11 +744,11 @@ class MyContents {
             // U = 2
 
             [ // V = 0..2
-                
+
                 [ 0.5, -2.0, 0.0, 1 ],
 
                 [ 0.0, -2.0, -1.0, 1 ],
-                
+
                 [ -0.5, -2.0, 0.0, 1 ]
 
             ]
@@ -762,7 +773,7 @@ class MyContents {
     this.app.scene.add( this.vaseMesh );
   }
 
-  buildSpring() {    
+  buildSpring() {
     let numberOfSamples = 1000;
     let collection = [];
     for (let i = 0; i < 50; i++) {
@@ -830,7 +841,7 @@ class MyContents {
                 [ 1.5, 0.0, -1.5, 1 ],
 
                 [ 1.5,  0.0, 0.0, 1 ],
-                
+
                 [ 1.5,  0.0, 1.5, 1 ]
 
             ],
@@ -838,11 +849,11 @@ class MyContents {
             // U = 2
 
             [ // V = 0..2
-                
+
                 [ 3.0, 0.0, 0.0, 1 ],
 
                 [ 3.0, 0.0, 0.0, 1 ],
-                
+
                 [ 3.0, 0.0, 0.0, 1 ]
 
             ]
@@ -864,7 +875,7 @@ class MyContents {
 
       this.flowerMesh.add(petalMesh);
     }
-    
+
 
     this.flowerMesh.scale.set( 0.1, 0.1, 0.1 );
     stemMesh.scale.set( 3, 3, 3 );
@@ -873,7 +884,7 @@ class MyContents {
     this.app.scene.add( this.flowerMesh );
   }
 
-  
+
 
   /**
    * initializes the contents
@@ -913,6 +924,40 @@ class MyContents {
     this.app.scene.add(pointLightHelper);
 
     //-------------------------------------------------------------------------------
+
+    // add a light for the window
+    this.windowLight = new THREE.SpotLight(
+      0xffffff,
+      4,
+      10,
+      Math.PI / 5,
+      0.1,
+      0
+    );
+
+    this.windowLight.castShadow = true;
+    this.windowLight.position.set(-5, 5, 0.0);
+
+    this.app.scene.add(this.windowLight);
+
+    this.windowLight.shadow.mapSize.width = 512;
+    this.windowLight.shadow.mapSize.height = 512;
+    this.windowLight.shadow.camera.near = 0.1;
+    this.windowLight.shadow.camera.far = 1.5;
+    this.windowLight.focus = 1;
+
+    // add a target for the previous point light
+    this.windowLightTarget = new THREE.Object3D();
+    this.windowLightTarget.position.set(0.0, 0.0, 0.0);
+    this.app.scene.add(this.windowLight.target);
+    this.app.scene.add(this.windowLightTarget);
+    this.windowLight.target = this.windowLightTarget;
+
+    // add a point light helper for the previous point light
+    //const windowLightHelper = new THREE.SpotLightHelper(this.windowLight);
+    //this.app.scene.add(windowLightHelper);
+
+    //--------------------------------------------------------------------------------
 
     // add a spot light on top of the model
     this.candleLight = new THREE.SpotLight(
@@ -1020,6 +1065,10 @@ class MyContents {
     var plane = new THREE.PlaneGeometry(planeSizeU, planeSizeV);
 
     this.planeMesh = new THREE.Mesh(plane, this.planeMaterial);
+
+    this.planeMesh.castShadow = false;
+
+    this.planeMesh.receiveShadow = true;
 
     this.planeMesh.rotation.x = -Math.PI / 2;
 
