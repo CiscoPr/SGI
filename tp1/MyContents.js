@@ -576,6 +576,8 @@ class MyContents {
     kirbyGroup.add(rightFoot);
     kirbyGroup.add(leftFoot);
 
+    kirbyGroup.scale.set(0.5, 0.5, 0.5);
+    kirbyGroup.position.x = -3.5;
     this.app.scene.add(kirbyGroup);
   }
 
