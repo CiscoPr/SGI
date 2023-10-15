@@ -23,7 +23,7 @@ class MyContents {
 
     //texture
 
-    this.planeTexture = new THREE.TextureLoader().load("textures/feup_b.jpg");
+    this.planeTexture = new THREE.TextureLoader().load("textures/floor.jpg");
 
     // the wrapS must be equals to the one selected in the gui interface
     this.planeTexture.wrapS = THREE.RepeatWrapping;
@@ -81,6 +81,7 @@ class MyContents {
     this.candleLightHelper = null;
   }
 
+  /*
   buildBox() {
     this.cubeTexture = new THREE.TextureLoader().load(
       "textures/feup_entry.jpg"
@@ -117,6 +118,8 @@ class MyContents {
     this.boxMesh.position.y = 5;
     this.app.scene.add(this.boxMesh);
   }
+
+  */
 
   /**
    * builds the table mesh with material assigned
@@ -690,7 +693,7 @@ class MyContents {
 
     let planeSizeU = 10;
 
-    let planeSizeV = 7;
+    let planeSizeV = 10;
 
     let planeUVRate = planeSizeV / planeSizeU;
 
