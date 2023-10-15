@@ -619,12 +619,15 @@ class MyContents {
     //-------------------------------------------------------------------------------
 
     // add a spot light on top of the model
-    this.candleLight = new THREE.PointLight(
+    this.candleLight = new THREE.SpotLight(
       0xffffff,
-      2,
-      1,
+      4,
+      1.5,
+      Math.PI /4.5,
+      0,
+      0,
     );
-    this.candleLight.position.set(0.1, 1.6, -0.1);
+    this.candleLight.position.set(0.1, 1.6, -0.4);
     this.candleLight.castShadow = true;
 
     this.app.scene.add(this.candleLight);
@@ -643,7 +646,7 @@ class MyContents {
     this.app.scene.add(this.candleLightTarget);
     this.candleLight.target = this.candleLightTarget;
     // add a spot light helper for the previous spot light
-    //this.candleLightHelper = new THREE.candleLightHelper( this.candleLight );
+    //this.candleLightHelper = new THREE.SpotLightHelper( this.candleLight );
     //this.app.scene.add( this.candleLightHelper );
 
     //--------------------------------------------------------------------------------
