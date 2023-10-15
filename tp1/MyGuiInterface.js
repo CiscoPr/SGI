@@ -43,26 +43,6 @@ class MyGuiInterface  {
             'diffuse color': this.contents.diffusePlaneColor,
             'specular color': this.contents.specularPlaneColor,
         };
-
-        // adds a folder to the gui interface for the plane
-        const planeFolder = this.datgui.addFolder( 'Plane' );
-        planeFolder.addColor( data, 'diffuse color' ).onChange( (value) => { this.contents.updateDiffusePlaneColor(value) } );
-        planeFolder.addColor( data, 'specular color' ).onChange( (value) => { this.contents.updateSpecularPlaneColor(value) } );
-        planeFolder.add(this.contents, 'planeShininess', 0, 1000).name("shininess").onChange( (value) => { this.contents.updatePlaneShininess(value) } );
-        planeFolder.open();
-
-        // adds a folder to the gui interface for the camera
-        const cameraFolder = this.datgui.addFolder('Camera')
-        cameraFolder.add(this.app, 'activeCameraName', [ 'Perspective', 'Perspective2', 'Left', 'Top', 'Front', 'Back', "Right"] ).name("active camera");
-        // note that we are using a property from the app
-        cameraFolder.add(this.app.activeCamera.position, 'x', 0, 10).name("x coord")
-        cameraFolder.open()
-
-        // adds a folder to the gui interface for the plane texture
-        const textureFolder = this.datgui.addFolder('Texture');
-        textureFolder.add(this.contents.planeTexture, 'wrapS', [ 'RepeatWrapping', 'ClampToEdgeWrapping', 'MirroredRepeatWrapping' ] ).name('wrapS').onChange((value) => { this.contents.updatePlaneTexture(value) });
-
-        textureFolder.open();
     }
 }
 
