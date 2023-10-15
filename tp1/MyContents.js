@@ -764,6 +764,93 @@ class MyContents {
     this.app.scene.add(this.springMesh);
   }
 
+  buildFlower() {
+    const petalMaterial = new THREE.MeshBasicMaterial( { color: "#0000ff", side: THREE.DoubleSide} );
+    const centerMaterial = new THREE.MeshBasicMaterial( { color: "#ffff00", side: THREE.DoubleSide} );
+    const stemMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+
+    const builder = new MyNurbsBuilder();
+    let controlPoints;
+    let surfaceData;
+    let orderU = 2;
+    let orderV = 2;
+
+    // stem points
+    let stemPoints = new THREE.QuadraticBezierCurve3(
+      new THREE.Vector3(0.0, 0.0, 0.0),
+      new THREE.Vector3(0.0, -1.0, -0.5),
+      new THREE.Vector3(0.0, -2.0, -0.5)
+    );
+
+    const numberOfSamples = 16;
+    const stemGeometry = new THREE.BufferGeometry().setFromPoints( stemPoints.getPoints( numberOfSamples ) );
+
+    let stemMesh = new THREE.Line( stemGeometry, stemMaterial );
+
+    // petal control points
+    controlPoints =
+
+        [   // U = 0
+
+            [ // V = 0..2;
+
+                [ 0.0, 0.0, 0.0, 1 ],
+
+                [ 0.0,  0.0, 0.0, 1 ],
+
+                [ 0.0,  0.0, 0.0, 1 ]
+
+            ],
+
+            // U = 1
+
+            [ // V = 0..2
+
+                [ 1.5, 0.0, -1.5, 1 ],
+
+                [ 1.5,  0.0, 0.0, 1 ],
+                
+                [ 1.5,  0.0, 1.5, 1 ]
+
+            ],
+
+            // U = 2
+
+            [ // V = 0..2
+                
+                [ 3.0, 0.0, 0.0, 1 ],
+
+                [ 3.0, 0.0, 0.0, 1 ],
+                
+                [ 3.0, 0.0, 0.0, 1 ]
+
+            ]
+
+        ]
+
+    // build petal surface
+    surfaceData = builder.build(controlPoints,
+      orderU, orderV, 16, 16, petalMaterial);
+
+    const circleGeometry = new THREE.CircleGeometry(1);
+    this.flowerMesh = new THREE.Mesh( circleGeometry, centerMaterial );
+
+    for(let i = 0; i < 6; i++) {
+      let petalMesh = new THREE.Mesh( surfaceData, petalMaterial );
+      petalMesh.rotation.y = i * Math.PI / 3;
+      petalMesh.rotation.x = Math.PI / 2;
+      petalMesh.position.set(Math.cos(i * Math.PI / 3), Math.sin(i * Math.PI / 3), 0.0);
+
+      this.flowerMesh.add(petalMesh);
+    }
+    
+
+    this.flowerMesh.scale.set( 0.1, 0.1, 0.1 );
+    stemMesh.scale.set( 3, 3, 3 );
+    this.flowerMesh.add(stemMesh);
+
+    this.app.scene.add( this.flowerMesh );
+  }
 
   
 
@@ -850,6 +937,7 @@ class MyContents {
     this.buildCarPictureBackground();
     this.buildJournal();
     this.buildVasel();
+    this.buildFlower();
     this.buildSpring();
 
     // adjust the table position
@@ -874,6 +962,9 @@ class MyContents {
 
     // adjust spring position
     this.springMesh.position.set(0.5, 1.10, -0.6);
+
+    // adjust flower position
+    this.flowerMesh.position.set(0.5, 1.7, 0.7);
 
     // Create a Plane Mesh with basic material
 
