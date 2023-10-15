@@ -25,7 +25,7 @@ class MyContents {
 
     //texture
 
-    this.planeTexture = new THREE.TextureLoader().load("textures/feup_b.jpg");
+    this.planeTexture = new THREE.TextureLoader().load("textures/floor.jpg");
 
     // the wrapS must be equals to the one selected in the gui interface
     this.planeTexture.wrapS = THREE.RepeatWrapping;
@@ -78,6 +78,10 @@ class MyContents {
     this.walls = null;
 
     // spotLight related attributes
+    this.candleLight = null;
+    this.candleLightTarget = null;
+    this.candleLightHelper = null;
+
     this.spotLight = null
     this.spotLightTarget = null
     this.spotLightHelper = null
@@ -95,6 +99,7 @@ class MyContents {
     this.springMesh = null
   }
 
+  /*
   buildBox() {
     this.cubeTexture = new THREE.TextureLoader().load(
       "textures/feup_entry.jpg"
@@ -131,6 +136,8 @@ class MyContents {
     this.boxMesh.position.y = 5;
     this.app.scene.add(this.boxMesh);
   }
+
+  */
 
   /**
    * builds the table mesh with material assigned
@@ -180,6 +187,8 @@ class MyContents {
     // adjust the table position
     this.tableMesh.rotation.x = -Math.PI / 2;
 
+    this.tableMesh.castShadow = true;
+    this.tableMesh.receiveShadow = true;
     // add the table to the scene
     this.app.scene.add(this.tableMesh);
   }
@@ -223,7 +232,10 @@ class MyContents {
       0,
       (7 * Math.PI) / 4
     );
-    this.cakeMesh = new THREE.Mesh(cake, cakeMaterial);
+    let cakeMesh = new THREE.Mesh(cake, cakeMaterial);
+
+    // adjust the cake position
+    cakeMesh.position.y = 1.2;
 
     // create child geometry
     let plane = new THREE.PlaneGeometry(0.2, 0.6);
@@ -236,12 +248,18 @@ class MyContents {
     planeMesh2.rotation.z = Math.PI / 2;
     planeMesh2.rotation.y = -Math.PI / 2;
 
-    // add plane to the cake mesh
-    this.cakeMesh.add(planeMesh1);
-    this.cakeMesh.add(planeMesh2);
 
-    // add the cake to the scene
-    this.app.scene.add(this.cakeMesh);
+    // add plane to the cake mesh
+    cakeMesh.add(planeMesh1);
+    cakeMesh.add(planeMesh2);
+
+    // cake mesh must cast shadow
+    cakeMesh.castShadow = true;
+    cakeMesh.receiveShadow = true;
+    // add the cake to the scene and the helper
+    //const helper = new THREE.CameraHelper( this.candleLight.shadow.camera );
+    this.app.scene.add(cakeMesh);
+    //this.app.scene.add(helper);
   }
 
   /**
@@ -288,6 +306,7 @@ class MyContents {
     let candle = new THREE.CylinderGeometry(0.016, 0.016, 0.3);
     this.candleMesh = new THREE.Mesh(candle, candleMaterial);
 
+    this.candleMesh.castShadow = true;
     // add wick to the candle
     this.candleMesh.add(wickMesh);
 
@@ -578,6 +597,8 @@ class MyContents {
     kirbyGroup.add(rightFoot);
     kirbyGroup.add(leftFoot);
 
+    kirbyGroup.scale.set(0.5, 0.5, 0.5);
+    kirbyGroup.position.x = -3.5;
     this.app.scene.add(kirbyGroup);
   }
 
@@ -894,25 +915,35 @@ class MyContents {
     //-------------------------------------------------------------------------------
 
     // add a spot light on top of the model
-    this.spotLight = new THREE.SpotLight(
+    this.candleLight = new THREE.SpotLight(
       0xffffff,
       4,
-      0.6,
-      (Math.PI / 180) * 35,
+      1.5,
+      Math.PI /4.5,
       0,
-      0
+      0,
     );
-    this.spotLight.position.set(0.3, 1.55, -0.3);
-    this.app.scene.add(this.spotLight);
+    this.candleLight.position.set(0.1, 1.6, -0.4);
+    this.candleLight.castShadow = true;
+
+    this.app.scene.add(this.candleLight);
+
+    this.candleLight.shadow.mapSize.width = 512;
+    this.candleLight.shadow.mapSize.height = 512;
+    this.candleLight.shadow.camera.near = 0.1;
+    this.candleLight.shadow.camera.far = 1.5;
+    this.candleLight.focus = 1;
+
+
     // add a target for the previous spot light
-    this.spotLightTarget = new THREE.Object3D();
-    this.spotLightTarget.position.set(0, 1.3, 0);
-    this.app.scene.add(this.spotLight.target);
-    this.app.scene.add(this.spotLightTarget);
-    this.spotLight.target = this.spotLightTarget;
+    this.candleLightTarget = new THREE.Object3D();
+    this.candleLightTarget.position.set(0, 1.3, 0);
+    this.app.scene.add(this.candleLight.target);
+    this.app.scene.add(this.candleLightTarget);
+    this.candleLight.target = this.candleLightTarget;
     // add a spot light helper for the previous spot light
-    //this.spotLightHelper = new THREE.SpotLightHelper( this.spotLight );
-    //this.app.scene.add( this.spotLightHelper );
+    //this.candleLightHelper = new THREE.SpotLightHelper( this.candleLight );
+    //this.app.scene.add( this.candleLightHelper );
 
     //--------------------------------------------------------------------------------
 
@@ -946,8 +977,7 @@ class MyContents {
     // adjust the plate position
     this.plateMesh.position.y = 1.1;
 
-    // adjust the cake position
-    this.cakeMesh.position.y = 1.2;
+
 
     // adjust the candle position
     this.candleMesh.position.y = 1.3;
@@ -970,7 +1000,7 @@ class MyContents {
 
     let planeSizeU = 10;
 
-    let planeSizeV = 7;
+    let planeSizeV = 10;
 
     let planeUVRate = planeSizeV / planeSizeU;
 
@@ -1269,3 +1299,4 @@ class MyContents {
 }
 
 export { MyContents };
+
