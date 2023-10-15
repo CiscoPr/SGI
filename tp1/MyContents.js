@@ -90,6 +90,9 @@ class MyContents {
 
     // flower related attributes
     this.flowerMesh = null
+
+    // spring related attributes
+    this.springMesh = null
   }
 
   buildBox() {
@@ -738,6 +741,29 @@ class MyContents {
     this.app.scene.add( this.vaseMesh );
   }
 
+  buildSpring() {    
+    let numberOfSamples = 1000;
+    let collection = [];
+    for (let i = 0; i < 50; i++) {
+      collection.push(new THREE.Vector3(Math.cos(i), Math.sin(i) , i ));
+    }
+
+    // create curve path
+    const curve = new THREE.CatmullRomCurve3( collection );
+
+    const sampledPoints = curve.getPoints( numberOfSamples );
+    const curveGeometry = new THREE.BufferGeometry().setFromPoints( sampledPoints );
+
+    const material = new THREE.LineBasicMaterial( { color: 0x767474 } );
+
+    // Create the final object to add to the scene
+    this.springMesh = new THREE.Line( curveGeometry, material );
+
+    this.springMesh.scale.set( 0.05, 0.05, 0.01 );
+
+    this.app.scene.add(this.springMesh);
+  }
+
 
   
 
@@ -824,6 +850,7 @@ class MyContents {
     this.buildCarPictureBackground();
     this.buildJournal();
     this.buildVasel();
+    this.buildSpring();
 
     // adjust the table position
     this.tableMesh.position.y += 1;
@@ -844,6 +871,9 @@ class MyContents {
 
     // adjust vasel position
     this.vaseMesh.position.set(0.5, 1.60, 0.6);
+
+    // adjust spring position
+    this.springMesh.position.set(0.5, 1.10, -0.6);
 
     // Create a Plane Mesh with basic material
 
