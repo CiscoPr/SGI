@@ -55,46 +55,6 @@ class MyContents {
     this.candleLightHelper = null;
   }
 
-  /*
-  buildBox() {
-    this.cubeTexture = new THREE.TextureLoader().load(
-      "textures/feup_entry.jpg"
-    );
-
-    this.cubeTexture.wrapS = THREE.RepeatWrapping;
-
-    this.cubeTexture.wrapT = THREE.RepeatWrapping;
-
-    this.diffuseCubeColor = "rgb(128,128,128)";
-
-    this.specularCubeColor = "rgb(0,0,0)";
-
-    this.cubeShininess = 0;
-
-    let boxMaterial = new THREE.MeshPhongMaterial({
-      color: this.diffuseCubeColor,
-
-      specular: this.specularCubeColor,
-
-      emissive: "#000000",
-      shininess: this.cubeShininess,
-
-      map: this.cubeTexture,
-    });
-
-    // Create a Cube Mesh with basic material
-    let box = new THREE.BoxGeometry(
-      this.boxMeshSize,
-      this.boxMeshSize,
-      this.boxMeshSize
-    );
-    this.boxMesh = new THREE.Mesh(box, boxMaterial);
-    this.boxMesh.position.y = 5;
-    this.app.scene.add(this.boxMesh);
-  }
-
-  */
-
   /**
    * initializes the contents
    */
@@ -120,7 +80,7 @@ class MyContents {
 
     //-------------------------------------------------------------------------------
 
-    // add a spot light on top of the model
+    // add a spot light on top of the cake
     this.candleLight = new THREE.SpotLight(
       0xffffff,
       4,
@@ -147,9 +107,6 @@ class MyContents {
     this.app.scene.add(this.candleLight.target);
     this.app.scene.add(this.candleLightTarget);
     this.candleLight.target = this.candleLightTarget;
-    // add a spot light helper for the previous spot light
-    //this.candleLightHelper = new THREE.SpotLightHelper( this.candleLight );
-    //this.app.scene.add( this.candleLightHelper );
 
     //--------------------------------------------------------------------------------
 
@@ -200,83 +157,12 @@ class MyContents {
   }
 
   /**
-   * updates the diffuse plane color and the material
-   * @param {THREE.Color} value
-   */
-  /*updateDiffusePlaneColor(value) {
-    this.diffusePlaneColor = value;
-    this.planeMaterial.color.set(this.diffusePlaneColor);
-  }
-  /**
-   * updates the specular plane color and the material
-   * @param {THREE.Color} value
-   */
-  /*updateSpecularPlaneColor(value) {
-    this.specularPlaneColor = value;
-    this.planeMaterial.specular.set(this.specularPlaneColor);
-  }
-  /**
-   * updates the plane shininess and the material
-   * @param {number} value
-   */
-  /*updatePlaneShininess(value) {
-    this.planeShininess = value;
-    this.planeMaterial.shininess = this.planeShininess;
-  }
-
-  updatePlaneTexture(value) {
-    if (value == "ClampToEdgeWrapping") {
-      this.planeTexture.wrapS = THREE.ClampToEdgeWrapping;
-    } else if (value == "RepeatWrapping") {
-      this.planeTexture.wrapS = THREE.RepeatWrapping;
-    } else if (value == "MirroredRepeatWrapping") {
-      this.planeTexture.wrapS = THREE.MirroredRepeatWrapping;
-    }
-    this.planeMaterial.needsUpdate = true;
-  }
-
-  /**
-   * rebuilds the box mesh if required
-   * this method is called from the gui interface
-   */
-  /* rebuildBox() {
-        // remove boxMesh if exists
-        if (this.boxMesh !== undefined && this.boxMesh !== null) {
-            this.app.scene.remove(this.boxMesh)
-        }
-        this.buildBox();
-        this.lastBoxEnabled = null
-    } */
-
-  /**
-   * updates the box mesh if required
-   * this method is called from the render method of the app
-   * updates are trigered by boxEnabled property changes
-   */
-  /* updateBoxIfRequired() {
-        if (this.boxEnabled !== this.lastBoxEnabled) {
-            this.lastBoxEnabled = this.boxEnabled
-            if (this.boxEnabled) {
-                this.app.scene.add(this.boxMesh)
-            }
-            else {
-                this.app.scene.remove(this.boxMesh)
-            }
-        }
-    } */
-
-  /**
    * updates the contents
    * this method is called from the render method of the app
    *
    */
   update() {
-    // check if box mesh needs to be updated
-    // this.updateBoxIfRequired()
-    // sets the box mesh position based on the displacement vector
-    /* this.boxMesh.position.x = this.boxDisplacement.x
-        this.boxMesh.position.y = this.boxDisplacement.y
-        this.boxMesh.position.z = this.boxDisplacement.z */
+    
   }
 }
 
