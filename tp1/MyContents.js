@@ -7,6 +7,7 @@ import { MyCandle } from './components/MyCandle.js';
 import { MyPlate } from './components/MyPlate.js';
 import { MyTable } from './components/MyTable.js';
 import { MyNurbsBuilder } from './MyNurbsBuilder.js';
+import { MyDoor } from './components/MyDoor.js'
 
 
 /**
@@ -182,7 +183,7 @@ class MyContents {
 
       specular: "#000000",
 
-      emissive: "#808080",
+      emissive: "#241f31",
       shininess: 90,
 
       map: windowTexture,
@@ -811,6 +812,7 @@ class MyContents {
     this.table = new MyTable(this.app.scene);
     this.walls = new MyWalls(this.app.scene);
     this.floor = new MyFloor(this.app.scene);
+    this.door = new MyDoor(this.app.scene);  
 
 
     // adjust components position
@@ -819,6 +821,7 @@ class MyContents {
     this.plate.plateMesh.position.set(0.0, 1.1, 0.0);
     this.table.tableMesh.position.set(0.0, 1.0, 0.0);
     this.floor.floorMesh.position.set(0.0, 0.0, 0.0);
+    this.door.doorMesh.position.set(5.0, 1.5, 0.0);
 
   
     //this.buildBox();
