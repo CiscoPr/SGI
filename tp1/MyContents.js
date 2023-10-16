@@ -6,7 +6,6 @@ import { MyCake } from './components/MyCake.js';
 import { MyCandle } from './components/MyCandle.js';
 import { MyPlate } from './components/MyPlate.js';
 import { MyTable } from './components/MyTable.js';
-import { MyNurbsBuilder } from './MyNurbsBuilder.js';
 import { MyDoor } from './components/MyDoor.js'
 import { MyPicture } from './components/MyPicture.js';
 import { MyRug } from './components/MyRug.js';
@@ -18,6 +17,7 @@ import { MyVasel } from './components/MyVasel.js';
 import { MyJournal } from './components/MyJournal.js';
 import { MyFlower } from './components/MyFlower.js';
 import { MySpring } from './components/MySpring.js';
+import { MyPainting } from './components/MyPainting.js';
 
 /**
  *  This class contains the contents of out application
@@ -47,15 +47,12 @@ class MyContents {
     this.journal = null;
     this.flower = null;
     this.spring = null;
+    this.painting = null;
 
     // spotLight related attributes
     this.candleLight = null;
     this.candleLightTarget = null;
     this.candleLightHelper = null;
-
-    this.spotLight = null
-    this.spotLightTarget = null
-    this.spotLightHelper = null
   }
 
   /*
@@ -110,21 +107,6 @@ class MyContents {
       this.app.scene.add(this.axis);
     }*/
 
-    // variables to hold the curves
-    this.polyline = null;
-    this.quadraticBezierCurve = null;
-    // number of samples to use for the curves (not for polyline)
-    this.numberOfSamples = 16;
-
-    // hull material and geometry
-    this.hullMaterial = new THREE.MeshBasicMaterial({
-      color: 0xffffff,
-      opacity: 0.5,
-      transparent: true,
-    });
-
-    // curve recomputation
-    this.recompute();
     //-------------------------------------------------------------------------------
 
     // add a point light on top of the model
@@ -197,6 +179,7 @@ class MyContents {
     this.journal = new MyJournal(this.app.scene);
     this.flower = new MyFlower(this.app.scene);
     this.spring = new MySpring(this.app.scene);
+    this.painting = new MyPainting(this.app.scene);
 
     // adjust components position
     this.cake.cakeMesh.position.set(0.0, 1.2, 0.0);
@@ -214,238 +197,6 @@ class MyContents {
     this.journal.journalMesh.position.set(-0.5, 1.20, -0.6);
     this.flower.flowerMesh.position.set(0.5, 1.7, 0.7);
     this.spring.springMesh.position.set(0.5, 1.10, -0.6);
-  
-    //this.buildBox();
-    this.buildCarPictureBackground();
-  }
-
-  // Deletes the contents of the line if it exists and recreates them
-
-  recompute() {
-    if (this.polyline !== null) this.app.scene.remove(this.polyline);
-    if (this.quadraticBezierCurve !== null)
-      this.app.scene.remove(this.quadraticBezierCurve);
-
-    this.initCurveCar();
-  }
-
-  /*
-  drawHull(position, points) {
-    const geometry = new THREE.BufferGeometry().setFromPoints(points);
-
-    let line = new THREE.Line(geometry, this.hullMaterial);
-
-    // set initial position
-
-    line.position.set(position.x, position.y, position.z);
-
-    this.app.scene.add(line);
-  }
-  */
-
-  //+3 y
-  initCurveCar() {
-    let pointsTire1 = [
-      new THREE.Vector3(-2.5, 3, 4.98),
-      new THREE.Vector3(-2, 4, 4.98),
-      new THREE.Vector3(-1, 4, 4.98),
-      new THREE.Vector3(-0.5, 3, 4.98),
-    ];
-
-    let pointsTire2 = [
-      new THREE.Vector3(0.5, 3, 4.98),
-      new THREE.Vector3(1, 4, 4.98),
-      new THREE.Vector3(2, 4, 4.98),
-      new THREE.Vector3(2.5, 3, 4.98),
-    ];
-
-    // quadratic since we only need to specify 3 points
-    let pointsHalfCar = [
-      new THREE.Vector3(2.5, 3, 4.98),
-      new THREE.Vector3(2.5, 5.5, 4.98),
-      new THREE.Vector3(0.0, 5.5, 4.98),
-    ];
-
-    let frontCar = [
-        new THREE.Vector3(0.0, 5.5, 4.98),
-        new THREE.Vector3(-1.5, 5.5, 4.98),
-        new THREE.Vector3(-1.5, 4.25, 4.98),
-    ];
-
-    let hoodCar = [
-        new THREE.Vector3(-1.5, 4.25, 4.98),
-        new THREE.Vector3(-2.5, 4.25, 4.98),
-        new THREE.Vector3(-2.5, 3, 4.98),
-    ];
-
-    let position = new THREE.Vector3(0, 0, 0);
-
-    /*
-    this.drawHull(position, pointsTire1);
-    this.drawHull(position, pointsTire2);
-    this.drawHull(position, pointsHalfCar);
-    this.drawHull(position, frontCar);
-    this.drawHull(position, hoodCar);
-    */
-
-    let curveTire1 = new THREE.CubicBezierCurve3(
-      pointsTire1[0],
-      pointsTire1[1],
-      pointsTire1[2],
-      pointsTire1[3]
-    );
-
-    let curveTire2 = new THREE.CubicBezierCurve3(
-      pointsTire2[0],
-      pointsTire2[1],
-      pointsTire2[2],
-      pointsTire2[3]
-    );
-
-    let curveHalfCar = new THREE.QuadraticBezierCurve3(
-      pointsHalfCar[0],
-      pointsHalfCar[1],
-      pointsHalfCar[2]
-    );
-
-    let curveFrontCar = new THREE.QuadraticBezierCurve3(
-        frontCar[0],
-        frontCar[1],
-        frontCar[2]
-    );
-
-    let curveHoodCar = new THREE.QuadraticBezierCurve3(
-        hoodCar[0],
-        hoodCar[1],
-        hoodCar[2]
-    );
-
-    // sample a number of points on the curve
-
-    let sampledPointsTire1 = curveTire1.getPoints(this.numberOfSamples);
-    let sampledPointsTire2 = curveTire2.getPoints(this.numberOfSamples);
-    let sampledPointsHalfCar = curveHalfCar.getPoints(this.numberOfSamples);
-    let sampledPointsFrontCar = curveFrontCar.getPoints(this.numberOfSamples);
-    let sampledPointsHoodCar = curveHoodCar.getPoints(this.numberOfSamples);
-
-    this.curveGeometryTire1 = new THREE.BufferGeometry().setFromPoints(
-      sampledPointsTire1
-    );
-
-    this.curveGeometryTire2 = new THREE.BufferGeometry().setFromPoints(
-      sampledPointsTire2
-    );
-
-    this.curveGeometryHalfCar = new THREE.BufferGeometry().setFromPoints(
-      sampledPointsHalfCar
-    );
-
-    this.curveGeometryFrontCar = new THREE.BufferGeometry().setFromPoints(
-        sampledPointsFrontCar
-    );
-
-    this.curveGeometryHoodCar = new THREE.BufferGeometry().setFromPoints(
-        sampledPointsHoodCar
-    );
-
-    this.lineMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
-
-    this.lineObjTire1 = new THREE.Line(
-      this.curveGeometryTire1,
-      this.lineMaterial
-    );
-    this.lineObjTire2 = new THREE.Line(
-      this.curveGeometryTire2,
-      this.lineMaterial
-    );
-    this.lineObjHalfCar = new THREE.Line(
-      this.curveGeometryHalfCar,
-      this.lineMaterial
-    );
-    this.lineObjFrontCar = new THREE.Line(
-        this.curveGeometryFrontCar,
-        this.lineMaterial
-    );
-
-    this.lineObjHoodCar = new THREE.Line(
-        this.curveGeometryHoodCar,
-        this.lineMaterial
-    );
-
-    this.lineObjTire1.position.set(position.x, position.y, position.z);
-    this.lineObjTire2.position.set(position.x, position.y, position.z);
-    this.lineObjHalfCar.position.set(position.x, position.y, position.z);
-    this.lineObjFrontCar.position.set(position.x, position.y, position.z);
-    this.lineObjHoodCar.position.set(position.x, position.y, position.z);
-
-    this.app.scene.add(this.lineObjTire1);
-    this.app.scene.add(this.lineObjTire2);
-    this.app.scene.add(this.lineObjHalfCar);
-    this.app.scene.add(this.lineObjFrontCar);
-    this.app.scene.add(this.lineObjHoodCar);
-  }
-
-  buildCarPictureBackground(){
-    // it should be a white plane
-    let planeMaterial = new THREE.MeshPhongMaterial({
-        color: "#ffffff",
-        specular: "#000000",
-        emissive: "#000000",
-        shininess: 90,
-    });
-
-    let plane = new THREE.PlaneGeometry(5.5, 3);
-    this.carPictureBackground = new THREE.Mesh(plane, planeMaterial);
-
-    this.carPictureBackground.position.y = 4.25;
-
-    this.carPictureBackground.position.z = 4.99;
-
-    this.carPictureBackground.position.x = 0;
-
-    this.carPictureBackground.rotation.y = Math.PI;
-
-    // borders to the picture
-    let borderUpper = new THREE.BoxGeometry(5.5, 0.1, 0.1);
-    let borderLower = new THREE.BoxGeometry(5.5, 0.1, 0.1);
-    let borderLeft = new THREE.BoxGeometry(0.1, 3, 0.1);
-    let borderRight = new THREE.BoxGeometry(0.1, 3, 0.1);
-
-    let borderMaterial = new THREE.MeshPhongMaterial({
-        color: "#753500",
-        specular: "#000000",
-        emissive: "#000000",
-        shininess: 90,
-    });
-
-    let borderMeshUpper = new THREE.Mesh(borderUpper, borderMaterial);
-    let borderMeshLower = new THREE.Mesh(borderLower, borderMaterial);
-    let borderMeshLeft = new THREE.Mesh(borderLeft, borderMaterial);
-    let borderMeshRight = new THREE.Mesh(borderRight, borderMaterial);
-
-    borderMeshUpper.position.y = 5.7;
-    borderMeshUpper.position.z = 5;
-
-    borderMeshLower.position.y = 2.75;
-    borderMeshLower.position.z = 5;
-
-    borderMeshLeft.position.y = 4.25;
-    borderMeshLeft.position.z = 5;
-    borderMeshLeft.position.x = -2.75;
-
-    borderMeshRight.position.y = 4.25;
-    borderMeshRight.position.z = 5;
-    borderMeshRight.position.x = 2.75;
-
-    //adds the borders to the scene
-    this.app.scene.add(borderMeshUpper);
-    this.app.scene.add(borderMeshLower);
-    this.app.scene.add(borderMeshLeft);
-    this.app.scene.add(borderMeshRight);
-
-
-
-    this.app.scene.add(this.carPictureBackground);
   }
 
   /**
