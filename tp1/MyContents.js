@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { MyAxis } from './MyAxis.js';
 import { MyCake } from './components/MyCake.js';
+import { MyCandle } from './components/MyCandle.js';
 import { MyNurbsBuilder } from './MyNurbsBuilder.js';
 
 
@@ -69,11 +70,9 @@ class MyContents {
 
     let plane = new THREE.PlaneGeometry(10, 3);
 
-    // cake related attributes
+    // components
     this.cake = null;
-
-    // candle related attributes
-    this.candleMesh = null;
+    this.candle = null;
 
     // walls related attributes
     this.walls = null;
@@ -210,111 +209,6 @@ class MyContents {
 
     // add plate to the scene
     this.app.scene.add(this.plateMesh);
-  }
-
-  /**
-   * builds the cake cylinder with a triangular piece missing
-   */
-
-  buildCake() {
-    let cakeMaterial = new THREE.MeshPhongMaterial({
-      color: "#63452c",
-      specular: "#cdab8f",
-      emissive: "#000000",
-      shininess: 90,
-    });
-
-    // build the cake mesh
-    let cake = new THREE.CylinderGeometry(
-      0.3,
-      0.3,
-      0.2,
-      32,
-      1,
-      false,
-      0,
-      (7 * Math.PI) / 4
-    );
-    let cakeMesh = new THREE.Mesh(cake, cakeMaterial);
-
-    // adjust the cake position
-    cakeMesh.position.y = 1.2;
-
-    // create child geometry
-    let plane = new THREE.PlaneGeometry(0.2, 0.6);
-
-    let planeMesh1 = new THREE.Mesh(plane, cakeMaterial);
-    planeMesh1.rotation.z = Math.PI / 2;
-    planeMesh1.rotation.y = Math.PI / 4;
-
-    let planeMesh2 = new THREE.Mesh(plane, cakeMaterial);
-    planeMesh2.rotation.z = Math.PI / 2;
-    planeMesh2.rotation.y = -Math.PI / 2;
-
-
-    // add plane to the cake mesh
-    cakeMesh.add(planeMesh1);
-    cakeMesh.add(planeMesh2);
-
-    // cake mesh must cast shadow
-    cakeMesh.castShadow = true;
-    cakeMesh.receiveShadow = true;
-    // add the cake to the scene and the helper
-    //const helper = new THREE.CameraHelper( this.candleLight.shadow.camera );
-    this.app.scene.add(cakeMesh);
-    //this.app.scene.add(helper);
-  }
-
-  /**
-   * builds the candle with is a cylinder
-   */
-  buildCandle() {
-    let flameMaterial = new THREE.MeshPhongMaterial({
-      color: "#ffff77",
-      specular: "#ff0000",
-      emissive: "#ff0000",
-      shininess: 90,
-    });
-
-    let wickMaterial = new THREE.MeshPhongMaterial({
-      color: "#ffffff",
-      specular: "#ff0000",
-      emissive: "#ffffff",
-      shininess: 90,
-    });
-
-    let candleMaterial = new THREE.MeshPhongMaterial({
-      color: "#8ac6ff",
-      specular: "#000000",
-      emissive: "#8ac6ff",
-      shininess: 90,
-    });
-
-    // build the flame mesh
-    let flame = new THREE.CapsuleGeometry(0.016, 0.026);
-    let flameMesh = new THREE.Mesh(flame, flameMaterial);
-    flameMesh.position.y = 0.05;
-
-    // build the wick mesh
-    let wick = new THREE.CylinderGeometry(0.005, 0.005, 0.13);
-    let wickMesh = new THREE.Mesh(wick, wickMaterial);
-
-    // add flame to the wick
-    wickMesh.add(flameMesh);
-
-    // adjust the wick position
-    wickMesh.position.y = 0.16;
-
-    // build the candle mesh
-    let candle = new THREE.CylinderGeometry(0.016, 0.016, 0.3);
-    this.candleMesh = new THREE.Mesh(candle, candleMaterial);
-
-    this.candleMesh.castShadow = true;
-    // add wick to the candle
-    this.candleMesh.add(wickMesh);
-
-    // add flameMesh to the scene
-    this.app.scene.add(this.candleMesh);
   }
 
   /**
@@ -1093,12 +987,17 @@ class MyContents {
     this.buildTable();
     this.buildPlate();
     
-    // build cake
+    // build components
     this.cake = new MyCake(this.app.scene);
-    // adjust cake position
-    this.cake.cakeMesh.position.set(0.0, 1.2, 0.0);
+    this.candle = new MyCandle(this.app.scene);
 
-    this.buildCandle();
+
+    // adjust components position
+    this.cake.cakeMesh.position.set(0.0, 1.2, 0.0);
+    this.candle.candleMesh.position.set(0.1, 1.3, -0.1);
+
+    // build components
+  
     //this.buildBox();
     this.buildPicture("202004646.jpg");
     this.buildPicture("202004724.jpg");
@@ -1117,11 +1016,6 @@ class MyContents {
 
     // adjust the plate position
     this.plateMesh.position.y = 1.1;
-
-    // adjust the candle position
-    this.candleMesh.position.y = 1.3;
-    this.candleMesh.position.x = 0.1;
-    this.candleMesh.position.z = -0.1;
 
     // adjust journal position
     this.journalMesh.position.set(-0.5, 1.20, -0.6);
