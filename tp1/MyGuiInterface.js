@@ -47,14 +47,17 @@ class MyGuiInterface  {
             'wallColor': this.contents.walls.diffuse,
         };
 
-        //adds a folder to the gui interface for the cake
+        //adds a folder to the gui interface for the colors
         const colorsFolder = this.datgui.addFolder('Color Change');
         colorsFolder.addColor(data, 'cakeColor').onChange((value) => { this.contents.updateCakeTopping(value) });
         colorsFolder.addColor(data, 'petalColor').onChange((value) => { this.contents.updateFlowerPetalColor(value) });
         colorsFolder.addColor(data, 'wallColor').onChange((value) => { this.contents.updateWallColor(value) });
         colorsFolder.open();
 
-
+        // adds a folder to the gui interface to control display of the figures
+        const displayFolder = this.datgui.addFolder('Display');
+        displayFolder.add(this.contents.candle, 'candleEnabled', true).name("candle enabled");
+        displayFolder.open();
 
         // adds a folder to the gui interface for the plane
         /*const planeFolder = this.datgui.addFolder( 'Plane' );

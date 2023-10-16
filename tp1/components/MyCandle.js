@@ -10,9 +10,11 @@ class MyCandle {
   */
   constructor(scene) {
     this.scene = scene;
-    
+
     // app properties
     this.candleMesh = null;
+    this.candleEnabled = true;
+    this.lastCandleEnabled = null
 
     // candle material properties
     this.color = "#8ac6ff";
@@ -37,7 +39,7 @@ class MyCandle {
       emissive: "#ffffff",
       shininess: 90,
     });
-    
+
     let flameMaterial = new THREE.MeshPhongMaterial({
       color: this.flameColor,
       specular: this.flameSpecular,
@@ -76,9 +78,9 @@ class MyCandle {
     this.candleMesh.add(wickMesh);
 
     // add flameMesh to the scene
-    this.scene.add(this.candleMesh);  
+    this.scene.add(this.candleMesh);
   }
-   
+
   rebuildCandle() {
     // remove candleMesh if exists
     if (this.candleMesh !== undefined && this.candleMesh !== null) {

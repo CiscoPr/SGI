@@ -182,6 +182,38 @@ class MyContents {
     });
   }
 
+  /**
+   * rebuilds the candle mesh if required
+   * this method is called from the gui interface
+   */
+  rebuildCandle() {
+    // remove boxMesh if exists
+    if (this.candle.candleMesh !== undefined && this.candle.candleMesh !== null) {
+        this.app.scene.remove(this.candle.candleMesh)
+    }
+    this.candle.buildCandle();
+    this.candle.lastCandleEnabled = null
+  }
+
+  /**
+   * updates the candle mesh if required
+   * this method is called from the render method of the app
+   * updates are trigered by candleEnabled property changes
+   */
+  updateCandleIfRequired() {
+      if (this.candle.candleEnabled !== this.candle.lastCandleEnabled) {
+          this.candle.lastCandleEnabled = this.candle.candleEnabled
+          if (this.candle.candleEnabled) {
+              this.app.scene.add(this.candle.candleMesh)
+              this.app.scene.add(this.candleLight)
+          }
+          else {
+              this.app.scene.remove(this.candle.candleMesh)
+              this.app.scene.remove(this.candleLight)
+          }
+      }
+  }
+
 
   /**
    * updates the contents
@@ -189,6 +221,7 @@ class MyContents {
    *
    */
   update() {
+    this.updateCandleIfRequired();
 
   }
 }
