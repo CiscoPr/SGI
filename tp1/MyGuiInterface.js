@@ -57,6 +57,7 @@ class MyGuiInterface  {
         // adds a folder to the gui interface to control display of the figures
         const displayFolder = this.datgui.addFolder('Display');
         displayFolder.add(this.contents.candle, 'candleEnabled', true).name("candle enabled");
+        displayFolder.add(this.contents.window, 'windowEnabled', true).name("window enabled");
         displayFolder.open();
 
         // adds a folder to the gui interface for the plane

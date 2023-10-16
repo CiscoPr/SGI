@@ -183,19 +183,6 @@ class MyContents {
   }
 
   /**
-   * rebuilds the candle mesh if required
-   * this method is called from the gui interface
-   */
-  rebuildCandle() {
-    // remove boxMesh if exists
-    if (this.candle.candleMesh !== undefined && this.candle.candleMesh !== null) {
-        this.app.scene.remove(this.candle.candleMesh)
-    }
-    this.candle.buildCandle();
-    this.candle.lastCandleEnabled = null
-  }
-
-  /**
    * updates the candle mesh if required
    * this method is called from the render method of the app
    * updates are trigered by candleEnabled property changes
@@ -214,6 +201,28 @@ class MyContents {
       }
   }
 
+  /**
+   * updates the window mesh if required
+   * this method is called from the render method of the app
+   * updates are trigered by windowEnabled property changes
+   */
+  updateWindowIfRequired() {
+      if (this.window.windowEnabled !== this.window.lastWindowEnabled) {
+          this.window.lastWindowEnabled = this.window.windowEnabled
+          if (this.window.windowEnabled) {
+              //add window group and all the children
+              this.app.scene.add(this.window.windowMesh)
+              this.app.scene.add(this.window.windowLight)
+          }
+          else {
+            //remove window and all the children
+
+              this.app.scene.remove(this.window.windowMesh)
+              this.app.scene.remove(this.window.windowLight)
+          }
+      }
+  }
+
 
   /**
    * updates the contents
@@ -222,6 +231,7 @@ class MyContents {
    */
   update() {
     this.updateCandleIfRequired();
+    this.updateWindowIfRequired();
 
   }
 }
