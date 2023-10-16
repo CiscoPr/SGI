@@ -13,6 +13,7 @@ class MyWindow {
 
     // app properties
     this.windowMesh = null;
+    this.windowLight = null;
 
     // Window material properties
     this.windowTexture = new THREE.TextureLoader().load("textures/nostalgia.jpg");
@@ -25,6 +26,36 @@ class MyWindow {
 
     // build the Window mesh
     this.buildWindow();
+  }
+
+  buildLigth() {
+    // add a light for the window
+    this.windowLight = new THREE.SpotLight(
+      0xffffff,
+      4,
+      15,
+      Math.PI / 5,
+      0.1,
+      0
+    );
+
+    this.windowLight.castShadow = true;
+    this.windowLight.position.set(-6, 5, 0.0);
+
+    this.scene.add(this.windowLight);
+
+    this.windowLight.shadow.mapSize.width = 512;
+    this.windowLight.shadow.mapSize.height = 512;
+    this.windowLight.shadow.camera.near = 0.1;
+    this.windowLight.shadow.camera.far = 1.5;
+    this.windowLight.focus = 1;
+
+    // add a target for the previous point light
+    this.windowLightTarget = new THREE.Object3D();
+    this.windowLightTarget.position.set(0.0, 0.0, 0.0);
+    this.scene.add(this.windowLight.target);
+    this.scene.add(this.windowLightTarget);
+    this.windowLight.target = this.windowLightTarget;
   }
 
   buildWindow() {
@@ -110,6 +141,7 @@ class MyWindow {
   
     //adds the window to the scene
     this.scene.add(this.windowMesh);
+    this.buildLigth();
   }
    
   rebuildWindow() {

@@ -16,6 +16,8 @@ import { MyLamp } from './components/MyLamp.js';
 import { MyWindow } from './components/MyWindow.js';
 import { MyVasel } from './components/MyVasel.js';
 import { MyJournal } from './components/MyJournal.js';
+import { MyFlower } from './components/MyFlower.js';
+import { MySpring } from './components/MySpring.js';
 
 /**
  *  This class contains the contents of out application
@@ -43,6 +45,8 @@ class MyContents {
     this.window = null;
     this.vase = null;
     this.journal = null;
+    this.flower = null;
+    this.spring = null;
 
     // spotLight related attributes
     this.candleLight = null;
@@ -52,15 +56,6 @@ class MyContents {
     this.spotLight = null
     this.spotLightTarget = null
     this.spotLightHelper = null
-
-    // vase related attributes
-    this.vaseMesh = null
-
-    // flower related attributes
-    this.flowerMesh = null
-
-    // spring related attributes
-    this.springMesh = null
   }
 
   /*
@@ -103,119 +98,6 @@ class MyContents {
 
   */
 
-
-  buildSpring() {
-    let numberOfSamples = 1000;
-    let collection = [];
-    for (let i = 0; i < 50; i++) {
-      collection.push(new THREE.Vector3(Math.cos(i), Math.sin(i) , i ));
-    }
-
-    // create curve path
-    const curve = new THREE.CatmullRomCurve3( collection );
-
-    const sampledPoints = curve.getPoints( numberOfSamples );
-    const curveGeometry = new THREE.BufferGeometry().setFromPoints( sampledPoints );
-
-    const material = new THREE.LineBasicMaterial( { color: 0x767474 } );
-
-    // Create the final object to add to the scene
-    this.springMesh = new THREE.Line( curveGeometry, material );
-
-    this.springMesh.scale.set( 0.05, 0.05, 0.01 );
-
-    this.app.scene.add(this.springMesh);
-  }
-
-  buildFlower() {
-    const petalMaterial = new THREE.MeshBasicMaterial( { color: "#0000ff", side: THREE.DoubleSide} );
-    const centerMaterial = new THREE.MeshBasicMaterial( { color: "#ffff00", side: THREE.DoubleSide} );
-    const stemMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
-
-    const builder = new MyNurbsBuilder();
-    let controlPoints;
-    let surfaceData;
-    let orderU = 2;
-    let orderV = 2;
-
-    // stem points
-    let stemPoints = new THREE.QuadraticBezierCurve3(
-      new THREE.Vector3(0.0, 0.0, 0.0),
-      new THREE.Vector3(0.0, -1.0, -0.5),
-      new THREE.Vector3(0.0, -2.0, -0.5)
-    );
-
-    const numberOfSamples = 16;
-    const stemGeometry = new THREE.BufferGeometry().setFromPoints( stemPoints.getPoints( numberOfSamples ) );
-
-    let stemMesh = new THREE.Line( stemGeometry, stemMaterial );
-
-    // petal control points
-    controlPoints =
-
-        [   // U = 0
-
-            [ // V = 0..2;
-
-                [ 0.0, 0.0, 0.0, 1 ],
-
-                [ 0.0,  0.0, 0.0, 1 ],
-
-                [ 0.0,  0.0, 0.0, 1 ]
-
-            ],
-
-            // U = 1
-
-            [ // V = 0..2
-
-                [ 1.5, 0.0, -1.5, 1 ],
-
-                [ 1.5,  0.0, 0.0, 1 ],
-
-                [ 1.5,  0.0, 1.5, 1 ]
-
-            ],
-
-            // U = 2
-
-            [ // V = 0..2
-
-                [ 3.0, 0.0, 0.0, 1 ],
-
-                [ 3.0, 0.0, 0.0, 1 ],
-
-                [ 3.0, 0.0, 0.0, 1 ]
-
-            ]
-
-        ]
-
-    // build petal surface
-    surfaceData = builder.build(controlPoints,
-      orderU, orderV, 16, 16, petalMaterial);
-
-    const circleGeometry = new THREE.CircleGeometry(1);
-    this.flowerMesh = new THREE.Mesh( circleGeometry, centerMaterial );
-
-    for(let i = 0; i < 6; i++) {
-      let petalMesh = new THREE.Mesh( surfaceData, petalMaterial );
-      petalMesh.rotation.y = i * Math.PI / 3;
-      petalMesh.rotation.x = Math.PI / 2;
-      petalMesh.position.set(Math.cos(i * Math.PI / 3), Math.sin(i * Math.PI / 3), 0.0);
-
-      this.flowerMesh.add(petalMesh);
-    }
-
-
-    this.flowerMesh.scale.set( 0.1, 0.1, 0.1 );
-    stemMesh.scale.set( 3, 3, 3 );
-    this.flowerMesh.add(stemMesh);
-
-    this.app.scene.add( this.flowerMesh );
-  }
-
-
   /**
    * initializes the contents
    */
@@ -255,40 +137,6 @@ class MyContents {
     this.app.scene.add(pointLightHelper);
 
     //-------------------------------------------------------------------------------
-
-    // add a light for the window
-    this.windowLight = new THREE.SpotLight(
-      0xffffff,
-      4,
-      15,
-      Math.PI / 5,
-      0.1,
-      0
-    );
-
-    this.windowLight.castShadow = true;
-    this.windowLight.position.set(-6, 5, 0.0);
-
-    this.app.scene.add(this.windowLight);
-
-    this.windowLight.shadow.mapSize.width = 512;
-    this.windowLight.shadow.mapSize.height = 512;
-    this.windowLight.shadow.camera.near = 0.1;
-    this.windowLight.shadow.camera.far = 1.5;
-    this.windowLight.focus = 1;
-
-    // add a target for the previous point light
-    this.windowLightTarget = new THREE.Object3D();
-    this.windowLightTarget.position.set(0.0, 0.0, 0.0);
-    this.app.scene.add(this.windowLight.target);
-    this.app.scene.add(this.windowLightTarget);
-    this.windowLight.target = this.windowLightTarget;
-
-    // add a point light helper for the previous point light
-    //const windowLightHelper = new THREE.SpotLightHelper(this.windowLight);
-    //this.app.scene.add(windowLightHelper);
-
-    //--------------------------------------------------------------------------------
 
     // add a spot light on top of the model
     this.candleLight = new THREE.SpotLight(
@@ -347,6 +195,8 @@ class MyContents {
     this.window = new MyWindow(this.app.scene);
     this.vase = new MyVasel(this.app.scene);
     this.journal = new MyJournal(this.app.scene);
+    this.flower = new MyFlower(this.app.scene);
+    this.spring = new MySpring(this.app.scene);
 
     // adjust components position
     this.cake.cakeMesh.position.set(0.0, 1.2, 0.0);
@@ -362,18 +212,11 @@ class MyContents {
     this.rug.rugMesh.position.set(0.0, 0.0, 0.0);
     this.vase.vaseMesh.position.set(0.5, 1.60, 0.6);
     this.journal.journalMesh.position.set(-0.5, 1.20, -0.6);
+    this.flower.flowerMesh.position.set(0.5, 1.7, 0.7);
+    this.spring.springMesh.position.set(0.5, 1.10, -0.6);
   
     //this.buildBox();
     this.buildCarPictureBackground();
-    this.buildFlower();
-    this.buildSpring();
-
-
-    // adjust spring position
-    this.springMesh.position.set(0.5, 1.10, -0.6);
-
-    // adjust flower position
-    this.flowerMesh.position.set(0.5, 1.7, 0.7);
   }
 
   // Deletes the contents of the line if it exists and recreates them
