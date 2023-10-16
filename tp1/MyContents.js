@@ -527,6 +527,28 @@ class MyContents {
     this.app.scene.add(borderMeshLeft);
     this.app.scene.add(borderMeshRight);
 
+    let curtainTexture = new THREE.TextureLoader().load("textures/curtain.jpg");
+
+    let curtainMaterial = new THREE.MeshPhongMaterial({
+      color: "#ffffff",
+      specular: "#000000",
+      emissive: "#000000",
+      shininess: 90,
+      map: curtainTexture,
+    });
+
+    let curtainWidth = 4.9;
+    let curtainHeight = 1.2;
+
+    let curtain = new THREE.PlaneGeometry(curtainWidth, curtainHeight);
+
+    let curtainMesh = new THREE.Mesh(curtain, curtainMaterial);
+    curtainMesh.rotation.y = Math.PI / 2;
+    curtainMesh.position.y = 5.65;
+    curtainMesh.position.x = -4.8;
+    //adds the curtains to the scene
+    this.app.scene.add(curtainMesh);
+
     //adds the window to the scene
     this.app.scene.add(this.windowMesh);
   }
