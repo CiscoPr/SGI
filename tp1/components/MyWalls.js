@@ -33,22 +33,22 @@ class MyWalls {
       shininess: this.shininess,
       map: this.wallTexture,
     });
-    let wallGeometry = new THREE.PlaneGeometry(10, 10);
+    let wallGeometry = new THREE.PlaneGeometry(10, 8);
 
     let wallMesh1 = new THREE.Mesh(wallGeometry, wallMaterial);
     wallMesh1.rotation.y = Math.PI;
-    wallMesh1.position.set(0, 5, 5);
+    wallMesh1.position.set(0, 4, 5);
 
     let wallMesh2 = new THREE.Mesh(wallGeometry, wallMaterial);
     wallMesh2.rotation.y = Math.PI / 2;
-    wallMesh2.position.set(-5, 5, 0);
+    wallMesh2.position.set(-5, 4, 0);
 
     let wallMesh3 = new THREE.Mesh(wallGeometry, wallMaterial);
-    wallMesh3.position.set(0, 5, -5);
+    wallMesh3.position.set(0, 4, -5);
 
     let wallMesh4 = new THREE.Mesh(wallGeometry, wallMaterial);
     wallMesh4.rotation.y = -Math.PI / 2;
-    wallMesh4.position.set(5, 5, 0);
+    wallMesh4.position.set(5, 4, 0);
 
     this.walls = new THREE.Group();
     this.walls.add(wallMesh1);

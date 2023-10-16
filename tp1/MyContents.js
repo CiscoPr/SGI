@@ -628,11 +628,12 @@ class MyContents {
    */
   init() {
     // create once
+    /*
     if (this.axis === null) {
       // create and attach the axis to the scene
       this.axis = new MyAxis(this);
       this.app.scene.add(this.axis);
-    }
+    }*/
 
     // variables to hold the curves
     this.polyline = null;
