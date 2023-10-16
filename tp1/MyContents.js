@@ -442,6 +442,9 @@ class MyContents {
     if (tex == "202004646.jpg") this.pictureMesh.position.x = 1.5;
     else this.pictureMesh.position.x = -1.5;
 
+    this.pictureMesh.castShadow = true;
+    this.pictureMesh.receiveShadow = true;
+
     this.app.scene.add(this.pictureMesh);
   }
 
@@ -912,6 +915,64 @@ class MyContents {
   }
 
 
+  //builds cone black lamps above the two small pictures
+  buildLamps(studentNumber) {
+
+    let lampMaterial = new THREE.MeshPhongMaterial({
+      color: "#000000",
+      specular: "#000000",
+      emissive: "#000000",
+      shininess: 90,
+    });
+
+    let lamp = new THREE.ConeGeometry(0.4, 0.3, 32);
+
+    let lampMesh = new THREE.Mesh(lamp, lampMaterial);
+
+    lampMesh.position.y = 6.2;
+    lampMesh.position.z = -5;
+
+    //create a spot light
+    let spotLight = new THREE.SpotLight(
+      0xffffff,
+      10,
+      3,
+      Math.PI / 4,
+      0.5,
+    );
+
+    if(studentNumber == "202004646") spotLight.position.set(1.5, 6.2, -4.8);
+    else spotLight.position.set(-1.5, 6.2, -4.8);
+    this.app.scene.add(spotLight);
+    spotLight.castShadow = true;
+
+    spotLight.shadow.mapSize.width = 512;
+    spotLight.shadow.mapSize.height = 512;
+    spotLight.shadow.camera.near = 0.1;
+    spotLight.shadow.camera.far = 1.5;
+    spotLight.focus = 1;
+
+    // add a target for the previous spot light
+    let spotLightTarget = new THREE.Object3D();
+    if(studentNumber == "202004646") spotLightTarget.position.set(1.5, 5.2, -4.8);
+    else spotLightTarget.position.set(-1.5, 5.2, -4.8);
+
+    this.app.scene.add(spotLight.target);
+    this.app.scene.add(spotLightTarget);
+    spotLight.target = spotLightTarget;
+
+    // add a spot light helper for the previous spot light
+    //let spotLightHelper = new THREE.SpotLightHelper( spotLight );
+    //this.app.scene.add( spotLightHelper );
+
+
+
+    if(studentNumber == "202004646") lampMesh.position.x = 1.5;
+    else lampMesh.position.x = -1.5;
+
+    this.app.scene.add(lampMesh);
+  }
+
 
   /**
    * initializes the contents
@@ -1035,6 +1096,8 @@ class MyContents {
     //this.buildBox();
     this.buildPicture("202004646.jpg");
     this.buildPicture("202004724.jpg");
+    this.buildLamps("202004646");
+    this.buildLamps("202004724");
     this.buildWindows();
     this.buildKirby();
     this.buildCarPictureBackground();
