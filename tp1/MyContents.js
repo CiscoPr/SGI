@@ -173,6 +173,15 @@ class MyContents {
 
   }
 
+  /**
+   * updates the wall color
+   */
+  updateWallColor(color) {
+    this.walls.walls.children.forEach((wall) => {
+      wall.material.color.set(color);
+    });
+  }
+
 
   /**
    * updates the contents

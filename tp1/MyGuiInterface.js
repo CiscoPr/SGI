@@ -44,12 +44,14 @@ class MyGuiInterface  {
         const data = {
             'cakeColor': this.contents.cake.cakeMesh2.material.color,
             'petalColor': this.contents.flower.petalColor,
+            'wallColor': this.contents.walls.diffuse,
         };
 
         //adds a folder to the gui interface for the cake
         const colorsFolder = this.datgui.addFolder('Color Change');
         colorsFolder.addColor(data, 'cakeColor').onChange((value) => { this.contents.updateCakeTopping(value) });
         colorsFolder.addColor(data, 'petalColor').onChange((value) => { this.contents.updateFlowerPetalColor(value) });
+        colorsFolder.addColor(data, 'wallColor').onChange((value) => { this.contents.updateWallColor(value) });
         colorsFolder.open();
 
 

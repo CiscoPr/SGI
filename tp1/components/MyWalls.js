@@ -10,7 +10,7 @@ class MyWalls {
   */
   constructor(scene) {
     this.scene = scene;
-    
+
     // app properties
     this.wallsMesh = null;
 
@@ -58,7 +58,7 @@ class MyWalls {
 
     this.scene.add(this.walls);
   }
-   
+
   rebuildWalls() {
     // remove wallsMesh if exists
     if (this.wallsMesh !== undefined && this.wallsMesh !== null) {
