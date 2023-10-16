@@ -7,7 +7,7 @@ import { MyPlate } from './components/MyPlate.js';
 import { MyTable } from './components/MyTable.js';
 import { MyNurbsBuilder } from './MyNurbsBuilder.js';
 import { MyDoor } from './components/MyDoor.js'
-
+import { MyClock } from './components/MyClock.js';
 
 /**
  *  This class contains the contents of out application
@@ -859,7 +859,8 @@ class MyContents {
     this.plate = new MyPlate(this.app.scene);
     this.table = new MyTable(this.app.scene);
     this.walls = new MyWalls(this.app.scene);
-    this.door = new MyDoor(this.app.scene);  
+    this.door = new MyDoor(this.app.scene); 
+      this.clock = new MyClock(this.app.scene);  
 
 
     // adjust components position
@@ -868,6 +869,7 @@ class MyContents {
     this.plate.plateMesh.position.set(0.0, 1.1, 0.0);
     this.table.tableMesh.position.set(0.0, 1.0, 0.0);
     this.door.doorMesh.position.set(5.0, 1.5, 0.0);
+    this.clock.clockMesh.position.set(4.9, 5.0, 0.0);  
 
   
     //this.buildBox();
