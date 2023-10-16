@@ -9,7 +9,7 @@ import { MyTable } from './components/MyTable.js';
 import { MyNurbsBuilder } from './MyNurbsBuilder.js';
 import { MyDoor } from './components/MyDoor.js'
 import { MyPicture } from './components/MyPicture.js';
-
+import { MyRug } from './components/MyRug.js';
 import { MyClock } from './components/MyClock.js';
 
 /**
@@ -746,7 +746,7 @@ class MyContents {
     this.picture1 = new MyPicture(this.app.scene, "202004646.jpg");
     this.picture2 = new MyPicture(this.app.scene, "202004724.jpg");
     this.clock = new MyClock(this.app.scene);  
-
+    this.rug = new MyRug(this.app.scene);
 
     // adjust components position
     this.cake.cakeMesh.position.set(0.0, 1.2, 0.0);
@@ -758,7 +758,7 @@ class MyContents {
     this.picture1.pictureMesh.position.set(1.5, 5, -4.9);
     this.picture2.pictureMesh.position.set(-1.5, 5, -4.9);
     this.clock.clockMesh.position.set(4.9, 5.0, 0.0);  
-
+    this.rug.rugMesh.position.set(0.0, 0.0, 0.0);
   
     //this.buildBox();
     this.buildLamps("202004646");
