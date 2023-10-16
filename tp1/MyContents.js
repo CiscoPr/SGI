@@ -750,6 +750,7 @@ class MyContents {
 
     // adjust components position
     this.cake.cakeMesh.position.set(0.0, 1.2, 0.0);
+    this.cake.cakeMesh2.position.set(0.0, 1.3, 0.0);
     this.candle.candleMesh.position.set(0.1, 1.3, -0.1);
     this.plate.plateMesh.position.set(0.0, 1.1, 0.0);
     this.table.tableMesh.position.set(0.0, 1.0, 0.0);
