@@ -612,8 +612,8 @@ class MyContents {
     kirbyGroup.add(rightFoot);
     kirbyGroup.add(leftFoot);
 
-    kirbyGroup.scale.set(0.5, 0.5, 0.5);
-    kirbyGroup.position.x = -3.5;
+    kirbyGroup.scale.set(0.75, 0.75, 0.75);
+    kirbyGroup.position.x = -5;
 
     this.app.scene.add(kirbyGroup);
   }
@@ -1267,6 +1267,46 @@ class MyContents {
     this.carPictureBackground.position.x = 0;
 
     this.carPictureBackground.rotation.y = Math.PI;
+
+    // borders to the picture
+    let borderUpper = new THREE.BoxGeometry(5.5, 0.1, 0.1);
+    let borderLower = new THREE.BoxGeometry(5.5, 0.1, 0.1);
+    let borderLeft = new THREE.BoxGeometry(0.1, 3, 0.1);
+    let borderRight = new THREE.BoxGeometry(0.1, 3, 0.1);
+
+    let borderMaterial = new THREE.MeshPhongMaterial({
+        color: "#753500",
+        specular: "#000000",
+        emissive: "#000000",
+        shininess: 90,
+    });
+
+    let borderMeshUpper = new THREE.Mesh(borderUpper, borderMaterial);
+    let borderMeshLower = new THREE.Mesh(borderLower, borderMaterial);
+    let borderMeshLeft = new THREE.Mesh(borderLeft, borderMaterial);
+    let borderMeshRight = new THREE.Mesh(borderRight, borderMaterial);
+
+    borderMeshUpper.position.y = 5.7;
+    borderMeshUpper.position.z = 5;
+
+    borderMeshLower.position.y = 2.75;
+    borderMeshLower.position.z = 5;
+
+    borderMeshLeft.position.y = 4.25;
+    borderMeshLeft.position.z = 5;
+    borderMeshLeft.position.x = -2.75;
+
+    borderMeshRight.position.y = 4.25;
+    borderMeshRight.position.z = 5;
+    borderMeshRight.position.x = 2.75;
+
+    //adds the borders to the scene
+    this.app.scene.add(borderMeshUpper);
+    this.app.scene.add(borderMeshLower);
+    this.app.scene.add(borderMeshLeft);
+    this.app.scene.add(borderMeshRight);
+
+
 
     this.app.scene.add(this.carPictureBackground);
   }
