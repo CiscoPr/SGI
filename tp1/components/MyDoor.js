@@ -13,7 +13,6 @@ class MyDoor{
 
         // app properties
         this.doorMesh = null;
-        this.doorHandleMesh = null;
         this.doorTexture = new THREE.TextureLoader().load("textures/door.jpg");
         this.color = "#ffffff";
         this.specular = "#000000";
