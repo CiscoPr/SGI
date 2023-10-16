@@ -34,11 +34,11 @@ We also added some other extra elements:
 - the cake has two halfs, in order to simulate a topping of some sort
 
 
-![screenshot1](screenshots/image5.png)
+![screenshot1](screenshots/image8.png)
 
 ![screenshot2](screenshots/image7.png)
 
-![screenshot3](screenshots/image2.png)
+![screenshot3](screenshots/image9.png)
 ----
 ## Issues/Problems
 
