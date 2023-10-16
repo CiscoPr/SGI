@@ -320,13 +320,16 @@ class MyContents {
    * builds the walls group
    */
   buildWalls() {
-    this.wallDiffuseColor = "rgb(154,153,150)";
+    this.wallDiffuseColor = "rgb(256,256,256)";
 
     //wall must not have specular component
     this.wallSpecularColor = "rgb(0,0,0)";
 
     this.wallShininess = 0;
 
+    this.wallTexture = new THREE.TextureLoader().load("textures/wall_texture.jpg");
+
+    // plane material with wall texture
     let planeMaterial = new THREE.MeshPhongMaterial({
       color: this.wallDiffuseColor,
 
@@ -334,6 +337,8 @@ class MyContents {
 
       emissive: "#000000",
       shininess: this.wallShininess,
+
+      map: this.wallTexture,
     });
 
     let plane1 = new THREE.PlaneGeometry(10, 10);
@@ -456,7 +461,7 @@ class MyContents {
 
       specular: "#000000",
 
-      emissive: "#000000",
+      emissive: "#808080",
       shininess: 90,
 
       map: windowTexture,
@@ -929,14 +934,14 @@ class MyContents {
     this.windowLight = new THREE.SpotLight(
       0xffffff,
       4,
-      10,
+      15,
       Math.PI / 5,
       0.1,
       0
     );
 
     this.windowLight.castShadow = true;
-    this.windowLight.position.set(-5, 5, 0.0);
+    this.windowLight.position.set(-6, 5, 0.0);
 
     this.app.scene.add(this.windowLight);
 
