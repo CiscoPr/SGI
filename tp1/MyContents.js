@@ -1,7 +1,10 @@
 import * as THREE from 'three';
 import { MyAxis } from './MyAxis.js';
+import { MyWalls } from './components/MyWalls.js';
 import { MyCake } from './components/MyCake.js';
 import { MyCandle } from './components/MyCandle.js';
+import { MyPlate } from './components/MyPlate.js';
+import { MyTable } from './components/MyTable.js';
 import { MyNurbsBuilder } from './MyNurbsBuilder.js';
 
 
@@ -16,12 +19,6 @@ class MyContents {
   constructor(app) {
     this.app = app;
     this.axis = null;
-
-    // table related attributes
-    this.tableMesh = null;
-
-    // plate related attributes
-    this.plateMesh = null;
 
     // plane related attributes
 
@@ -73,8 +70,8 @@ class MyContents {
     // components
     this.cake = null;
     this.candle = null;
-
-    // walls related attributes
+    this.plate = null;
+    this.table = null;
     this.walls = null;
 
     // spotLight related attributes
@@ -138,135 +135,6 @@ class MyContents {
   }
 
   */
-
-  /**
-   * builds the table mesh with material assigned
-   */
-  buildTable() {
-    this.tableTexture = new THREE.TextureLoader().load("textures/wood.jpg");
-    // legs must be of specular color
-    this.legSpecularColor = "rgb(128, 128, 128)";
-
-    this.legDiffuseColor = "rgb(0, 0, 0)";
-
-    this.legShininess = 90;
-
-    let legMaterial = new THREE.MeshPhongMaterial({
-      color: this.legDiffuseColor,
-
-      specular: this.legSpecularColor,
-
-      emissive: "#000000",
-      shininess: this.legShininess,
-    });
-
-    let tableMaterial = new THREE.MeshPhongMaterial({
-      color: "#684500",
-      specular: "#000000",
-      emissive: "#000000",
-      shininess: 90,
-      map: this.tableTexture,
-    });
-
-    // Create a table Mesh with basic material
-    let table = new THREE.BoxGeometry(1.5, 2.0, 0.1);
-    this.tableMesh = new THREE.Mesh(table, tableMaterial);
-
-    // Create each leg Mesh with basic material
-    const leg = new THREE.CylinderGeometry(0.1, 0.1, 1, 8);
-    for (let i = 0; i < 4; i++) {
-      let legMesh = new THREE.Mesh(leg, legMaterial);
-      legMesh.rotation.x = -Math.PI / 2;
-      legMesh.position.x = i % 2 ? -0.6 : 0.6;
-      legMesh.position.y = i < 2 ? -0.8 : 0.8;
-      legMesh.position.z = -0.5;
-      legMesh.castShadow = true;
-      legMesh.receiveShadow = true;
-
-      this.tableMesh.add(legMesh);
-    }
-
-    // adjust the table position
-    this.tableMesh.rotation.x = -Math.PI / 2;
-
-    this.tableMesh.castShadow = true;
-    this.tableMesh.receiveShadow = true;
-    // add the table to the scene
-    this.app.scene.add(this.tableMesh);
-  }
-
-  buildPlate() {
-    let plateMaterial = new THREE.MeshPhongMaterial({
-      color: "#ffffff",
-      specular: "#000000",
-      emissive: "#000000",
-      shininess: 90,
-    });
-
-    // build the plate mesh
-    let plateGeometry = new THREE.CylinderGeometry(0.35, 0.25, 0.1);
-    this.plateMesh = new THREE.Mesh(plateGeometry, plateMaterial);
-
-    // add plate to the scene
-    this.app.scene.add(this.plateMesh);
-  }
-
-  /**
-   * builds the walls group
-   */
-  buildWalls() {
-    this.wallDiffuseColor = "rgb(256,256,256)";
-
-    //wall must not have specular component
-    this.wallSpecularColor = "rgb(0,0,0)";
-
-    this.wallShininess = 0;
-
-    this.wallTexture = new THREE.TextureLoader().load("textures/wall_texture.jpg");
-
-    // plane material with wall texture
-    let planeMaterial = new THREE.MeshPhongMaterial({
-      color: this.wallDiffuseColor,
-
-      specular: this.wallSpecularColor,
-
-      emissive: "#000000",
-      shininess: this.wallShininess,
-
-      map: this.wallTexture,
-    });
-
-    let plane1 = new THREE.PlaneGeometry(10, 10);
-    let planeMesh1 = new THREE.Mesh(plane1, planeMaterial);
-    planeMesh1.rotation.y = Math.PI;
-    planeMesh1.position.y = 5;
-    planeMesh1.position.z = 5;
-
-    let plane2 = new THREE.PlaneGeometry(10, 10);
-    let planeMesh2 = new THREE.Mesh(plane2, planeMaterial);
-    planeMesh2.rotation.y = Math.PI / 2;
-    planeMesh2.position.y = 5;
-    planeMesh2.position.x = -5;
-
-    let plane3 = new THREE.PlaneGeometry(10, 10);
-    let planeMesh3 = new THREE.Mesh(plane3, planeMaterial);
-    planeMesh3.position.y = 5;
-    planeMesh3.position.z = -5;
-
-    let plane4 = new THREE.PlaneGeometry(10, 10);
-    let planeMesh4 = new THREE.Mesh(plane4, planeMaterial);
-    planeMesh4.rotation.y = -Math.PI / 2;
-    planeMesh4.position.y = 5;
-    planeMesh4.position.x = 5;
-
-    this.walls = new THREE.Group();
-    this.walls.add(planeMesh1);
-    this.walls.add(planeMesh2);
-    this.walls.add(planeMesh3);
-    this.walls.add(planeMesh4);
-
-    this.app.scene.add(this.walls);
-  }
 
   buildPicture(tex) {
     /* idea of picture border
@@ -982,21 +850,22 @@ class MyContents {
     //--------------------------------------------------------------------------------
 
     this.updatePlaneTexture("ClampToEdgeWrapping");
-    // build objects
-    this.buildWalls();
-    this.buildTable();
-    this.buildPlate();
+
     
     // build components
     this.cake = new MyCake(this.app.scene);
     this.candle = new MyCandle(this.app.scene);
+    this.plate = new MyPlate(this.app.scene);
+    this.table = new MyTable(this.app.scene);
+    this.walls = new MyWalls(this.app.scene);
 
 
     // adjust components position
     this.cake.cakeMesh.position.set(0.0, 1.2, 0.0);
     this.candle.candleMesh.position.set(0.1, 1.3, -0.1);
+    this.plate.plateMesh.position.set(0.0, 1.1, 0.0);
+    this.table.tableMesh.position.set(0.0, 1.0, 0.0);
 
-    // build components
   
     //this.buildBox();
     this.buildPicture("202004646.jpg");
@@ -1011,11 +880,7 @@ class MyContents {
     this.buildFlower();
     this.buildSpring();
 
-    // adjust the table position
-    this.tableMesh.position.y += 1;
 
-    // adjust the plate position
-    this.plateMesh.position.y = 1.1;
 
     // adjust journal position
     this.journalMesh.position.set(-0.5, 1.20, -0.6);

@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 /**
- *  Cake class
+ *  Candle class
  */
 class MyCandle {
   /**
@@ -26,7 +26,7 @@ class MyCandle {
     this.flameEmissive = "#ff0000";
     this.flameShininess = 90;
 
-    // build the cake mesh
+    // build the candle mesh
     this.buildCandle();
   }
 
