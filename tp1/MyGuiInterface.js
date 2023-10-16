@@ -43,12 +43,16 @@ class MyGuiInterface  {
 
         const data = {
             'cakeColor': this.contents.cake.cakeMesh2.material.color,
+            'petalColor': this.contents.flower.petalColor,
         };
 
         //adds a folder to the gui interface for the cake
-        const cakeFolder = this.datgui.addFolder('Cake Topping');
-        cakeFolder.addColor(data, 'cakeColor').onChange((value) => { this.contents.updateCakeTopping(value) });
-        cakeFolder.open();
+        const colorsFolder = this.datgui.addFolder('Color Change');
+        colorsFolder.addColor(data, 'cakeColor').onChange((value) => { this.contents.updateCakeTopping(value) });
+        colorsFolder.addColor(data, 'petalColor').onChange((value) => { this.contents.updateFlowerPetalColor(value) });
+        colorsFolder.open();
+
+
 
         // adds a folder to the gui interface for the plane
         /*const planeFolder = this.datgui.addFolder( 'Plane' );

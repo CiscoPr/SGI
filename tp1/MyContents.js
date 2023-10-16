@@ -164,6 +164,17 @@ class MyContents {
   }
 
   /**
+   * updates the flower petal color
+   */
+  updateFlowerPetalColor(color) {
+    this.flower.flowerMesh.children.forEach((petal) => {
+      petal.material.color.set(color);
+    });
+
+  }
+
+
+  /**
    * updates the contents
    * this method is called from the render method of the app
    *

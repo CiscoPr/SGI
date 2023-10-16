@@ -15,6 +15,7 @@ class MyFlower {
     // app properties
     this.flowerMesh = null;
 
+
     // Flower geometry properties
     // petal control points
     this.controlPoints =
@@ -56,7 +57,7 @@ class MyFlower {
             ]
 
         ]
-    
+
     this.order = 2;
     this.numberSamples = 16;
     this.stemPoints = new THREE.QuadraticBezierCurve3(
@@ -69,7 +70,7 @@ class MyFlower {
     this.petalColor = "#0000ff";
     this.centerColor = "#ffff00";
     this.stemColor = "#00ff00";
-    
+
 
     // build the Flower mesh
     this.buildFlower();
@@ -79,17 +80,17 @@ class MyFlower {
     const builder = new MyNurbsBuilder();
 
     const petalMaterial = new THREE.MeshBasicMaterial( { color: this.petalColor, side: THREE.DoubleSide} );
-    const surfaceData = builder.build(this.controlPoints, this.order, this.order, 
-        this.numberSamples, this.numberSamples, petalMaterial);   
+    const surfaceData = builder.build(this.controlPoints, this.order, this.order,
+        this.numberSamples, this.numberSamples, petalMaterial);
 
     const centerMaterial = new THREE.MeshBasicMaterial( { color: this.centerColor, side: THREE.DoubleSide} );
     const circleGeometry = new THREE.CircleGeometry(1);
     this.flowerMesh = new THREE.Mesh( circleGeometry, centerMaterial );
-    
+
     const stemMaterial = new THREE.LineBasicMaterial({ color: this.stemColor });
     const stemGeometry = new THREE.BufferGeometry().setFromPoints( this.stemPoints.getPoints( this.numberSamples ) );
     let stemMesh = new THREE.Line( stemGeometry, stemMaterial );
-    
+
 
     for(let i = 0; i < 6; i++) {
       let petalMesh = new THREE.Mesh( surfaceData, petalMaterial );
@@ -106,7 +107,7 @@ class MyFlower {
 
     this.scene.add( this.flowerMesh );
   }
-   
+
   rebuildFlower() {
     // remove flowerMesh if exists
     if (this.flowerMesh !== undefined && this.flowerMesh !== null) {
