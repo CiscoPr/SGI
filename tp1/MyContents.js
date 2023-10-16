@@ -10,6 +10,7 @@ import { MyNurbsBuilder } from './MyNurbsBuilder.js';
 import { MyDoor } from './components/MyDoor.js'
 import { MyPicture } from './components/MyPicture.js';
 
+import { MyClock } from './components/MyClock.js';
 
 /**
  *  This class contains the contents of out application
@@ -744,6 +745,7 @@ class MyContents {
     this.door = new MyDoor(this.app.scene);  
     this.picture1 = new MyPicture(this.app.scene, "202004646.jpg");
     this.picture2 = new MyPicture(this.app.scene, "202004724.jpg");
+    this.clock = new MyClock(this.app.scene);  
 
 
     // adjust components position
@@ -755,6 +757,7 @@ class MyContents {
     this.door.doorMesh.position.set(5.0, 1.5, 0.0);
     this.picture1.pictureMesh.position.set(1.5, 5, -4.9);
     this.picture2.pictureMesh.position.set(-1.5, 5, -4.9);
+    this.clock.clockMesh.position.set(4.9, 5.0, 0.0);  
 
   
     //this.buildBox();
