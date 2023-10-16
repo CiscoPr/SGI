@@ -17,6 +17,8 @@ class MyRug{
         this.rugTexture.wrapS = THREE.RepeatWrapping;
         this.rugTexture.wrapT = THREE.RepeatWrapping;
         this.rugTexture.repeat.set(5, 5);
+        this.castShadow = true;
+        this.receiveShadow = true;
         this.color = "#ffffff";
         this.specular = "#000000";
         this.emissive = "#000000";
@@ -40,6 +42,9 @@ class MyRug{
 
         this.rugMesh = new THREE.Mesh(rugGeometry, rugMaterial);
 
+        this.rugMesh.castShadow = this.castShadow;
+        this.rugMesh.receiveShadow = this.receiveShadow;
+        
         this.rugMesh.rotation.x = Math.PI / 2;
         this.scene.add(this.rugMesh);
     }

@@ -11,6 +11,7 @@ import { MyDoor } from './components/MyDoor.js'
 import { MyPicture } from './components/MyPicture.js';
 import { MyRug } from './components/MyRug.js';
 import { MyClock } from './components/MyClock.js';
+import { MyKirby } from './components/MyKirby.js';
 
 /**
  *  This class contains the contents of out application
@@ -205,92 +206,6 @@ class MyContents {
     this.app.scene.add(this.windowMesh);
   }
 
-  buildKirby() {
-    //loads the texture
-    let kirbyTexture = new THREE.TextureLoader().load("textures/kirby.jpg");
-
-    kirbyTexture.wrapS = THREE.RepeatWrapping;
-
-    kirbyTexture.wrapT = THREE.RepeatWrapping;
-
-    let kirbyMaterial = new THREE.MeshPhongMaterial({
-      color: "#ffffff",
-
-      specular: "#000000",
-
-      emissive: "#000000",
-      shininess: 90,
-
-      map: kirbyTexture,
-    });
-
-    let kirbyHandsMaterial = new THREE.MeshPhongMaterial({
-      color: "#d5afaf",
-
-      specular: "#000000",
-
-      emissive: "#000000",
-      shininess: 90,
-    });
-
-    let kirbyFeetMaterial = new THREE.MeshPhongMaterial({
-      color: "#800051",
-
-      specular: "#000000",
-
-      emissive: "#000000",
-      shininess: 90,
-    });
-
-    let kirby = new THREE.SphereGeometry(1, 32, 32);
-    let kirbyHands = new THREE.SphereGeometry(0.3, 32, 32);
-    let kirbyFeet = new THREE.CylinderGeometry(0.4, 0.5, 0.3, 32);
-
-    this.kirbyMesh = new THREE.Mesh(kirby, kirbyMaterial);
-
-    this.kirbyMesh.position.y = 1;
-
-    this.kirbyMesh.position.x = 3;
-
-    let rightHand = new THREE.Mesh(kirbyHands, kirbyHandsMaterial);
-    rightHand.position.y = 0.7;
-    rightHand.position.x = 3;
-    rightHand.position.z = 0.9;
-
-    let leftHand = new THREE.Mesh(kirbyHands, kirbyHandsMaterial);
-    leftHand.position.y = 0.7;
-    leftHand.position.x = 3;
-    leftHand.position.z = -0.9;
-
-    let rightFoot = new THREE.Mesh(kirbyFeet, kirbyFeetMaterial);
-    rightFoot.position.y = 0.1;
-    rightFoot.position.x = 3;
-    rightFoot.position.z = 0.65;
-    let leftFoot = new THREE.Mesh(kirbyFeet, kirbyFeetMaterial);
-    leftFoot.position.y = 0.1;
-    leftFoot.position.x = 3;
-    leftFoot.position.z = -0.65;
-
-    this.kirbyMesh.castShadow = true;
-    this.kirbyMesh.receiveShadow = true;
-    rightHand.castShadow = true;
-    rightHand.receiveShadow = true;
-    leftHand.castShadow = true;
-    leftHand.receiveShadow = true;
-
-
-    let kirbyGroup = new THREE.Group();
-    kirbyGroup.add(this.kirbyMesh);
-    kirbyGroup.add(rightHand);
-    kirbyGroup.add(leftHand);
-    kirbyGroup.add(rightFoot);
-    kirbyGroup.add(leftFoot);
-
-    kirbyGroup.scale.set(0.75, 0.75, 0.75);
-    kirbyGroup.position.x = -5;
-
-    this.app.scene.add(kirbyGroup);
-  }
 
   buildJournal() {
     const map =
@@ -748,6 +663,7 @@ class MyContents {
     this.picture2 = new MyPicture(this.app.scene, "202004724.jpg");
     this.clock = new MyClock(this.app.scene);  
     this.rug = new MyRug(this.app.scene);
+    this.kirby = new MyKirby(this.app.scene);
 
     // adjust components position
     this.cake.cakeMesh.position.set(0.0, 1.2, 0.0);
@@ -766,7 +682,6 @@ class MyContents {
     this.buildLamps("202004646");
     this.buildLamps("202004724");
     this.buildWindows();
-    this.buildKirby();
     this.buildCarPictureBackground();
     this.buildJournal();
     this.buildVasel();
