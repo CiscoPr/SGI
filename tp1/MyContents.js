@@ -321,13 +321,16 @@ class MyContents {
    * builds the walls group
    */
   buildWalls() {
-    this.wallDiffuseColor = "rgb(154,153,150)";
+    this.wallDiffuseColor = "rgb(256,256,256)";
 
     //wall must not have specular component
     this.wallSpecularColor = "rgb(0,0,0)";
 
     this.wallShininess = 0;
 
+    this.wallTexture = new THREE.TextureLoader().load("textures/wall_texture.jpg");
+
+    // plane material with wall texture
     let planeMaterial = new THREE.MeshPhongMaterial({
       color: this.wallDiffuseColor,
 
@@ -335,6 +338,8 @@ class MyContents {
 
       emissive: "#000000",
       shininess: this.wallShininess,
+
+      map: this.wallTexture,
     });
 
     let plane1 = new THREE.PlaneGeometry(10, 10);
@@ -438,6 +443,9 @@ class MyContents {
     if (tex == "202004646.jpg") this.pictureMesh.position.x = 1.5;
     else this.pictureMesh.position.x = -1.5;
 
+    this.pictureMesh.castShadow = true;
+    this.pictureMesh.receiveShadow = true;
+
     this.app.scene.add(this.pictureMesh);
   }
 
@@ -457,7 +465,7 @@ class MyContents {
 
       specular: "#000000",
 
-      emissive: "#000000",
+      emissive: "#808080",
       shininess: 90,
 
       map: windowTexture,
@@ -522,6 +530,28 @@ class MyContents {
     this.app.scene.add(borderMeshMiddle);
     this.app.scene.add(borderMeshLeft);
     this.app.scene.add(borderMeshRight);
+
+    let curtainTexture = new THREE.TextureLoader().load("textures/curtain.jpg");
+
+    let curtainMaterial = new THREE.MeshPhongMaterial({
+      color: "#ffffff",
+      specular: "#000000",
+      emissive: "#000000",
+      shininess: 90,
+      map: curtainTexture,
+    });
+
+    let curtainWidth = 4.9;
+    let curtainHeight = 1.2;
+
+    let curtain = new THREE.PlaneGeometry(curtainWidth, curtainHeight);
+
+    let curtainMesh = new THREE.Mesh(curtain, curtainMaterial);
+    curtainMesh.rotation.y = Math.PI / 2;
+    curtainMesh.position.y = 5.65;
+    curtainMesh.position.x = -4.8;
+    //adds the curtains to the scene
+    this.app.scene.add(curtainMesh);
 
     //adds the window to the scene
     this.app.scene.add(this.windowMesh);
@@ -608,8 +638,8 @@ class MyContents {
     kirbyGroup.add(rightFoot);
     kirbyGroup.add(leftFoot);
 
-    kirbyGroup.scale.set(0.5, 0.5, 0.5);
-    kirbyGroup.position.x = -3.5;
+    kirbyGroup.scale.set(0.75, 0.75, 0.75);
+    kirbyGroup.position.x = -5;
 
     this.app.scene.add(kirbyGroup);
   }
@@ -886,6 +916,64 @@ class MyContents {
   }
 
 
+  //builds cone black lamps above the two small pictures
+  buildLamps(studentNumber) {
+
+    let lampMaterial = new THREE.MeshPhongMaterial({
+      color: "#000000",
+      specular: "#000000",
+      emissive: "#000000",
+      shininess: 90,
+    });
+
+    let lamp = new THREE.ConeGeometry(0.4, 0.3, 32);
+
+    let lampMesh = new THREE.Mesh(lamp, lampMaterial);
+
+    lampMesh.position.y = 6.2;
+    lampMesh.position.z = -5;
+
+    //create a spot light
+    let spotLight = new THREE.SpotLight(
+      0xffffff,
+      10,
+      3,
+      Math.PI / 4,
+      0.5,
+    );
+
+    if(studentNumber == "202004646") spotLight.position.set(1.5, 6.2, -4.8);
+    else spotLight.position.set(-1.5, 6.2, -4.8);
+    this.app.scene.add(spotLight);
+    spotLight.castShadow = true;
+
+    spotLight.shadow.mapSize.width = 512;
+    spotLight.shadow.mapSize.height = 512;
+    spotLight.shadow.camera.near = 0.1;
+    spotLight.shadow.camera.far = 1.5;
+    spotLight.focus = 1;
+
+    // add a target for the previous spot light
+    let spotLightTarget = new THREE.Object3D();
+    if(studentNumber == "202004646") spotLightTarget.position.set(1.5, 5.2, -4.8);
+    else spotLightTarget.position.set(-1.5, 5.2, -4.8);
+
+    this.app.scene.add(spotLight.target);
+    this.app.scene.add(spotLightTarget);
+    spotLight.target = spotLightTarget;
+
+    // add a spot light helper for the previous spot light
+    //let spotLightHelper = new THREE.SpotLightHelper( spotLight );
+    //this.app.scene.add( spotLightHelper );
+
+
+
+    if(studentNumber == "202004646") lampMesh.position.x = 1.5;
+    else lampMesh.position.x = -1.5;
+
+    this.app.scene.add(lampMesh);
+  }
+
 
   /**
    * initializes the contents
@@ -930,14 +1018,14 @@ class MyContents {
     this.windowLight = new THREE.SpotLight(
       0xffffff,
       4,
-      10,
+      15,
       Math.PI / 5,
       0.1,
       0
     );
 
     this.windowLight.castShadow = true;
-    this.windowLight.position.set(-5, 5, 0.0);
+    this.windowLight.position.set(-6, 5, 0.0);
 
     this.app.scene.add(this.windowLight);
 
@@ -1014,6 +1102,8 @@ class MyContents {
     //this.buildBox();
     this.buildPicture("202004646.jpg");
     this.buildPicture("202004724.jpg");
+    this.buildLamps("202004646");
+    this.buildLamps("202004724");
     this.buildWindows();
     this.buildKirby();
     this.buildCarPictureBackground();
@@ -1266,6 +1356,46 @@ class MyContents {
     this.carPictureBackground.position.x = 0;
 
     this.carPictureBackground.rotation.y = Math.PI;
+
+    // borders to the picture
+    let borderUpper = new THREE.BoxGeometry(5.5, 0.1, 0.1);
+    let borderLower = new THREE.BoxGeometry(5.5, 0.1, 0.1);
+    let borderLeft = new THREE.BoxGeometry(0.1, 3, 0.1);
+    let borderRight = new THREE.BoxGeometry(0.1, 3, 0.1);
+
+    let borderMaterial = new THREE.MeshPhongMaterial({
+        color: "#753500",
+        specular: "#000000",
+        emissive: "#000000",
+        shininess: 90,
+    });
+
+    let borderMeshUpper = new THREE.Mesh(borderUpper, borderMaterial);
+    let borderMeshLower = new THREE.Mesh(borderLower, borderMaterial);
+    let borderMeshLeft = new THREE.Mesh(borderLeft, borderMaterial);
+    let borderMeshRight = new THREE.Mesh(borderRight, borderMaterial);
+
+    borderMeshUpper.position.y = 5.7;
+    borderMeshUpper.position.z = 5;
+
+    borderMeshLower.position.y = 2.75;
+    borderMeshLower.position.z = 5;
+
+    borderMeshLeft.position.y = 4.25;
+    borderMeshLeft.position.z = 5;
+    borderMeshLeft.position.x = -2.75;
+
+    borderMeshRight.position.y = 4.25;
+    borderMeshRight.position.z = 5;
+    borderMeshRight.position.x = 2.75;
+
+    //adds the borders to the scene
+    this.app.scene.add(borderMeshUpper);
+    this.app.scene.add(borderMeshLower);
+    this.app.scene.add(borderMeshLeft);
+    this.app.scene.add(borderMeshRight);
+
+
 
     this.app.scene.add(this.carPictureBackground);
   }
