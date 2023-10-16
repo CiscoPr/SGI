@@ -8,6 +8,7 @@ import { MyPlate } from './components/MyPlate.js';
 import { MyTable } from './components/MyTable.js';
 import { MyNurbsBuilder } from './MyNurbsBuilder.js';
 import { MyDoor } from './components/MyDoor.js'
+import { MyPicture } from './components/MyPicture.js';
 
 
 /**
@@ -29,6 +30,8 @@ class MyContents {
     this.table = null;
     this.walls = null;
     this.floor = null;
+    this.picture1 = null;
+    this.picture2 = null;
 
     // spotLight related attributes
     this.candleLight = null;
@@ -92,80 +95,6 @@ class MyContents {
 
   */
 
-  buildPicture(tex) {
-    /* idea of picture border
-        let borderUpper = new THREE.BoxGeometry( 1.5, 0.1, 0.1);
-        let borderLower = new THREE.BoxGeometry( 1.5, 0.1, 0.1);
-        let borderLeft = new THREE.BoxGeometry( 0.1, 1.5, 0.1);
-        let borderRight = new THREE.BoxGeometry( 0.1, 1.5, 0.1);
-
-        let borderMaterial = new THREE.MeshPhongMaterial({ color: "#000000",
-        specular: "#000000", emissive: "#000000", shininess: 90 });
-
-        let borderMeshUpper = new THREE.Mesh( borderUpper, borderMaterial );
-        let borderMeshLower = new THREE.Mesh( borderLower, borderMaterial );
-        let borderMeshLeft = new THREE.Mesh( borderLeft, borderMaterial );
-        let borderMeshRight = new THREE.Mesh( borderRight, borderMaterial );
-
-        borderMeshUpper.position.y = 5;
-        borderMeshUpper.position.z = -5;
-
-
-        borderMeshLower.position.y = 4.25;
-        borderMeshLeft.position.x = -0.75;
-        borderMeshRight.position.x = 0.75;
-
-        this.app.scene.add( borderMeshUpper );
-        this.app.scene.add( borderMeshLower );
-        this.app.scene.add( borderMeshLeft );
-        this.app.scene.add( borderMeshRight );
-        */
-
-    this.pictureTexture = new THREE.TextureLoader().load("textures/" + tex);
-
-    this.pictureTexture.wrapS = THREE.RepeatWrapping;
-
-    this.pictureTexture.wrapT = THREE.RepeatWrapping;
-
-    this.diffusePictureColor = "rgb(128,128,128)";
-
-    this.specularPictureColor = "rgb(0,0,0)";
-
-    this.pictureShininess = 0;
-
-    let pictureMaterial = new THREE.MeshPhongMaterial({
-      color: this.diffusePictureColor,
-
-      specular: this.specularPictureColor,
-
-      emissive: "#000000",
-      shininess: this.pictureShininess,
-
-      map: this.pictureTexture,
-    });
-
-    this.pictureWidth = 1;
-    this.pictureHeight = 1.5;
-
-    let picture = new THREE.PlaneGeometry(
-      this.pictureWidth,
-      this.pictureHeight
-    );
-
-    this.pictureMesh = new THREE.Mesh(picture, pictureMaterial);
-
-    this.pictureMesh.position.y = 5;
-
-    this.pictureMesh.position.z = -4.9;
-
-    if (tex == "202004646.jpg") this.pictureMesh.position.x = 1.5;
-    else this.pictureMesh.position.x = -1.5;
-
-    this.pictureMesh.castShadow = true;
-    this.pictureMesh.receiveShadow = true;
-
-    this.app.scene.add(this.pictureMesh);
-  }
 
   //here's a nice reference :)
   buildWindows() {
@@ -813,6 +742,8 @@ class MyContents {
     this.walls = new MyWalls(this.app.scene);
     this.floor = new MyFloor(this.app.scene);
     this.door = new MyDoor(this.app.scene);  
+    this.picture1 = new MyPicture(this.app.scene, "202004646.jpg");
+    this.picture2 = new MyPicture(this.app.scene, "202004724.jpg");
 
 
     // adjust components position
@@ -822,11 +753,11 @@ class MyContents {
     this.table.tableMesh.position.set(0.0, 1.0, 0.0);
     this.floor.floorMesh.position.set(0.0, 0.0, 0.0);
     this.door.doorMesh.position.set(5.0, 1.5, 0.0);
+    this.picture1.pictureMesh.position.set(1.5, 5, -4.9);
+    this.picture2.pictureMesh.position.set(-1.5, 5, -4.9);
 
   
     //this.buildBox();
-    this.buildPicture("202004646.jpg");
-    this.buildPicture("202004724.jpg");
     this.buildLamps("202004646");
     this.buildLamps("202004724");
     this.buildWindows();
