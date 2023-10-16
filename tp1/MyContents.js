@@ -115,7 +115,7 @@ class MyContents {
     this.app.scene.add(ambientLight);
 
     //--------------------------------------------------------------------------------
-    
+
     // build components
     this.cake = new MyCake(this.app.scene);
     this.candle = new MyCandle(this.app.scene);
@@ -123,10 +123,10 @@ class MyContents {
     this.table = new MyTable(this.app.scene);
     this.walls = new MyWalls(this.app.scene);
     this.floor = new MyFloor(this.app.scene);
-    this.door = new MyDoor(this.app.scene);  
+    this.door = new MyDoor(this.app.scene);
     this.picture1 = new MyPicture(this.app.scene, "202004646.jpg");
     this.picture2 = new MyPicture(this.app.scene, "202004724.jpg");
-    this.clock = new MyClock(this.app.scene);  
+    this.clock = new MyClock(this.app.scene);
     this.rug = new MyRug(this.app.scene);
     this.kirby = new MyKirby(this.app.scene);
     this.lamp1 = new MyLamp(this.app.scene, "202004646");
@@ -148,7 +148,7 @@ class MyContents {
     this.door.doorMesh.position.set(5.0, 1.5, 0.0);
     this.picture1.pictureMesh.position.set(1.5, 5, -4.9);
     this.picture2.pictureMesh.position.set(-1.5, 5, -4.9);
-    this.clock.clockMesh.position.set(4.9, 5.0, 0.0);  
+    this.clock.clockMesh.position.set(4.9, 5.0, 0.0);
     this.rug.rugMesh.position.set(0.0, 0.0, 0.0);
     this.vase.vaseMesh.position.set(0.5, 1.60, 0.6);
     this.journal.journalMesh.position.set(-0.5, 1.20, -0.6);
@@ -157,12 +157,19 @@ class MyContents {
   }
 
   /**
+   * updates the cake topping color
+   */
+  updateCakeTopping(color) {
+    this.cake.cakeMesh2.material.color.set(color);
+  }
+
+  /**
    * updates the contents
    * this method is called from the render method of the app
    *
    */
   update() {
-    
+
   }
 }
 

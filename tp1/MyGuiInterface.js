@@ -40,11 +40,15 @@ class MyGuiInterface  {
         boxFolder.open() */
 
 
-        
+
         const data = {
-            'diffuse color': this.contents.diffusePlaneColor,
-            'specular color': this.contents.specularPlaneColor,
+            'cakeColor': this.contents.cake.cakeMesh2.material.color,
         };
+
+        //adds a folder to the gui interface for the cake
+        const cakeFolder = this.datgui.addFolder('Cake Topping');
+        cakeFolder.addColor(data, 'cakeColor').onChange((value) => { this.contents.updateCakeTopping(value) });
+        cakeFolder.open();
 
         // adds a folder to the gui interface for the plane
         /*const planeFolder = this.datgui.addFolder( 'Plane' );
@@ -63,7 +67,7 @@ class MyGuiInterface  {
         // adds a folder to the gui interface for the plane texture
         /*const textureFolder = this.datgui.addFolder('Texture');
         textureFolder.add(this.contents.planeTexture, 'wrapS', [ 'RepeatWrapping', 'ClampToEdgeWrapping', 'MirroredRepeatWrapping' ] ).name('wrapS').onChange((value) => { this.contents.updatePlaneTexture(value) });
-        
+
         textureFolder.open()*/
     }
 }
