@@ -36,13 +36,18 @@ We also added some other extra elements:
 - a door with a texture
 - a circle that imitates a clock with its texture
 - the cake has two halfs, in order to simulate a topping of some sort
+- added 3 methods of interactive color change in the GUI (petals, cake topping and house walls)
+- added 2 methods of object display and corresponding lights (window and candle)
 
+There are some images below that show this scene final version. The reader can also checkout some prints that show part of this project's evolution in [here](tp1/screenshots/evolution/).
 
 ![screenshot1](tp1/screenshots/image8.png)
 
 ![screenshot2](tp1/screenshots/image7.png)
 
 ![screenshot3](tp1/screenshots/image9.png)
+
+![GUI](tp1/screenshots/gui.png)
 ----
 ## Issues/Problems
 
