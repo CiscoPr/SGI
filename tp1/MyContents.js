@@ -11,6 +11,8 @@ import { MyDoor } from './components/MyDoor.js'
 import { MyPicture } from './components/MyPicture.js';
 import { MyRug } from './components/MyRug.js';
 import { MyClock } from './components/MyClock.js';
+import { MyLamp } from './components/MyLamp.js';
+import { MyWindow } from './components/MyWindow.js';
 
 /**
  *  This class contains the contents of out application
@@ -33,6 +35,9 @@ class MyContents {
     this.floor = null;
     this.picture1 = null;
     this.picture2 = null;
+    this.lamp1 = null;
+    this.lamp2 = null;
+    this.window = null;
 
     // spotLight related attributes
     this.candleLight = null;
@@ -97,113 +102,6 @@ class MyContents {
   */
 
 
-  //here's a nice reference :)
-  buildWindows() {
-    //loads the texture
-    let windowTexture = new THREE.TextureLoader().load(
-      "textures/nostalgia.jpg"
-    );
-
-    windowTexture.wrapS = THREE.RepeatWrapping;
-
-    windowTexture.wrapT = THREE.RepeatWrapping;
-
-    let windowMaterial = new THREE.MeshPhongMaterial({
-      color: "#ffffff",
-
-      specular: "#000000",
-
-      emissive: "#241f31",
-      shininess: 90,
-
-      map: windowTexture,
-    });
-
-    let windowWidth = 5;
-    let windowHeight = 2.5;
-
-    let window = new THREE.PlaneGeometry(windowWidth, windowHeight);
-
-    this.windowMesh = new THREE.Mesh(window, windowMaterial);
-
-    this.windowMesh.rotation.y = Math.PI / 2;
-
-    this.windowMesh.position.y = 5;
-
-    this.windowMesh.position.x = -4.9;
-
-    //window border
-    let borderUpper = new THREE.BoxGeometry(windowWidth, 0.1, 0.1);
-    let borderLower = new THREE.BoxGeometry(windowWidth, 0.1, 0.1);
-    let borderLeft = new THREE.BoxGeometry(0.1, windowHeight, 0.1);
-    let borderRight = new THREE.BoxGeometry(0.1, windowHeight, 0.1);
-    let borderMiddle = new THREE.BoxGeometry(0.1, windowHeight, 0.1);
-
-    let borderMaterial = new THREE.MeshPhongMaterial({
-      color: "#000000",
-      specular: "#000000",
-      emissive: "#000000",
-      shininess: 90,
-    });
-
-    let borderMeshUpper = new THREE.Mesh(borderUpper, borderMaterial);
-    let borderMeshLower = new THREE.Mesh(borderLower, borderMaterial);
-    let borderMeshLeft = new THREE.Mesh(borderLeft, borderMaterial);
-    let borderMeshRight = new THREE.Mesh(borderRight, borderMaterial);
-    let borderMeshMiddle = new THREE.Mesh(borderMiddle, borderMaterial);
-
-    //defines the position of the borders
-    borderMeshUpper.rotation.y = Math.PI / 2;
-    borderMeshUpper.position.y = 5 + windowHeight / 2;
-    borderMeshUpper.position.x = -4.9;
-
-    borderMeshLower.rotation.y = Math.PI / 2;
-    borderMeshLower.position.y = 5 - windowHeight / 2;
-    borderMeshLower.position.x = -4.9;
-
-    borderMeshMiddle.position.y = 5;
-    borderMeshMiddle.position.x = -4.9;
-
-    borderMeshLeft.position.y = 5;
-    borderMeshLeft.position.x = -4.9;
-    borderMeshLeft.position.z = -windowWidth / 2 + 0.05;
-
-    borderMeshRight.position.y = 5;
-    borderMeshRight.position.x = -4.9;
-    borderMeshRight.position.z = windowWidth / 2 - 0.05;
-
-    //adds the borders to the scene
-    this.app.scene.add(borderMeshUpper);
-    this.app.scene.add(borderMeshLower);
-    this.app.scene.add(borderMeshMiddle);
-    this.app.scene.add(borderMeshLeft);
-    this.app.scene.add(borderMeshRight);
-
-    let curtainTexture = new THREE.TextureLoader().load("textures/curtain.jpg");
-
-    let curtainMaterial = new THREE.MeshPhongMaterial({
-      color: "#ffffff",
-      specular: "#000000",
-      emissive: "#000000",
-      shininess: 90,
-      map: curtainTexture,
-    });
-
-    let curtainWidth = 4.9;
-    let curtainHeight = 1.2;
-
-    let curtain = new THREE.PlaneGeometry(curtainWidth, curtainHeight);
-
-    let curtainMesh = new THREE.Mesh(curtain, curtainMaterial);
-    curtainMesh.rotation.y = Math.PI / 2;
-    curtainMesh.position.y = 5.65;
-    curtainMesh.position.x = -4.8;
-    //adds the curtains to the scene
-    this.app.scene.add(curtainMesh);
-
-    //adds the window to the scene
-    this.app.scene.add(this.windowMesh);
-  }
 
   buildKirby() {
     //loads the texture
@@ -564,65 +462,6 @@ class MyContents {
   }
 
 
-  //builds cone black lamps above the two small pictures
-  buildLamps(studentNumber) {
-
-    let lampMaterial = new THREE.MeshPhongMaterial({
-      color: "#000000",
-      specular: "#000000",
-      emissive: "#000000",
-      shininess: 90,
-    });
-
-    let lamp = new THREE.ConeGeometry(0.4, 0.3, 32);
-
-    let lampMesh = new THREE.Mesh(lamp, lampMaterial);
-
-    lampMesh.position.y = 6.2;
-    lampMesh.position.z = -5;
-
-    //create a spot light
-    let spotLight = new THREE.SpotLight(
-      0xffffff,
-      10,
-      3,
-      Math.PI / 4,
-      0.5,
-    );
-
-    if(studentNumber == "202004646") spotLight.position.set(1.5, 6.2, -4.8);
-    else spotLight.position.set(-1.5, 6.2, -4.8);
-    this.app.scene.add(spotLight);
-    spotLight.castShadow = true;
-
-    spotLight.shadow.mapSize.width = 512;
-    spotLight.shadow.mapSize.height = 512;
-    spotLight.shadow.camera.near = 0.1;
-    spotLight.shadow.camera.far = 1.5;
-    spotLight.focus = 1;
-
-    // add a target for the previous spot light
-    let spotLightTarget = new THREE.Object3D();
-    if(studentNumber == "202004646") spotLightTarget.position.set(1.5, 5.2, -4.8);
-    else spotLightTarget.position.set(-1.5, 5.2, -4.8);
-
-    this.app.scene.add(spotLight.target);
-    this.app.scene.add(spotLightTarget);
-    spotLight.target = spotLightTarget;
-
-    // add a spot light helper for the previous spot light
-    //let spotLightHelper = new THREE.SpotLightHelper( spotLight );
-    //this.app.scene.add( spotLightHelper );
-
-
-
-    if(studentNumber == "202004646") lampMesh.position.x = 1.5;
-    else lampMesh.position.x = -1.5;
-
-    this.app.scene.add(lampMesh);
-  }
-
-
   /**
    * initializes the contents
    */
@@ -747,6 +586,9 @@ class MyContents {
     this.picture2 = new MyPicture(this.app.scene, "202004724.jpg");
     this.clock = new MyClock(this.app.scene);  
     this.rug = new MyRug(this.app.scene);
+    this.lamp1 = new MyLamp(this.app.scene, "202004646");
+    this.lamp2 = new MyLamp(this.app.scene, "202004724");
+    this.window = new MyWindow(this.app.scene);
 
     // adjust components position
     this.cake.cakeMesh.position.set(0.0, 1.2, 0.0);
@@ -761,9 +603,6 @@ class MyContents {
     this.rug.rugMesh.position.set(0.0, 0.0, 0.0);
   
     //this.buildBox();
-    this.buildLamps("202004646");
-    this.buildLamps("202004724");
-    this.buildWindows();
     this.buildKirby();
     this.buildCarPictureBackground();
     this.buildJournal();
