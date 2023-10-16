@@ -45,11 +45,11 @@ class MyGuiInterface  {
         };
 
         // adds a folder to the gui interface for the plane
-        const planeFolder = this.datgui.addFolder( 'Plane' );
+        /*const planeFolder = this.datgui.addFolder( 'Plane' );
         planeFolder.addColor( data, 'diffuse color' ).onChange( (value) => { this.contents.updateDiffusePlaneColor(value) } );
         planeFolder.addColor( data, 'specular color' ).onChange( (value) => { this.contents.updateSpecularPlaneColor(value) } );
         planeFolder.add(this.contents, 'planeShininess', 0, 1000).name("shininess").onChange( (value) => { this.contents.updatePlaneShininess(value) } );
-        planeFolder.open();
+        planeFolder.open();*/
 
         // adds a folder to the gui interface for the camera
         const cameraFolder = this.datgui.addFolder('Camera')
@@ -59,10 +59,10 @@ class MyGuiInterface  {
         cameraFolder.open()
 
         // adds a folder to the gui interface for the plane texture
-        const textureFolder = this.datgui.addFolder('Texture');
+        /*const textureFolder = this.datgui.addFolder('Texture');
         textureFolder.add(this.contents.planeTexture, 'wrapS', [ 'RepeatWrapping', 'ClampToEdgeWrapping', 'MirroredRepeatWrapping' ] ).name('wrapS').onChange((value) => { this.contents.updatePlaneTexture(value) });
-
-        textureFolder.open();
+        
+        textureFolder.open()*/
     }
 }
 

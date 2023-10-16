@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { MyAxis } from './MyAxis.js';
+import { MyFloor } from './components/MyFloor.js';
 import { MyWalls } from './components/MyWalls.js';
 import { MyCake } from './components/MyCake.js';
 import { MyCandle } from './components/MyCandle.js';
@@ -20,59 +21,13 @@ class MyContents {
     this.app = app;
     this.axis = null;
 
-    // plane related attributes
-
-    //texture
-
-    this.planeTexture = new THREE.TextureLoader().load("textures/floor.jpg");
-
-    // the wrapS must be equals to the one selected in the gui interface
-    this.planeTexture.wrapS = THREE.RepeatWrapping;
-
-    this.planeTexture.wrapT = THREE.RepeatWrapping;
-
-    // material
-
-    this.diffusePlaneColor = "rgb(128,0,0)";
-
-    this.specularPlaneColor = "rgb(0,0,0)";
-
-    this.planeShininess = 0;
-
-    // relating texture and material:
-
-    // two alternatives with different results
-
-    // alternative 1
-    /*
-         this.planeMaterial = new THREE.MeshPhongMaterial({
-
-            color: this.diffusePlaneColor,
-
-            specular: this.specularPlaneColor,
-
-            emissive: "#000000", shininess: this.planeShininess,
-
-            map: this.planeTexture })
-
-        // end of alternative 1*/
-
-    // alternative 2
-
-    this.planeMaterial = new THREE.MeshLambertMaterial({
-      map: this.planeTexture,
-    });
-
-    // end of alternative 2
-
-    let plane = new THREE.PlaneGeometry(10, 3);
-
     // components
     this.cake = null;
     this.candle = null;
     this.plate = null;
     this.table = null;
     this.walls = null;
+    this.floor = null;
 
     // spotLight related attributes
     this.candleLight = null;
@@ -848,9 +803,6 @@ class MyContents {
     this.app.scene.add(ambientLight);
 
     //--------------------------------------------------------------------------------
-
-    this.updatePlaneTexture("ClampToEdgeWrapping");
-
     
     // build components
     this.cake = new MyCake(this.app.scene);
@@ -858,6 +810,7 @@ class MyContents {
     this.plate = new MyPlate(this.app.scene);
     this.table = new MyTable(this.app.scene);
     this.walls = new MyWalls(this.app.scene);
+    this.floor = new MyFloor(this.app.scene);
 
 
     // adjust components position
@@ -865,6 +818,7 @@ class MyContents {
     this.candle.candleMesh.position.set(0.1, 1.3, -0.1);
     this.plate.plateMesh.position.set(0.0, 1.1, 0.0);
     this.table.tableMesh.position.set(0.0, 1.0, 0.0);
+    this.floor.floorMesh.position.set(0.0, 0.0, 0.0);
 
   
     //this.buildBox();
@@ -893,41 +847,6 @@ class MyContents {
 
     // adjust flower position
     this.flowerMesh.position.set(0.5, 1.7, 0.7);
-
-    // Create a Plane Mesh with basic material
-
-    let planeSizeU = 10;
-
-    let planeSizeV = 10;
-
-    let planeUVRate = planeSizeV / planeSizeU;
-
-    let planeTextureUVRate = 3354 / 2385; // image dimensions
-
-    let planeTextureRepeatU = 1;
-
-    let planeTextureRepeatV =
-      planeTextureRepeatU * planeUVRate * planeTextureUVRate;
-
-    this.planeTexture.repeat.set(planeTextureRepeatU, planeTextureRepeatV);
-
-    this.planeTexture.rotation = 0;
-
-    this.planeTexture.offset = new THREE.Vector2(0, 0);
-
-    var plane = new THREE.PlaneGeometry(planeSizeU, planeSizeV);
-
-    this.planeMesh = new THREE.Mesh(plane, this.planeMaterial);
-
-    this.planeMesh.castShadow = false;
-
-    this.planeMesh.receiveShadow = true;
-
-    this.planeMesh.rotation.x = -Math.PI / 2;
-
-    this.planeMesh.position.y = 0;
-
-    this.app.scene.add(this.planeMesh);
   }
 
   // Deletes the contents of the line if it exists and recreates them
@@ -1163,7 +1082,7 @@ class MyContents {
    * updates the diffuse plane color and the material
    * @param {THREE.Color} value
    */
-  updateDiffusePlaneColor(value) {
+  /*updateDiffusePlaneColor(value) {
     this.diffusePlaneColor = value;
     this.planeMaterial.color.set(this.diffusePlaneColor);
   }
@@ -1171,7 +1090,7 @@ class MyContents {
    * updates the specular plane color and the material
    * @param {THREE.Color} value
    */
-  updateSpecularPlaneColor(value) {
+  /*updateSpecularPlaneColor(value) {
     this.specularPlaneColor = value;
     this.planeMaterial.specular.set(this.specularPlaneColor);
   }
@@ -1179,7 +1098,7 @@ class MyContents {
    * updates the plane shininess and the material
    * @param {number} value
    */
-  updatePlaneShininess(value) {
+  /*updatePlaneShininess(value) {
     this.planeShininess = value;
     this.planeMaterial.shininess = this.planeShininess;
   }
