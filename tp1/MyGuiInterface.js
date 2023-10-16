@@ -39,6 +39,8 @@ class MyGuiInterface  {
         boxFolder.add(this.contents.boxDisplacement, 'z', -5, 5)
         boxFolder.open() */
 
+
+        
         const data = {
             'diffuse color': this.contents.diffusePlaneColor,
             'specular color': this.contents.specularPlaneColor,
