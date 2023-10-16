@@ -46,7 +46,7 @@ class MyTable {
     });
 
     // Create a table Mesh with basic material
-    let tableGeometry = new THREE.BoxGeometry(1.5, 2.0, 0.1);
+    let tableGeometry = new THREE.BoxGeometry(2.5, 3.0, 0.1);
     this.tableMesh = new THREE.Mesh(tableGeometry, tableMaterial);
 
     // Create each leg Mesh with basic material
