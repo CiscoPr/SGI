@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { MyAxis } from './MyAxis.js';
+import { MyCake } from './components/MyCake.js';
 import { MyNurbsBuilder } from './MyNurbsBuilder.js';
 
 
@@ -69,7 +70,7 @@ class MyContents {
     let plane = new THREE.PlaneGeometry(10, 3);
 
     // cake related attributes
-    this.cakeMesh = null;
+    this.cake = null;
 
     // candle related attributes
     this.candleMesh = null;
@@ -1003,7 +1004,12 @@ class MyContents {
     this.buildWalls();
     this.buildTable();
     this.buildPlate();
-    this.buildCake();
+    
+    // build cake
+    this.cake = new MyCake(this.app.scene);
+    // adjust cake position
+    this.cake.cakeMesh.position.set(0.0, 1.2, 0.0);
+
     this.buildCandle();
     //this.buildBox();
     this.buildPicture("202004646.jpg");
@@ -1021,8 +1027,6 @@ class MyContents {
 
     // adjust the plate position
     this.plateMesh.position.y = 1.1;
-
-
 
     // adjust the candle position
     this.candleMesh.position.y = 1.3;
