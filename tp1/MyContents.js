@@ -14,6 +14,8 @@ import { MyClock } from './components/MyClock.js';
 import { MyKirby } from './components/MyKirby.js';
 import { MyLamp } from './components/MyLamp.js';
 import { MyWindow } from './components/MyWindow.js';
+import { MyVasel } from './components/MyVasel.js';
+import { MyJournal } from './components/MyJournal.js';
 
 /**
  *  This class contains the contents of out application
@@ -39,6 +41,8 @@ class MyContents {
     this.lamp1 = null;
     this.lamp2 = null;
     this.window = null;
+    this.vase = null;
+    this.journal = null;
 
     // spotLight related attributes
     this.candleLight = null;
@@ -48,9 +52,6 @@ class MyContents {
     this.spotLight = null
     this.spotLightTarget = null
     this.spotLightHelper = null
-
-    // journal related attributes
-    this.journalMesh = null
 
     // vase related attributes
     this.vaseMesh = null
@@ -102,168 +103,6 @@ class MyContents {
 
   */
 
-
-
-
-  buildJournal() {
-    const map =
-
-        new THREE.TextureLoader().load( 'textures/newspaper.jpg' );
-
-    map.wrapS = map.wrapT = THREE.RepeatWrapping;
-
-    map.anisotropy = 16;
-
-    map.colorSpace = THREE.SRGBColorSpace;
-
-    const material = new THREE.MeshLambertMaterial( { map: map,
-
-                    side: THREE.DoubleSide,
-
-                    transparent: true, opacity: 0.90 } );
-
-    const builder = new MyNurbsBuilder();
-
-    let controlPoints;
-
-    let surfaceData;
-
-    let orderU = 2;
-
-    let orderV = 2;
-
-
-    // build nurb
-
-    controlPoints =
-
-        [   // U = 0
-
-            [ // V = 0..2;
-
-                [ 0.5, 0.0, -1.0, 1 ],
-
-                [ 0.0,  -1.0, -1.0, 1 ],
-
-                [ -0.5,  0.0, -1.0, 1 ]
-
-            ],
-
-            // U = 1
-
-            [ // V = 0..2
-
-                [ 0.5, 0.0, 0.0, 1 ],
-
-                [ 0.0,  -1.0, 0.0, 1 ],
-
-                [ -0.5,  0.0, 0.0, 1 ]
-
-            ],
-
-            // U = 2
-
-            [ // V = 0..2
-
-                [ 0.5, 0.0, 1.0, 1 ],
-
-                [ 0.0, -1.0, 1.0, 1 ],
-
-                [ -0.5,  0.0, 1.0, 1 ]
-
-            ]
-
-        ]
-
-
-
-    surfaceData = builder.build(controlPoints,
-
-                  orderU, orderV, 8,
-
-                  8, material);
-
-    this.journalMesh = new THREE.Mesh( surfaceData, material );
-
-    this.journalMesh.scale.set( 0.3, 0.3, 0.3 );
-
-    this.app.scene.add( this.journalMesh );
-  }
-
-  buildVasel() {
-    const map = new THREE.TextureLoader().load( 'textures/vase.jpg' );
-    map.wrapS = map.wrapT = THREE.RepeatWrapping;
-    map.anisotropy = 16;
-    map.colorSpace = THREE.SRGBColorSpace;
-
-    const material = new THREE.MeshLambertMaterial( { map: map,
-        side: THREE.DoubleSide,
-        transparent: true, opacity: 0.90 } );
-
-    const builder = new MyNurbsBuilder();
-    let controlPoints;
-    let surfaceData;
-    let orderU = 2;
-    let orderV = 2;
-
-    // build nurb
-    controlPoints =
-
-        [   // U = 0
-
-            [ // V = 0..2;
-
-                [ 0.15, 0.0, 0.0, 1 ],
-
-                [ 0.0,  0.0, -0.3, 1 ],
-
-                [ -0.15,  0.0, 0.0, 1 ]
-
-            ],
-
-            // U = 1
-
-            [ // V = 0..2
-
-                [ 0.1, -1.0, 0.0, 1 ],
-
-                [ 0.0,  -1.0, -0.2, 1 ],
-
-                [ -0.1,  -1.0, 0.0, 1 ]
-
-            ],
-
-            // U = 2
-
-            [ // V = 0..2
-
-                [ 0.5, -2.0, 0.0, 1 ],
-
-                [ 0.0, -2.0, -1.0, 1 ],
-
-                [ -0.5, -2.0, 0.0, 1 ]
-
-            ]
-
-        ]
-
-    // build surface
-    surfaceData = builder.build(controlPoints,
-
-                  orderU, orderV, 16,
-
-                  16, material);
-
-    this.vaseMesh = new THREE.Mesh( surfaceData, material );
-    let vaseMesh2 = new THREE.Mesh( surfaceData, material );
-    vaseMesh2.rotation.y = Math.PI;
-
-    // add second surface to the first one
-    this.vaseMesh.add(vaseMesh2);
-    this.vaseMesh.scale.set( 0.3, 0.3, 0.3 );
-
-    this.app.scene.add( this.vaseMesh );
-  }
 
   buildSpring() {
     let numberOfSamples = 1000;
@@ -506,6 +345,8 @@ class MyContents {
     this.lamp1 = new MyLamp(this.app.scene, "202004646");
     this.lamp2 = new MyLamp(this.app.scene, "202004724");
     this.window = new MyWindow(this.app.scene);
+    this.vase = new MyVasel(this.app.scene);
+    this.journal = new MyJournal(this.app.scene);
 
     // adjust components position
     this.cake.cakeMesh.position.set(0.0, 1.2, 0.0);
@@ -519,21 +360,14 @@ class MyContents {
     this.picture2.pictureMesh.position.set(-1.5, 5, -4.9);
     this.clock.clockMesh.position.set(4.9, 5.0, 0.0);  
     this.rug.rugMesh.position.set(0.0, 0.0, 0.0);
+    this.vase.vaseMesh.position.set(0.5, 1.60, 0.6);
+    this.journal.journalMesh.position.set(-0.5, 1.20, -0.6);
   
     //this.buildBox();
     this.buildCarPictureBackground();
-    this.buildJournal();
-    this.buildVasel();
     this.buildFlower();
     this.buildSpring();
 
-
-
-    // adjust journal position
-    this.journalMesh.position.set(-0.5, 1.20, -0.6);
-
-    // adjust vasel position
-    this.vaseMesh.position.set(0.5, 1.60, 0.6);
 
     // adjust spring position
     this.springMesh.position.set(0.5, 1.10, -0.6);
