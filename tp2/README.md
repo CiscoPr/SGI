@@ -1,11 +1,11 @@
 # SGI 2023/2024 - TP2
 
-## Group: T0xG0y
+## Group: T01G01
 
 | Name             | Number    | E-Mail             |
 | ---------------- | --------- | ------------------ |
-| John Doe         | 201901010 | ...                |
-| Jane Doe         | 201901011 | ...                |
+| Francisco Prada  | 202004646 | up202004646@edu.fe.up.pt |
+| Vítor Cavaleiro  | 202004724 | up202004724@edu.fe.up.pt |
 
 ----
 ## Project information
