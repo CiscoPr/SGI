@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import { MyAxis } from './MyAxis.js';
 import { MyFileReader } from './parser/MyFileReader.js';
+import { MyEngine } from './engine/MyEngine.js';
+
 /**
  *  This class contains the contents of out application
  */
@@ -11,11 +13,14 @@ class MyContents  {
        @param {MyApp} app The application object
     */ 
     constructor(app) {
-        this.app = app
-        this.axis = null
+        this.app = app;
+        this.axis = null;
+        this.contentsReady = false;
 
         this.reader = new MyFileReader(app, this, this.onSceneLoaded);
-		this.reader.open("scenes/demo/demo.xml");		
+		this.reader.open("scenes/demo/demo.xml");
+
+        this.engine = new MyEngine(app, this);
     }
 
     /**
@@ -25,9 +30,11 @@ class MyContents  {
         // create once 
         if (this.axis === null) {
             // create and attach the axis to the scene
-            this.axis = new MyAxis(this)
-            this.app.scene.add(this.axis)
+            this.axis = new MyAxis(this);
+            this.app.scene.add(this.axis);
         }
+
+        this.engine.init();
     }
 
     /**
@@ -35,12 +42,12 @@ class MyContents  {
      * @param {MySceneData} data the entire scene data object
      */
     onSceneLoaded(data) {
-        console.info("scene data loaded " + data + ". visit MySceneData javascript class to check contents for each data item.")
+        console.info("scene data loaded " + data + ". visit MySceneData javascript class to check contents for each data item.");
         this.onAfterSceneLoadedAndBeforeRender(data);
     }
 
     output(obj, indent = 0) {
-        console.log("" + new Array(indent * 4).join(' ') + " - " + obj.type + " " + (obj.id !== undefined ? "'" + obj.id + "'" : ""))
+        console.log("" + new Array(indent * 4).join(' ') + " - " + obj.type + " " + (obj.id !== undefined ? "'" + obj.id + "'" : ""));
     }
 
     onAfterSceneLoadedAndBeforeRender(data) {
