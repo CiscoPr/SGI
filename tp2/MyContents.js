@@ -15,7 +15,6 @@ class MyContents  {
     constructor(app) {
         this.app = app;
         this.axis = null;
-        this.contentsReady = false;
 
         this.reader = new MyFileReader(app, this, this.onSceneLoaded);
 		this.reader.open("scenes/demo/demo.xml");
@@ -33,8 +32,11 @@ class MyContents  {
             this.axis = new MyAxis(this);
             this.app.scene.add(this.axis);
         }
+    }
 
-        this.engine.init();
+    readerError() {
+        const hasError = this.reader.errorMessage != null ? true : false;
+        return hasError;
     }
 
     /**
@@ -44,6 +46,7 @@ class MyContents  {
     onSceneLoaded(data) {
         console.info("scene data loaded " + data + ". visit MySceneData javascript class to check contents for each data item.");
         this.onAfterSceneLoadedAndBeforeRender(data);
+        this.engine.init();
     }
 
     output(obj, indent = 0) {
