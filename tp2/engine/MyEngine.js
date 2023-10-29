@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 import { MySceneData } from './../parser/MySceneData.js';
+import { LightsEngine } from './LightsEngine.js';
 
 /**
- *  This class contains the contents of out application
+ *  This class contains the contents of our engine
  */
 class MyEngine  {
 
@@ -61,6 +62,24 @@ class MyEngine  {
         const far = fog.far;
         this.app.scene.fog = new THREE.Fog(color, near, far);
         console.info("Loaded Fog");
+    }
+
+    primitiveRouter(id) {
+        const primitive = this.data.getNode(id);
+        if (primitive == null) return;
+
+        const lightTypes = ["pointlight", "directionallight", "spotlight"];
+
+        // create switch case for each primitive type
+        if (primitive.type == "primitive") {
+            return
+        } else if (lightTypes.includes(primitive.type)) {
+            const lightEngine = new LightsEngine(primitive);
+            return lightEngine.buildLight();
+        }
+
+        console.error("Primitive type not found");
+        return;
     }
 
     dealWithNode(id) {
