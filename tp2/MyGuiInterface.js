@@ -29,6 +29,10 @@ class MyGuiInterface  {
      * Initialize the gui interface
      */
     init() {
+        // adds a folder to the gui interface for the camera
+        const cameraFolder = this.datgui.addFolder('Camera')
+        //missing cameras from xml
+        cameraFolder.open()
     }
 }
 

@@ -33,6 +33,8 @@ class MyEngine  {
         this.dealWithGlobals();
         this.dealWithFog();
         this.dealWithNode(this.data.rootId);
+        this.dealWithCameras("cam1");
+        this.dealWithCameras("cam2");
     }
 
     dealWithGlobals() {
@@ -102,6 +104,37 @@ class MyEngine  {
         }
 
         return primitiveRouter(id);
+    }
+
+    dealWithCameras(id) {
+        const camera = this.data.getCamera(id);
+        if (camera == null) return;
+        const angle = camera.angle;
+        const near = camera.near;
+        const far = camera.far;
+        const location = camera.location;
+        const target = camera.target;
+
+        if (camera.type == "perspective") {
+            let cam = THREE.PerspectiveCamera(angle, this.app.width / this.app.height, near, far);
+
+
+        } else if (camera.type == "ortho") {
+                        
+            const left = camera.left;
+            const right = camera.right;
+            const top = camera.top;
+            const bottom = camera.bottom;
+            
+            let cam = THREE.OrthographicCamera(left, right, top, bottom, near, far);
+
+        }
+
+        cam.position.set(location.x, location.y, location.z);
+        let camTarget = new THREE.Object3D();
+        camTarget.position.set(target.x, target.y, target.z);
+
+        
     }
 }
 
