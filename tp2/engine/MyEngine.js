@@ -12,7 +12,7 @@ class MyEngine  {
        constructs the object
        @param {MyApp} app The application object
        @param {MyContents} contents The contents object
-    */ 
+    */
     constructor(app, contents) {
         this.app = app;
         this.contents = contents;
@@ -34,8 +34,9 @@ class MyEngine  {
 
         this.dealWithGlobals();
         this.dealWithFog();
-        // dealWithCameras();
         this.dealWithRoot();
+        this.dealWithCameras("cam1");
+        this.dealWithCameras("cam2");
     }
 
     dealWithGlobals() {
@@ -119,7 +120,7 @@ class MyEngine  {
         });
 
         return material;
-    } 
+    }
 
     dealWithNode(node, materialid) {
         if (node == null) return;
@@ -173,7 +174,7 @@ class MyEngine  {
         }
     }
 
-    
+
     primitiveRouter(primitive, materialid) {
         if (primitive == null) return;
 
@@ -191,6 +192,37 @@ class MyEngine  {
 
         console.error("Primitive type not found");
         return;
+    }
+
+    dealWithCameras(id) {
+        const camera = this.data.getCamera(id);
+        if (camera == null) return;
+        const angle = camera.angle;
+        const near = camera.near;
+        const far = camera.far;
+        const location = camera.location;
+        const target = camera.target;
+
+        if (camera.type == "perspective") {
+            let cam = THREE.PerspectiveCamera(angle, this.app.width / this.app.height, near, far);
+
+
+        } else if (camera.type == "ortho") {
+
+            const left = camera.left;
+            const right = camera.right;
+            const top = camera.top;
+            const bottom = camera.bottom;
+
+            let cam = THREE.OrthographicCamera(left, right, top, bottom, near, far);
+
+        }
+
+        cam.position.set(location.x, location.y, location.z);
+        let camTarget = new THREE.Object3D();
+        camTarget.position.set(target.x, target.y, target.z);
+
+
     }
 }
 
