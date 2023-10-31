@@ -11,7 +11,7 @@ class MyEngine  {
        constructs the object
        @param {MyApp} app The application object
        @param {MyContents} contents The contents object
-    */ 
+    */
     constructor(app, contents) {
         this.app = app;
         this.contents = contents;
@@ -119,13 +119,13 @@ class MyEngine  {
             let cam = THREE.PerspectiveCamera(angle, this.app.width / this.app.height, near, far);
 
 
-        } else if (camera.type == "ortho") {
-                        
+        } else if (camera.type == "orthogonal") {
+
             const left = camera.left;
             const right = camera.right;
             const top = camera.top;
             const bottom = camera.bottom;
-            
+
             let cam = THREE.OrthographicCamera(left, right, top, bottom, near, far);
 
         }
@@ -134,7 +134,7 @@ class MyEngine  {
         let camTarget = new THREE.Object3D();
         camTarget.position.set(target.x, target.y, target.z);
 
-        
+
     }
 }
 
