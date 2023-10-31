@@ -207,7 +207,7 @@ class MyEngine  {
             let cam = THREE.PerspectiveCamera(angle, this.app.width / this.app.height, near, far);
 
 
-        } else if (camera.type == "ortho") {
+        } else if (camera.type == "orthogonal") {
 
             const left = camera.left;
             const right = camera.right;
