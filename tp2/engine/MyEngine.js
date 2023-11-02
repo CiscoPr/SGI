@@ -17,6 +17,7 @@ class MyEngine  {
         this.app = app;
         this.contents = contents;
         this.data = this.contents.reader.data;
+
     }
 
     /**
@@ -33,7 +34,8 @@ class MyEngine  {
 
         this.dealWithGlobals();
         this.dealWithFog();
-        this.dealWithNode(this.data.rootId);
+        // dealWithCameras();
+        this.dealWithRoot();
     }
 
     dealWithGlobals() {
@@ -65,43 +67,90 @@ class MyEngine  {
         console.info("Loaded Fog");
     }
 
+    dealWithRoot() {
+        const root = this.data.getNode(this.data.rootId);
+        if (root == null) return;
+
+        console.info(root);
+        const rootGroup = this.dealWithNode(root, null);
+        console.info(rootGroup);
+
+        this.app.scene.add(rootGroup);
+    }
+
     getTexture(id) {
-        let texture;
+        if (id == null) return null;
         const params = this.data.getTexture(id);
-        
+        if (params == null) return null;
+
         // load texture
+        let texture;
         if (params.isVideo)
             texture = new THREE.VideoTexture().load( params.filepath );
         else
             texture = new THREE.TextureLoader().load( params.filepath );
 
+        texture.generateMipmaps = params.mipmaps;
+        texture.anisotropy = params.anisotropy;
 
         return texture;
-
-    getMaterial(id) {
-        const matParams = this.data.getMaterial(id);
-        const texParams = this.data.getTexture(matParams.textureref);
-        if (material == null) return;
-
-        let texture;
-        if (texParams.isVideo)
-            texture = new THREE.VideoTexture().load( texParams.filepath );
-        else
-            texture = new THREE.TextureLoader().load( texParams.filepath );
-
-
-        return material;
     }
 
-    primitiveRouter(id, materialid) {
-        const primitive = this.data.getNode(id);
+    getMaterial(id) {
+        if (id == null) return null;
+        const params = this.data.getMaterial(id);
+        if (params == null) return null;
+
+        // get texture
+        const texture = this.getTexture(params.textureref);
+        const side = params.twosided ? THREE.DoubleSide : THREE.FrontSide;
+        const flatShading = params.shading == "flat" ? true : false;
+
+        // create new mesh phong material
+        const material = new THREE.MeshPhongMaterial({
+            color: params.color,
+            specular: params.specular,
+            emissive: params.emissive,
+            shininess: params.shininess,
+            wireframe: params.wireframe,
+            flatShading: flatShading,
+            map: texture,
+            side: side
+        });
+
+        return material;
+    } 
+
+    dealWithNode(node, materialid) {
+        if (node == null) return;
+
+        if (node.type == "node") {
+            const group = new THREE.Group();
+            for (let i = 0; i < node.children.length; i++) {
+                // add children to group
+                if (node.materialIds.length == 0)
+                    group.add(this.dealWithNode(node.children[i], materialid));
+                else
+                    group.add(this.dealWithNode(node.children[i], node.materialIds[0]));
+            }
+
+            // deal with transformations
+
+            return group;
+        }
+
+        return this.primitiveRouter(node, materialid);
+    }
+
+    
+    primitiveRouter(primitive, materialid) {
         if (primitive == null) return;
 
         const lightTypes = ["pointlight", "directionallight", "spotlight"];
 
         // create switch case for each primitive type
         if (primitive.type == "primitive") {
-            const materaial = this.getMaterial(materialid)
+            const material = this.getMaterial(materialid)
             const componentsEngine = new ComponentsEngine(primitive);
             return componentsEngine.buildComponent(material);
         } else if (lightTypes.includes(primitive.type)) {
@@ -111,28 +160,6 @@ class MyEngine  {
 
         console.error("Primitive type not found");
         return;
-    }
-
-    dealWithNode(id, materialid) {
-        const node = this.data.getNode(id);
-        if (node == null) return;
-
-        console.info(node);
-        if (node.type == "node" && node.children.length > 0) {
-            const group = new THREE.Group();
-            for (let i = 0; i < node.children.length; i++) {
-                // add children to group
-                // group.add(this.dealWithNode(node.children[i]));
-            }
-
-            // deal with materials
-
-            // deal with transformations
-
-            return group;
-        }
-
-        return primitiveRouter(id, materialid);
     }
 }
 

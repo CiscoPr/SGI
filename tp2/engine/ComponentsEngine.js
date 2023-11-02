@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { MyNurbsBuilder } from '../MyNurbsBuilder';
+import { MyNurbsBuilder } from '../MyNurbsBuilder.js';
 
 /**
  *  This class contains the contents of the geometry engine
@@ -43,10 +43,14 @@ class ComponentsEngine  {
     }
 
     buildRectangle(material) {
-        const rectangleGeometry = new THREE.planeGeometry(this.params.representations[0].xy2[0], this.params.representations[0].xy2[1],
+        const rectangleGeometry = new THREE.PlaneGeometry(this.params.representations[0].xy2[0], this.params.representations[0].xy2[1],
             this.params.representations[0].parts_x, this.params.representations[0].parts_y);
+        
+        let rectangleMesh;
 
-        const rectangleMesh = new THREE.Mesh(rectangleGeometry, material);
+        if (material == null) rectangleMesh = new THREE.Mesh(rectangleGeometry);
+        else rectangleMesh = new THREE.Mesh(rectangleGeometry, material);
+
         rectangleMesh.position.set(this.params.representations[0].xy2[1] / 2, this.params.representations[0].xy2[1] / 2, 0);
 
         const rectangle = new THREE.LOD();
@@ -59,8 +63,11 @@ class ComponentsEngine  {
         const cylinderGeometry = new THREE.CylinderGeometry(this.params.representations[0].top, this.params.representations[0].base,
             this.params.representations[0].height, this.params.representations[0].slices, this.params.representations[0].stacks, 
             this.params.representations[0].capsclose, this.params.representations[0].thetastart, this.params.representations[0].thetalength);
+        
+        let cylinderMesh;
 
-        const cylinderMesh = new THREE.Mesh(cylinderGeometry, material);
+        if (material == null) cylinderMesh = new THREE.Mesh(cylinderGeometry);
+        else cylinderMesh = new THREE.Mesh(cylinderGeometry, material);
 
         const cylinder = new THREE.LOD();
         cylinder.addLevel(cylinderMesh, this.params.representations[0].distance);
@@ -83,7 +90,10 @@ class ComponentsEngine  {
         const boxGeometry = new THREE.BoxGeometry(width, height, depth,
             this.params.representations[0].parts_x, this.params.representations[0].parts_y, this.params.representations[0].parts_z);
     
-        const boxMesh = new THREE.Mesh(boxGeometry, material);
+        let boxMesh;
+        if (material == null) boxMesh = new THREE.Mesh(boxGeometry);
+        else boxMesh = new THREE.Mesh(boxGeometry, material);
+  
         boxMesh.position.set(width / 2, height / 2, depth / 2);
         
         const box = new THREE.LOD();
@@ -97,25 +107,27 @@ class ComponentsEngine  {
         const degree_u = this.params.representations[0].degree_u;
         const degree_v = this.params.representations[0].degree_v;
 
-        for (let i = 0; i < this.params.representations[0].controlPoints.lenght; i += degree_u * 2) {
-            const controlPoint = [];
-            const rows= this.params.representations[0].controlpoints.slices(i, degree_u * 2);
-            for (let j = 0; j < rows.lenght; j++) {
+        for (let i = 0; i < this.params.representations[0].controlpoints.length; i += degree_u * 2) {
+            const rows= this.params.representations[0].controlpoints.slice(i, degree_u * 2);
+            console.info(rows);
+            console.info(rows.length);
+            for (let j = 0; j < rows.length; j++) {
+                const controlPoint = [];
                 controlPoint.push(rows[j].xx);
                 controlPoint.push(rows[j].yy);
                 controlPoint.push(rows[j].zz);
+                controlPoints.push(controlPoint);
             }
-
-            controlPoints.push(controlPoint);
         }
+
+        console.info(controlPoints);
 
         const builder = new MyNurbsBuilder();
         let surfaceData = builder.build(controlPoints, degree_u, degree_v,
             this.params.representations[0].parts_u, this.params.representations[0].parts_v, material);
 
-        const nurbMesh = new THREE.Mesh(surfaceData, material);
-        
-        return nurbMesh;
+        if (material == null) return new THREE.Mesh(surfaceData);
+        else return new THREE.Mesh(surfaceData, material);
     }
 
     buildSkybox(materaial) {
