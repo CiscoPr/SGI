@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { MySceneData } from './../parser/MySceneData.js';
 import { LightsEngine } from './LightsEngine.js';
+import { ComponentsEngine } from './ComponentsEngine.js';
 
 /**
  *  This class contains the contents of our engine
@@ -64,7 +65,35 @@ class MyEngine  {
         console.info("Loaded Fog");
     }
 
-    primitiveRouter(id) {
+    getTexture(id) {
+        let texture;
+        const params = this.data.getTexture(id);
+        
+        // load texture
+        if (params.isVideo)
+            texture = new THREE.VideoTexture().load( params.filepath );
+        else
+            texture = new THREE.TextureLoader().load( params.filepath );
+
+
+        return texture;
+
+    getMaterial(id) {
+        const matParams = this.data.getMaterial(id);
+        const texParams = this.data.getTexture(matParams.textureref);
+        if (material == null) return;
+
+        let texture;
+        if (texParams.isVideo)
+            texture = new THREE.VideoTexture().load( texParams.filepath );
+        else
+            texture = new THREE.TextureLoader().load( texParams.filepath );
+
+
+        return material;
+    }
+
+    primitiveRouter(id, materialid) {
         const primitive = this.data.getNode(id);
         if (primitive == null) return;
 
@@ -72,7 +101,9 @@ class MyEngine  {
 
         // create switch case for each primitive type
         if (primitive.type == "primitive") {
-            return
+            const materaial = this.getMaterial(materialid)
+            const componentsEngine = new ComponentsEngine(primitive);
+            return componentsEngine.buildComponent(material);
         } else if (lightTypes.includes(primitive.type)) {
             const lightEngine = new LightsEngine(primitive);
             return lightEngine.buildLight();
@@ -82,7 +113,7 @@ class MyEngine  {
         return;
     }
 
-    dealWithNode(id) {
+    dealWithNode(id, materialid) {
         const node = this.data.getNode(id);
         if (node == null) return;
 
@@ -101,7 +132,7 @@ class MyEngine  {
             return group;
         }
 
-        return primitiveRouter(id);
+        return primitiveRouter(id, materialid);
     }
 }
 
