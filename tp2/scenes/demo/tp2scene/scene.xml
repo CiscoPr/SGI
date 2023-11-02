@@ -24,18 +24,103 @@
     </cameras>
 
     <textures>
+        <texture id="friskTex" filepath="./textures/frisk.png"/>
+        <texture id="torielTex" filepath="./textures/toriel.png"/>
+        <texture id="columnsTex" filepath="./textures/columns.png"/>
+        <texture id="flowerBedTex" filepath="./textures/golden_flowers.png"/>
+        <texture id="wallsTex" filepath="./textures/walls.png"/>
+        <texture id="floorTex" filepath="./textures/floor.png"/>
 
     </textures>
 
     <materials>
+        <material id="floorApp"
+            emissive="0.0 0.0 0.0 1"
+            color="0.8 0.8 0.8 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="floorTex"
+            texlength_s="1"
+            texlength_t="1"
+            twosided = "true"
+        />
 
+        <material id="wallsApp"
+            emissive="0.0 0.0 0.0 1"
+            color="0.8 0.8 0.8 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="wallsTex"
+            texlength_s="1"
+            texlength_t="1"
+            twosided = "true"
+        />
     </materials>
 
     <graph rootid="scene">
         <node id="scene">
             <children>
-                
+                <noderef id="room"/>
+
+                <directionallight id="light1" enabled="true"
+                    color="1.0 1.0 1.0 1"
+                    intensity="1.0"
+                    castshadow="true"
+                    position="2 2 4"
+                />
+
             </children>
         </node>
+
+        <node id="room">
+            <children>
+                <noderef id="floor"/>
+                <noderef id="wall1"/>
+                <noderef id="wall2"/>
+            </children>
+        </node>
+
+        <node id="floor">
+            <transforms>
+				<rotate value3="-90 0.0 0.0" />
+            </transforms>
+
+			<materialref id="floorApp" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="15 15" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="wall1">
+			<transforms>
+				<rotate value3="-90 0.0 0.0" />
+            </transforms>
+
+            <materialref id="wallsApp" />
+
+            <children>
+                <noderef id="rectangle1" />
+            </children>
+        </node>
+
+        <node id="wall2">
+			<transforms>
+				<translate value3="0 0 15" />
+				<rotate value3="0.0 90 0.0" />
+            </transforms>
+
+			<materialref id="wallsApp" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="15 8" />
+                </primitive>
+            </children>
+        </node>
+
+        
     </graph>
 </yaf>
