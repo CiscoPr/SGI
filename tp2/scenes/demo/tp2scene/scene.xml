@@ -55,13 +55,58 @@
             texlength_t="1"
             twosided = "true"
         />
+
+        <material id="flowerBedApp"
+            emissive="0.0 0.0 0.0 1"
+            color="0.8 0.8 0.8 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="flowerBedTex"
+            texlength_s="1"
+            texlength_t="1"
+            twosided = "true"
+        />
+
+        <material id="friskApp"
+            emissive="0.0 0.0 0.0 1"
+            color="0.8 0.8 0.8 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="friskTex"
+            texlength_s="1"
+            texlength_t="1"
+            twosided = "true"
+        />
+
+        <material id="torielApp"
+            emissive="0.0 0.0 0.0 1"
+            color="0.8 0.8 0.8 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="torielTex"
+            texlength_s="1"
+            texlength_t="1"
+            twosided = "true"
+        />
+
+        <material id="columnsApp"
+            emissive="0.0 0.0 0.0 1"
+            color="0.8 0.8 0.8 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="columnsTex"
+            texlength_s="1"
+            texlength_t="1"
+            twosided = "true"
+        />
+
     </materials>
 
     <graph rootid="scene">
         <node id="scene">
             <children>
                 <noderef id="room"/>
-
+                <noderef id="frisk"/>
                 <directionallight id="light1" enabled="true"
                     color="1.0 1.0 1.0 1"
                     intensity="1.0"
@@ -77,6 +122,7 @@
                 <noderef id="floor"/>
                 <noderef id="wall1"/>
                 <noderef id="wall2"/>
+                <noderef id="column"/>
             </children>
         </node>
 
@@ -88,6 +134,7 @@
 			<materialref id="floorApp" />
 
             <children>
+                <noderef id="flowerBed"/>
                 <primitive>
                     <rectangle xy1="0 0" xy2="15 15" />
                 </primitive>
@@ -116,11 +163,58 @@
 
             <children>
                 <primitive>
-                    <rectangle xy1="0 0" xy2="15 8" />
+                    <rectangle xy1="0 0" xy2="15 8"/>
                 </primitive>
             </children>
         </node>
 
-        
+        <node id="frisk">
+            <transforms>
+                <translate value3="0 0.5 0" />
+            </transforms>
+
+            <children>
+                <!-- Create a rectangle for frisk texture-->
+            </children>
+        </node>
+
+        <node id="toriel">
+            <transforms>
+                <translate value3="0 0.5 0" />
+            </transforms>
+
+            <children>
+                <!-- Create a rectangle for toriel texture-->
+            </children>
+        </node>
+
+        <node id="flowerBed">
+            <transforms>
+                <translate value3="0 0.01 0" />
+            </transforms>
+
+            <materialref id="flowerBedApp" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="15 15" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="column">
+            <transforms>
+                <translate value3="0 0.01 0" />
+            </transforms>
+
+            <materialref id="columnsApp" />
+
+            <children>
+                <primitive>
+                    <!-- Create a rectangular box for column-->
+                </primitive>
+            </children>
+        </node>
+
     </graph>
 </yaf>
