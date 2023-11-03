@@ -8,7 +8,7 @@ class LightsEngine  {
     /**
        constructs the object
        @param {Array} light paramaters
-    */ 
+    */
     constructor(params, app) {
         this.params = params;
         this.app = app;
@@ -18,7 +18,7 @@ class LightsEngine  {
      * Builds the light
      */
     buildLight() {
-        console.log(this.params); 
+        console.log(this.params);
         // create switch case for each light type
         switch(this.params.type) {
             case "pointlight":
@@ -30,14 +30,14 @@ class LightsEngine  {
             default:
                 console.error("Light type not found");
                 return;
-    
+
         }
     }
 
     buildDirectionalLight() {
         const light = new THREE.DirectionalLight(this.params.color.getHex(), this.params.intensity);
         light.position.set(this.params.position[0], this.params.position[1], this.params.position[2]);
-        light.castShadow = this.params.castshadow; 
+        light.castShadow = this.params.castshadow;
 
         if (light.castShadow) {
             light.shadow.mapSize.width = this.params.shadowmapsize;
@@ -51,7 +51,7 @@ class LightsEngine  {
 
         // create helper
         const helper = new THREE.DirectionalLightHelper(light);
-        this.app.scene.add(helper);
+        //this.app.scene.add(helper);
 
         return light;
     }
@@ -69,7 +69,7 @@ class LightsEngine  {
 
         // create helper
         const helper = new THREE.PointLightHelper(light);
-        this.app.scene.add(helper);
+        //this.app.scene.add(helper);
 
         return light;
     }
@@ -91,7 +91,7 @@ class LightsEngine  {
 
         // create helper
         const helper = new THREE.SpotLightHelper(light);
-        this.app.scene.add(helper);
+        //this.app.scene.add(helper);
 
         // add target to light
         light.target = target;

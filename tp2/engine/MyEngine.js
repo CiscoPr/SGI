@@ -134,7 +134,8 @@ class MyEngine  {
             wireframe: params.wireframe,
             flatShading: flatShading,
             map: texture,
-            side: side
+            side: side,
+            transparent: params.transparent,
         });
 
         return material;

@@ -9,7 +9,7 @@ class ComponentsEngine  {
     /**
        constructs the object
        @param {Array} params paramaters
-    */ 
+    */
     constructor(params) {
         this.params = params;
     }
@@ -18,7 +18,8 @@ class ComponentsEngine  {
      * Builds the light
      */
     buildComponent(material) {
-        console.log(this.params); 
+        console.log(this.params);
+        
         // create switch case for each light type
         switch(this.params.subtype) {
             case "rectangle":
@@ -34,11 +35,11 @@ class ComponentsEngine  {
             case "nurbs":
                 return this.buildNurb(material);
             case "skybox":
-                return this.buildSkybox(material);   
+                return this.buildSkybox(material);
             default:
                 console.error("Geometry type not found");
                 return;
-    
+
         }
     }
 
@@ -48,7 +49,7 @@ class ComponentsEngine  {
 
         const rectangleGeometry = new THREE.PlaneGeometry(width , height,
             this.params.representations[0].parts_x, this.params.representations[0].parts_y);
-        
+
         let rectangleMesh;
 
         if (material == null) rectangleMesh = new THREE.Mesh(rectangleGeometry);
@@ -66,9 +67,9 @@ class ComponentsEngine  {
 
     buildCylinder(material) {
         const cylinderGeometry = new THREE.CylinderGeometry(this.params.representations[0].top, this.params.representations[0].base,
-            this.params.representations[0].height, this.params.representations[0].slices, this.params.representations[0].stacks, 
+            this.params.representations[0].height, this.params.representations[0].slices, this.params.representations[0].stacks,
             this.params.representations[0].capsclose, this.params.representations[0].thetastart, this.params.representations[0].thetalength);
-        
+
         let cylinderMesh;
 
         if (material == null) cylinderMesh = new THREE.Mesh(cylinderGeometry);
@@ -94,16 +95,17 @@ class ComponentsEngine  {
         const depth = this.params.representations[0].xyz2[2] - this.params.representations[0].xyz1[2];
         const boxGeometry = new THREE.BoxGeometry(width, height, depth,
             this.params.representations[0].parts_x, this.params.representations[0].parts_y, this.params.representations[0].parts_z);
-    
+
         let boxMesh;
+        material.transparent = true;
         if (material == null) boxMesh = new THREE.Mesh(boxGeometry, new THREE.MeshBasicMaterial({ color: 0x00ff00 }));
         else boxMesh = new THREE.Mesh(boxGeometry, material);
-  
+
         boxMesh.position.set(width / 2, height / 2, depth / 2);
-        
+
         const box = new THREE.LOD();
         box.addLevel(boxMesh, this.params.representations[0].distance);
-        
+
         return box;
     }
 

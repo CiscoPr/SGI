@@ -67,6 +67,7 @@ class MySceneData  {
             {name: "twosided", type: "boolean", required: false, default: false},
             {name: "bump_ref", type: "string", required: false, default: null}, // bump map is to be used in later classes
             {name: "bump_scale", type: "float", required: false, default: 1.0},
+            {name: "transparent", type: "boolean", required: false, default: false},
 		]
 
         this.descriptors["orthogonal"] = [
