@@ -69,13 +69,14 @@
 
         <material id="friskApp"
             emissive="0.0 0.0 0.0 1"
-            color="0.8 0.8 0.8 1.0"
+            color="#00000000"
             specular="0 0 0 0"
             shininess="0"
             textureref="friskTex"
             texlength_s="1"
             texlength_t="1"
             twosided = "true"
+            transparent = "true"
         />
 
         <material id="torielApp"
@@ -136,7 +137,7 @@
             <children>
                 <noderef id="flowerBed"/>
                 <primitive>
-                    <rectangle xy1="0 0" xy2="15 15" />
+                    <rectangle xy1="-0.5 -0.5" xy2="0.5 0.5" />
                 </primitive>
             </children>
         </node>
@@ -149,7 +150,7 @@
             <materialref id="wallsApp" />
 
             <children>
-                <noderef id="rectangle1" />
+                <rectangle xy1="-0.5 -0.5" xy2="0.5 0.5" />
             </children>
         </node>
 
@@ -163,7 +164,7 @@
 
             <children>
                 <primitive>
-                    <rectangle xy1="0 0" xy2="15 8"/>
+                    <rectangle xy1="-0.5 -0.5" xy2="0.5 0.5" />
                 </primitive>
             </children>
         </node>
@@ -197,7 +198,7 @@
 
             <children>
                 <primitive>
-                    <rectangle xy1="0 0" xy2="15 15" />
+                    <rectangle xy1="-0.5 -0.5" xy2="0.5 0.5" />
                 </primitive>
             </children>
         </node>

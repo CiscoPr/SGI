@@ -11,13 +11,13 @@ class MyContents  {
     /**
        constructs the object
        @param {MyApp} app The application object
-    */ 
+    */
     constructor(app) {
         this.app = app;
         this.axis = null;
 
         this.reader = new MyFileReader(app, this, this.onSceneLoaded);
-		this.reader.open("scenes/demo/demo.xml");
+		this.reader.open("scenes/tp2scene/demo.xml");
 
         this.engine = new MyEngine(app, this);
     }
@@ -26,7 +26,7 @@ class MyContents  {
      * initializes the contents
      */
     init() {
-        // create once 
+        // create once
         if (this.axis === null) {
             // create and attach the axis to the scene
             this.axis = new MyAxis(this);
@@ -54,7 +54,7 @@ class MyContents  {
     }
 
     onAfterSceneLoadedAndBeforeRender(data) {
-       
+
         // refer to descriptors in class MySceneData.js
         // to see the data structure for each item
 
@@ -97,7 +97,7 @@ class MyContents  {
     }
 
     update() {
-        
+
     }
 }
 
