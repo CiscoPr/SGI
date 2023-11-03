@@ -183,7 +183,7 @@
 
                 <directionallight id="saveLight" enabled="true"
                     color="1.0 1.0 1.0 1"
-                    intensity="3.0"
+                    intensity="2.0"
                     castshadow="true"
                     position="2 2 4"
                 />
