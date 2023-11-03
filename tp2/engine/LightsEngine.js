@@ -9,8 +9,9 @@ class LightsEngine  {
        constructs the object
        @param {Array} light paramaters
     */ 
-    constructor(params) {
+    constructor(params, app) {
         this.params = params;
+        this.app = app;
     }
 
     /**
@@ -48,6 +49,10 @@ class LightsEngine  {
             light.shadow.camera.bottom = this.params.shadowbottom;
         }
 
+        // create helper
+        const helper = new THREE.DirectionalLightHelper(light);
+        this.app.scene.add(helper);
+
         return light;
     }
 
@@ -61,6 +66,10 @@ class LightsEngine  {
             light.shadow.mapSize.height = this.params.shadowmapsize;
             light.shadow.camera.far = this.params.shadowfar;
         }
+
+        // create helper
+        const helper = new THREE.PointLightHelper(light);
+        this.app.scene.add(helper);
 
         return light;
     }
@@ -80,9 +89,13 @@ class LightsEngine  {
         const target = new THREE.Object3D();
         target.position.set(this.params.target[0], this.params.target[1], this.params.target[2]);
 
+        // create helper
+        const helper = new THREE.SpotLightHelper(light);
+        this.app.scene.add(helper);
+
         // add target to light
         light.target = target;
-        light.add(target);
+        this.app.scene.add(target);
 
         return light;
     }

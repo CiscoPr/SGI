@@ -43,7 +43,10 @@ class ComponentsEngine  {
     }
 
     buildRectangle(material) {
-        const rectangleGeometry = new THREE.PlaneGeometry(this.params.representations[0].xy2[0], this.params.representations[0].xy2[1],
+        const width = this.params.representations[0].xy2[0] - this.params.representations[0].xy1[0];
+        const height = this.params.representations[0].xy2[1] - this.params.representations[0].xy1[1];
+
+        const rectangleGeometry = new THREE.PlaneGeometry(width , height,
             this.params.representations[0].parts_x, this.params.representations[0].parts_y);
         
         let rectangleMesh;
@@ -51,7 +54,9 @@ class ComponentsEngine  {
         if (material == null) rectangleMesh = new THREE.Mesh(rectangleGeometry);
         else rectangleMesh = new THREE.Mesh(rectangleGeometry, material);
 
-        rectangleMesh.position.set(this.params.representations[0].xy2[1] / 2, this.params.representations[0].xy2[1] / 2, 0);
+        rectangleMesh.position.set(this.params.representations[0].xy1[0], this.params.representations[0].xy1[1], 0);
+        rectangleMesh.position.x += width / 2;
+        rectangleMesh.position.y += height / 2;
 
         const rectangle = new THREE.LOD();
         rectangle.addLevel(rectangleMesh, this.params.representations[0].distance);
@@ -91,7 +96,7 @@ class ComponentsEngine  {
             this.params.representations[0].parts_x, this.params.representations[0].parts_y, this.params.representations[0].parts_z);
     
         let boxMesh;
-        if (material == null) boxMesh = new THREE.Mesh(boxGeometry);
+        if (material == null) boxMesh = new THREE.Mesh(boxGeometry, new THREE.MeshBasicMaterial({ color: 0x00ff00 }));
         else boxMesh = new THREE.Mesh(boxGeometry, material);
   
         boxMesh.position.set(width / 2, height / 2, depth / 2);

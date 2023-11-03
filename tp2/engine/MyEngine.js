@@ -135,11 +135,42 @@ class MyEngine  {
             }
 
             // deal with transformations
+            const transformations = node.transformations;
+            this.applyTransformations(group, transformations);
 
             return group;
         }
 
         return this.primitiveRouter(node, materialid);
+    }
+
+    applyTransformations(group, transformations) {
+        for (let i = transformations.length - 1; i >= 0; i--) {
+            const transformation = transformations[i];
+            let currentMatrix = new THREE.Matrix4();
+            switch (transformation.type) {
+                case "T":
+                    const translation = transformation.translate;
+                    const translationVector = new THREE.Vector3(translation[0], translation[1], translation[2]);
+
+                    group.applyMatrix4(new THREE.Matrix4().makeTranslation(translationVector));
+                    break;
+                case "R":
+                    const rotation = transformation.rotation;
+                    const euler = new THREE.Euler(rotation[0] * Math.PI / 180, rotation[1] * Math.PI / 180, rotation[2] * Math.PI / 180, "XYZ");
+
+                    group.applyMatrix4(new THREE.Matrix4().makeRotationFromEuler(euler));
+                    break;
+                case "S":
+                    const scale = transformation.scale;
+
+                    group.applyMatrix4(new THREE.Matrix4().makeScale(scale[0], scale[1], scale[2]));
+                    break;
+                default:
+                    console.error("Transformation type not found");
+                    break;
+            }
+        }
     }
 
     
@@ -154,7 +185,7 @@ class MyEngine  {
             const componentsEngine = new ComponentsEngine(primitive);
             return componentsEngine.buildComponent(material);
         } else if (lightTypes.includes(primitive.type)) {
-            const lightEngine = new LightsEngine(primitive);
+            const lightEngine = new LightsEngine(primitive, this.app);
             return lightEngine.buildLight();
         }
 
