@@ -8,8 +8,8 @@ import { MyContents } from './MyContents.js';
 class MyGuiInterface  {
 
     /**
-     * 
-     * @param {MyApp} app The application object 
+     *
+     * @param {MyApp} app The application object
      */
     constructor(app) {
         this.app = app
@@ -19,7 +19,7 @@ class MyGuiInterface  {
 
     /**
      * Set the contents object
-     * @param {MyContents} contents the contents objects 
+     * @param {MyContents} contents the contents objects
      */
     setContents(contents) {
         this.contents = contents
@@ -29,6 +29,10 @@ class MyGuiInterface  {
      * Initialize the gui interface
      */
     init() {
+        // adds a folder to the gui interface for the camera
+        const cameraFolder = this.datgui.addFolder('Camera')
+        
+        cameraFolder.open()
     }
 }
 

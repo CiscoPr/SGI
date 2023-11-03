@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-16" standalone="yes"?>
+<yaf>
+
+	<!-- Credits of the original file go to Group 1, class 1 of course LAIG school year 2013/2014, FEUP, University of Porto -->
+
+    <globals background="0 0 0 1" ambient="0 0 0 1" />
+
+    <fog color="1.0 1.0 1.0 1.0" near="0.0" far="100.0" />
+
+    <cameras initial="cam1" >
+        <perspective id="cam1"
+            angle="60"
+            near="0.1"
+            far="1000"
+            location="15 15 15"
+            target="0 0.0 0" />
+
+        <orthogonal id="cam2"
+            near="0.1"
+            far="1000"
+            location="0 15 15"
+            target="0.0 15 0.0"
+            left="-5"
+            right="5"
+            bottom="-5"
+            top="-5" />
+    </cameras>
+
+    <!-- bloco de texturas. Este bloco tem de existir mas pode estar vazio, se nao forem usadas texturas -->
+    <textures>
+        <texture id="friskTex" filepath="scenes/tp2scene/textures/frisk.png"/>
+        <texture id="torielTex" filepath="scenes/tp2scene/textures/toriel.png"/>
+        <texture id="columnsTex" filepath="scenes/tp2scene/textures/columns.png"/>
+        <texture id="flowerBedTex" filepath="scenes/tp2scene/textures/golden_flowers.png"/>
+        <texture id="wallsTex" filepath="scenes/tp2scene/textures/walls.png"/>
+        <texture id="floorTex" filepath="scenes/tp2scene/textures/floor.png"/>
+        <texture id="doorTex" filepath="scenes/tp2scene/textures/door.png"/>
+        <texture id="boardTex" filepath="scenes/tp2scene/textures/board.png"/>
+        <texture id="saveTex" filepath="scenes/tp2scene/textures/save.png"/>
+    </textures>
+
+    <materials>
+
+		<material id="leftWallApp"
+            emissive="0.0 0.0 0.0 1"
+			color="0.8 0.8 0.8 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="wallsTex"
+            texlength_s="15"
+            texlength_t="15"
+            twosided = "true" />
+
+		<material id="rightWallApp"
+            emissive="0.0 0.0 0.0 1"
+            color="0.8 0.8 0.8 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="wallsTex"
+            texlength_s="15"
+            texlength_t="15"
+            twosided = "true" />
+
+		<material id="floorApp"
+            emissive="0.0 0.0 0.0 1"
+            color="0.8 0.8 0.8 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="floorTex"
+            texlength_s="15"
+            texlength_t="15"
+            twosided = "true"
+        />
+
+        <material id="flowerBedApp"
+            emissive="0.0 0.0 0.0 1"
+            color="0.8 0.8 0.8 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="flowerBedTex"
+            texlength_s="1"
+            texlength_t="1"
+            twosided = "true"
+            transparent="true"
+        />
+
+
+        <material id="columnsApp"
+            emissive="0.0 0.0 0.0 1"
+            color="0.8 0.8 0.8 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="columnsTex"
+            texlength_s="1"
+            texlength_t="1"
+            twosided = "true"
+        />
+
+        <material id="friskApp"
+            emissive="0.0 0.0 0.0 1"
+            color="0.8 0.8 0.8 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="friskTex"
+            texlength_s="1"
+            texlength_t="1"
+            twosided = "true"
+            transparent="true"
+        />
+
+        <material id="torielApp"
+            emissive="0.0 0.0 0.0 1"
+            color="0.8 0.8 0.8 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="torielTex"
+            texlength_s="1"
+            texlength_t="1"
+            twosided = "true"
+            transparent="true"
+        />
+
+        <material id="doorApp"
+            emissive="0.0 0.0 0.0 1"
+            color="0.8 0.8 0.8 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="doorTex"
+            texlength_s="1"
+            texlength_t="1"
+            twosided = "true"
+        />
+
+        <material id="boardApp"
+            emissive="0.0 0.0 0.0 1"
+            color="0.8 0.8 0.8 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="boardTex"
+            texlength_s="1"
+            texlength_t="1"
+            twosided = "true"
+            transparent="false"
+        />
+
+        <material id="saveApp"
+            emissive="0.0 0.0 0.0 1"
+            color="0.8 0.8 0.8 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="saveTex"
+            texlength_s="1"
+            texlength_t="1"
+            twosided = "true"
+            transparent="true"
+        />
+
+    </materials>
+
+    <graph rootid="scene">
+
+		<node id="scene">
+            <children>
+                <noderef id="leftWall" />
+				<noderef id="rightWall" />
+				<noderef id="floor" />
+                <noderef id="column1"/>
+                <noderef id="column2"/>
+                <noderef id="entities"/>
+                <noderef id="save"/>
+
+                <pointlight id="light1" enabled="true"
+                    color="0.5 0.6 0.8 1"
+                    intensity="1.0"
+                    distance="1000"
+                    decay="2.0"
+                    castshadow="false"
+                    position="33.75 37.3 33.75"
+                />
+
+                <pointlight id="light2" enabled="true"
+                    color="0.5 0.6 0.8 1"
+                    intensity="1.0"
+                    distance="1000"
+                    decay="2.0"
+                    castshadow="false"
+                    position="11.25 7.3 3.75"
+                />
+
+                <pointlight id="light3" enabled="true"
+                    color="0.5 0.6 0.8 1"
+                    intensity="1.0"
+                    distance="1000"
+                    decay="2.0"
+                    castshadow="false"
+                    position="11.25 7.3 3.75"
+                />
+
+                <spotlight id="light4" enabled="true"
+                    color="1.0 1.0 1.0 1"
+                    intensity="1.0"
+                    distance="1000"
+                    decay="2.0"
+                    castshadow="true"
+                    position="2 2 4"
+                    target="0 0 0"
+                    penumbra="1.0"
+                    angle="10.0"
+                />
+
+                <directionallight id="light5" enabled="true"
+                    color="1.0 1.0 1.0 1"
+                    intensity="1.0"
+                    castshadow="true"
+                    position="2 2 4"
+                />
+            </children>
+        </node>
+
+		<node id="rectangle1">
+
+            <transforms>
+				<translate value3="0 0 -0.5" />
+				<rotate value3="0 180.0 0.0" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <rectangle xy1="-0.5 -0.5" xy2="0.5 0.5" />
+                </primitive>
+            </children>
+        </node>
+
+
+		<node id="floor">
+
+			<transforms>
+				<translate value3="0 0 20" />
+				<rotate value3="-90 0.0 0.0" />
+            </transforms>
+
+			<materialref id="floorApp" />
+
+            <children>
+                <noderef id="flowerBed" />
+                <primitive>
+                    <rectangle xy1="0 0" xy2="20 20" />
+                </primitive>
+            </children>
+        </node>
+
+		<node id="wall">
+			<transforms>
+				<rotate value3="-90 0.0 0.0" />
+            </transforms>
+
+            <children>
+                <noderef id="rectangle1" />
+            </children>
+        </node>
+
+		<node id="leftWall">
+			<transforms>
+				<translate value3="0 0 20" />
+				<rotate value3="0.0 90 0.0" />
+            </transforms>
+
+			<materialref id="leftWallApp" />
+
+            <children>
+                <noderef id="door"/>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="20 10" />
+                </primitive>
+
+            </children>
+        </node>
+
+        <node id="door">
+            <transforms>
+                <translate value3="5.0 0 0.1" />
+            </transforms>
+
+            <materialref id="doorApp" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0.3 0.0" xy2="9.0 8.17" />
+                </primitive>
+            </children>
+        </node>
+
+		<node id="rightWall">
+			<materialref id="rightWallApp" />
+
+            <children>
+                <noderef id="board" />
+                <primitive>
+                    <rectangle xy1="0 0" xy2="20 10" />
+                </primitive>
+            </children>
+        </node>
+
+
+        <node id="board">
+            <transforms>
+                <translate value3="12.0 5.0 0.5" />
+                <rotate value3="0.0 180 0.0" />
+            </transforms>
+
+            <materialref id="boardApp" />
+
+            <children>
+                <primitive>
+                    <box xyz1="0 0 0.0" xyz2="4.0 2.0 2.0" />
+                </primitive>
+            </children>
+        </node>
+
+		<node id="column1">
+
+			<materialref id="columnsApp" />
+
+            <children>
+                <primitive>
+                    <box xyz1="0.0 0.0 0.0" xyz2="4.5 10.0 1.5" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="column2">
+            <transforms>
+                <translate value3="15.5 0 0" />
+            </transforms>
+			<materialref id="columnsApp" />
+
+            <children>
+                <primitive>
+                    <box xyz1="0.0 0.0 0.0" xyz2="4.5 10.0 1.5" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="flowerBed">
+            <transforms>
+                <translate value3="5.0 6.0 0.1" />
+                <scale value3="1.5 1.7 1.0" />
+            </transforms>
+
+            <materialref id="flowerBedApp" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="-1.0 -1.0" xy2="8.0 6.0" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="entities">
+            <transforms>
+                <translate value3="-2.0 0.0 0.0" />
+            </transforms>
+            <children>
+                <noderef id="frisk" />
+                <noderef id="toriel" />
+            </children>
+        </node>
+
+        <node id="frisk">
+            <transforms>
+                <translate value3="6.0 0.0 15.0" />
+                <rotate value3="0.0 90.0 0.0" />
+            </transforms>
+
+            <materialref id="friskApp" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0.0 0.0" xy2="5.0 5.0" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="toriel">
+            <transforms>
+                <translate value3="6.0 0.0 11.0" />
+                <rotate value3="0.0 90.0 0.0" />
+            </transforms>
+
+            <materialref id="torielApp" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0.0 0.0" xy2="5.0 8.0" />
+                </primitive>
+            </children>
+        </node>
+
+
+        <node id="save">
+            <transforms>
+                <translate value3="7.5 0.0 2.0" />
+            </transforms>
+
+            <materialref id="saveApp" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0.0 0.0" xy2="5.0 5.0" />
+                </primitive>
+            </children>
+        </node>
+
+    </graph>
+</yaf>
