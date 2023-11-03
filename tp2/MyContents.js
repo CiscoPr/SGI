@@ -17,7 +17,7 @@ class MyContents  {
         this.axis = null;
 
         this.reader = new MyFileReader(app, this, this.onSceneLoaded);
-		this.reader.open("scenes/tp2scene/demo.xml");
+		this.reader.open("scenes/tp2scene/scene.xml");
 
         this.engine = new MyEngine(app, this);
     }
