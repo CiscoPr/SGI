@@ -88,14 +88,16 @@ class LightsEngine  {
         // create target
         const target = new THREE.Object3D();
         target.position.set(this.params.target[0], this.params.target[1], this.params.target[2]);
+        light.target = target;
+        this.app.scene.add(target);
 
         // create helper
         const helper = new THREE.SpotLightHelper(light);
         //this.app.scene.add(helper);
 
         // add target to light
-        light.target = target;
-        this.app.scene.add(target);
+
+
 
         return light;
     }
