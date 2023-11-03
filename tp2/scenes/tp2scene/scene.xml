@@ -169,51 +169,26 @@
                 <noderef id="entities"/>
                 <noderef id="save"/>
 
-                <pointlight id="light1" enabled="true"
-                    color="0.5 0.6 0.8 1"
-                    intensity="1.0"
-                    distance="1000"
-                    decay="2.0"
-                    castshadow="false"
-                    position="33.75 37.3 33.75"
-                />
-
-                <pointlight id="light2" enabled="true"
-                    color="0.5 0.6 0.8 1"
-                    intensity="1.0"
-                    distance="1000"
-                    decay="2.0"
-                    castshadow="false"
-                    position="11.25 7.3 3.75"
-                />
-
-                <pointlight id="light3" enabled="true"
-                    color="0.5 0.6 0.8 1"
-                    intensity="1.0"
-                    distance="1000"
-                    decay="2.0"
-                    castshadow="false"
-                    position="11.25 7.3 3.75"
-                />
-
-                <spotlight id="light4" enabled="true"
+                <spotlight id="ruins" enabled="true"
                     color="1.0 1.0 1.0 1"
-                    intensity="1.0"
+                    intensity="50.0"
                     distance="1000"
-                    decay="2.0"
+                    decay="1.5"
                     castshadow="true"
-                    position="2 2 4"
-                    target="0 0 0"
+                    position="10.0 3.0 2.0"
+                    target="10.0 3.0 5.0"
                     penumbra="1.0"
                     angle="10.0"
                 />
 
-                <directionallight id="light5" enabled="true"
+                <directionallight id="saveLight" enabled="true"
                     color="1.0 1.0 1.0 1"
-                    intensity="1.0"
+                    intensity="2.0"
                     castshadow="true"
                     position="2 2 4"
                 />
+
+
             </children>
         </node>
 
