@@ -92,10 +92,24 @@ class MyEngine  {
         const leftTex = skybox.left;
         const rightTex = skybox.right;
         const frontTex = skybox.front;
-        const backTex = skybox.back;
-        const type = skybox.type;
-        
-        
+
+
+        const skyboxGeometry = new THREE.BoxGeometry(skybox.size[0], skybox.size[1], skybox.size[2]);
+        const skyboxMaterials = [
+            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(upTex), side: THREE.BackSide, fog:false }),
+            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(downTex), side: THREE.BackSide, fog:false }),
+            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(leftTex), side: THREE.BackSide, fog:false }),
+            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(rightTex), side: THREE.BackSide, fog:false }),
+            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(frontTex), side: THREE.BackSide, fog:false }),
+            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(frontTex), side: THREE.BackSide, fog:false }),
+        ];
+
+
+
+        const skyboxMesh = new THREE.Mesh(skyboxGeometry, skyboxMaterials);
+        console.log('my mesh', skyboxMesh)
+        skyboxMesh.position.set(center[0], center[1], center[2]);
+        this.app.scene.add(skyboxMesh);
         console.info("Loaded Skybox");
     }
 
