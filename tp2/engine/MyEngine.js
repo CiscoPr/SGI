@@ -34,6 +34,7 @@ class MyEngine  {
         console.info("------------------ creating Three.js scene ------------------");
 
         this.dealWithGlobals();
+        this.dealWithSkybox();
         this.dealWithFog();
         this.dealWithRoot();
         this.dealWithCameras();
@@ -69,6 +70,35 @@ class MyEngine  {
         this.app.scene.fog = new THREE.Fog(color, near, far);
         console.info("Loaded Fog");
     }
+
+    dealWithSkybox() {
+        const skybox = this.data.getSkybox();
+        if (skybox == null) return;
+
+        //added skybox {"size":[100,100,100],
+        //"center": [0, 0, 0], "emissive": 0,
+        //"intensity": 10, "up": "scenes/tp2scene/textures/skybox.png",
+        //"down": "scenes/tp2scene/textures/skybox.png", "left": "scenes/tp2scene/textures/skybox.png",
+        //"right": "scenes/tp2scene/textures/skybox.png", "front": "scenes/tp2scene/textures/skybox.png",
+        //"back": "scenes/tp2scene/textures/skybox.png", "type": "skybox", "id": "default", "custom": { }
+    
+        // set skybox
+        const size = skybox.size;
+        const center = skybox.center;
+        const emissive = skybox.emissive;
+        const intensity = skybox.intensity;
+        const upTex = skybox.up;
+        const downTex = skybox.down;
+        const leftTex = skybox.left;
+        const rightTex = skybox.right;
+        const frontTex = skybox.front;
+        const backTex = skybox.back;
+        const type = skybox.type;
+        
+        
+        console.info("Loaded Skybox");
+    }
+
 
     dealWithCameras() {
         const cameras = this.data.getCameras();

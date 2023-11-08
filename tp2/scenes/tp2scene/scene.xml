@@ -7,6 +7,14 @@
 
     <fog color="1.0 1.0 1.0 1.0" near="0.0" far="100.0" />
 
+    <skybox
+       size="100.0 100.0 100.0"              
+       center="0.0 0.0 0.0"
+       emissive="0.0 0.0 0.0 1"  intensity="10"
+       front="scenes/tp2scene/textures/skybox.png" back="scenes/tp2scene/textures/skybox.png"        
+       up="scenes/tp2scene/textures/skybox.png" down="scenes/tp2scene/textures/skybox.png"          
+       left="scenes/tp2scene/textures/skybox.png" right="scenes/tp2scene/textures/skybox.png" />          
+
     <cameras initial="cam1" >
         <perspective id="cam1"
             angle="60"
