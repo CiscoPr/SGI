@@ -8,12 +8,12 @@
     <fog color="1.0 1.0 1.0 1.0" near="0.0" far="100.0" />
 
     <skybox
-       size="1000.0 1000.0 1000.0"              
+       size="1000.0 1000.0 1000.0"
        center="10.0 10.0 10.0"
-       emissive="0.0 0.0 0.0 1"  intensity="10"
-       front="scenes/tp2scene/textures/skybox.png" back="scenes/tp2scene/textures/skybox.png"        
-       up="scenes/tp2scene/textures/skybox.png" down="scenes/tp2scene/textures/skybox.png"          
-       left="scenes/tp2scene/textures/sky_up.png" right="scenes/tp2scene/textures/under_skybox.png" />          
+       emissive="0.0 0.0 0.0 1"  intensity="0"
+       front="scenes/tp2scene/textures/skybox.png" back="scenes/tp2scene/textures/skybox.png"
+       up="scenes/tp2scene/textures/skybox.png" down="scenes/tp2scene/textures/skybox.png"
+       left="scenes/tp2scene/textures/sky_up.png" right="scenes/tp2scene/textures/under_skybox.png" />
 
     <cameras initial="cam1" >
         <perspective id="cam1"
@@ -177,7 +177,7 @@
                 <noderef id="entities"/>
                 <noderef id="save"/>
 
-                <spotlight id="ruins" enabled="true"
+                <spotlight id="saveLight" enabled="true"
                     color="1.0 1.0 1.0 1"
                     intensity="50.0"
                     distance="1000"
@@ -189,11 +189,18 @@
                     angle="10.0"
                 />
 
-                <directionallight id="saveLight" enabled="true"
+                <directionallight id="ruins" enabled="true"
                     color="1.0 1.0 1.0 1"
                     intensity="2.0"
                     castshadow="true"
                     position="2 2 4"
+                />
+
+                <directionallight id="ruins2" enabled="true"
+                color="1.0 1.0 1.0 1"
+                intensity="2.0"
+                castshadow="true"
+                position="-2 -2 -4"
                 />
 
 

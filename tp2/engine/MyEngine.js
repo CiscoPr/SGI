@@ -81,7 +81,7 @@ class MyEngine  {
         //"down": "scenes/tp2scene/textures/skybox.png", "left": "scenes/tp2scene/textures/skybox.png",
         //"right": "scenes/tp2scene/textures/skybox.png", "front": "scenes/tp2scene/textures/skybox.png",
         //"back": "scenes/tp2scene/textures/skybox.png", "type": "skybox", "id": "default", "custom": { }
-    
+
         // set skybox
         const size = skybox.size;
         const center = skybox.center;
@@ -93,18 +93,15 @@ class MyEngine  {
         const rightTex = skybox.right;
         const frontTex = skybox.front;
 
-
         const skyboxGeometry = new THREE.BoxGeometry(skybox.size[0], skybox.size[1], skybox.size[2]);
         const skyboxMaterials = [
-            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(upTex), side: THREE.BackSide, fog:false }),
-            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(downTex), side: THREE.BackSide, fog:false }),
-            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(leftTex), side: THREE.BackSide, fog:false }),
-            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(rightTex), side: THREE.BackSide, fog:false }),
-            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(frontTex), side: THREE.BackSide, fog:false }),
-            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(frontTex), side: THREE.BackSide, fog:false }),
+            new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load(upTex), side: THREE.BackSide, fog:false, emissive: emissive, emissiveIntensity: intensity}),
+            new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load(downTex), side: THREE.BackSide, fog:false, emissive: emissive, emissiveIntensity: intensity}),
+            new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load(leftTex), side: THREE.BackSide, fog:false, emissive: emissive, emissiveIntensity: intensity }),
+            new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load(rightTex), side: THREE.BackSide, fog:false, emissive: emissive, emissiveIntensity: intensity }),
+            new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load(frontTex), side: THREE.BackSide, fog:false, emissive: emissive, emissiveIntensity: intensity }),
+            new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load(frontTex), side: THREE.BackSide, fog:false, emissive: emissive, emissiveIntensity: intensity }),
         ];
-
-
 
         const skyboxMesh = new THREE.Mesh(skyboxGeometry, skyboxMaterials);
         console.log('my mesh', skyboxMesh)
