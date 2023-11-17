@@ -137,7 +137,7 @@ class ComponentsEngine  {
         else return new THREE.Mesh(surfaceData, material);
     }
 
-    buildSkybox(materaial) {
+    buildSkybox(material) {
         return null;
     }
 
