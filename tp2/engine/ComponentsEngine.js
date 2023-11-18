@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { MyNurbsBuilder } from '../MyNurbsBuilder.js';
+import { TriangleEngine } from './TriangleEngine.js';
 
 /**
  *  This class contains the contents of the geometry engine
@@ -19,7 +20,7 @@ class ComponentsEngine  {
      */
     buildComponent(material) {
         console.log(this.params);
-        
+
         // create switch case for each light type
         switch(this.params.subtype) {
             case "rectangle":
@@ -82,7 +83,23 @@ class ComponentsEngine  {
     }
 
     buildTriangle(material) {
-        return null;
+
+        const triangleGeometry = new TriangleEngine(
+            this.params.representations[0].xyz1,
+            this.params.representations[0].xyz2,
+            this.params.representations[0].xyz3);
+
+        let triangleMesh;
+
+        if (material == null) triangleMesh = new THREE.Mesh(triangleGeometry);
+        else triangleMesh = new THREE.Mesh(triangleGeometry, material);
+
+        const triangle = new THREE.LOD();
+
+        console.log("my triangle", triangleMesh);
+        triangle.addLevel(triangleMesh, this.params.representations[0].distance);
+
+        return triangle;
     }
 
     buildSphere(material) {
