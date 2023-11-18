@@ -96,14 +96,31 @@ class ComponentsEngine  {
 
         const triangle = new THREE.LOD();
 
-        console.log("my triangle", triangleMesh);
         triangle.addLevel(triangleMesh, this.params.representations[0].distance);
 
         return triangle;
     }
 
     buildSphere(material) {
-        return null;
+        const radius = this.params.representations[0].radius;
+        const slices = this.params.representations[0].slices;
+        const stacks = this.params.representations[0].stacks;
+        const thetaStart = this.params.representations[0].thetastart;
+        const thetaLength = this.params.representations[0].thetalength;
+        const phiStart = this.params.representations[0].phistart;
+        const phiLength = this.params.representations[0].philength;
+
+        const sphereGeometry = new THREE.SphereGeometry(radius, slices, stacks,  phiStart, phiLength, thetaStart, thetaLength);
+
+        let sphereMesh;
+
+        if (material == null) sphereMesh = new THREE.Mesh(sphereGeometry);
+        else sphereMesh = new THREE.Mesh(sphereGeometry, material);
+
+        const sphere = new THREE.LOD();
+        sphere.addLevel(sphereMesh, this.params.representations[0].distance);
+
+        return sphere;
     }
 
     buildBox(material) {
