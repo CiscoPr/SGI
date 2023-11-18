@@ -4,22 +4,22 @@ import { MySceneData } from './MySceneData.js';
  *  This class contains the XML parser
  *  Credits: Alexandre Valle (alexandre.valle@fe.up.pt)
  *  Version: 2023-10-13
- * 
+ *
  *  DO NOT CHANGE THIS FILE. IT WILL BE MODIFIED OR REPLACED DURING EVALUATION
- * 
+ *
  *  1. in a given class file MyWhateverNameClass.js in the constructor call:
- * 
+ *
  *  this.reader = new MyFileReader(app, this, this.onSceneLoaded);
- *  this.reader.open("scenes/<path to xml file>.xml");	
- * 
+ *  this.reader.open("scenes/<path to xml file>.xml");
+ *
  *  The last argumet in the constructor is a method that is called when the xml file is loaded and parsed (see step 2).
- * 
- *  2. in the MyWhateverNameClass.js class, add a method with signature: 
+ *
+ *  2. in the MyWhateverNameClass.js class, add a method with signature:
  *     onSceneLoaded(data) {
  *     }
- * 
- *  This method is called once the xml file is loaded and parsed successfully. The data argument is the entire scene data object. 
- * 
+ *
+ *  This method is called once the xml file is loaded and parsed successfully. The data argument is the entire scene data object.
+ *
  */
 
 class MyFileReader  {
@@ -27,13 +27,13 @@ class MyFileReader  {
     /**
        constructs the object
        @param {MyApp} app The application object
-    */ 
+    */
     constructor(app, contents, onSceneLoadedCallback) {
         this.app = app
         this.contents = contents;
         this.xmlhttp = null;
         this.xmlDoc = null;
-        this.xmlloaded = false;	
+        this.xmlloaded = false;
         this.data = new MySceneData();
         this.errorMessage = null;
         this.onSceneLoadedCallback = onSceneLoadedCallback;
@@ -42,7 +42,7 @@ class MyFileReader  {
     open(xmlfile)  {
 		if (window.XMLHttpRequest) {
 			this.xmlhttp=new XMLHttpRequest(); // For all modern browsers
-		} 
+		}
 		else if (window.ActiveXObject) {
 			this.xmlhttp=new ActiveXObject("Microsoft.XMLHTTP"); // For (older) IE
 		}
@@ -52,7 +52,7 @@ class MyFileReader  {
 			this.xmlhttp.onload = this.onStateChange;
 			this.xmlhttp.reader = this;
 			this.xmlfilename = xmlfile;
- 			this.xmlhttp.open("GET", xmlfile, true); //  (httpMethod,  URL,  asynchronous)			
+ 			this.xmlhttp.open("GET", xmlfile, false); //  (httpMethod,  URL,  asynchronous)
 			this.xmlhttp.setRequestHeader("Content-Type", "text/xml");
 			this.xmlhttp.send(null);
 		}
@@ -64,20 +64,20 @@ class MyFileReader  {
 
 	/**
 	 * Called when the state of the XMLHttpRequest changes. if 4 then the file is loaded and we can parse it.
-	 * @returns 
+	 * @returns
 	 */
 	onStateChange() {
 
 	  if (this.readyState == 4) {  // 4 => loaded complete
 		if (this.status == 200) {  // HTTP status code  ( 200 => OK )
-			
+
 			let reader = this.reader;
 			console.info("------------------ " + reader.xmlfilename + " file read. begin parsing ------------------");
-        
+
 			let parser = new window.DOMParser();
 			reader.xmlDoc = parser.parseFromString(this.response, "text/xml");
 			reader.readXML();
-			
+
 			if (reader.errorMessage != null) {
 				console.error(reader.errorMessage);
 				return;
@@ -85,29 +85,29 @@ class MyFileReader  {
 			try {
 				// final operations after load
 				reader.data.onLoadFinished(reader.app, reader.contents);
-				
+
 				// signal contents that the file is read
-				reader.onSceneLoadedCallback.bind(reader.contents)(reader.data);			
+				reader.onSceneLoadedCallback.bind(reader.contents)(reader.data);
 			}
 			catch (error) {
 				console.error(error);
 				return;
 			}
-		  } 
+		  }
 		  else {
 			alert("statusText: " + this.statusText + "\nHTTP status code: " + this.status);
-		  } 
-	   }  
+		  }
+	   }
     };
 
 	/**
 	 * Read the xml file and loads the data
 	 */
 	readXML() {
-		
+
 		try {
 			let rootElement = this.xmlDoc.documentElement;
-			
+
 			if (rootElement == null) {
 				throw new Error("No content in xml file")
 			}
@@ -134,12 +134,12 @@ class MyFileReader  {
 
 	/**
 	 * checks if any unknown node is child a given element
-	 * @param {*} parentElem 
+	 * @param {*} parentElem
 	 * @param {Array} list an array of strings with the valid node names
 	 */
 	checkForUnknownNodes(parentElem, list) {
 		// for each of the elem's children
-		for (let i=0; i< parentElem.children.length; i++) {	
+		for (let i=0; i< parentElem.children.length; i++) {
 			let elem = parentElem.children[i]
 			// is element's tag name not present in the list?
 			if (list.includes(elem.tagName) === false) {
@@ -151,12 +151,12 @@ class MyFileReader  {
 
 	/**
 	 *  checks if any unknown attributes exits at a given element
-	 * @param {*} elem 
-	 *  @param {Array} list an array of strings with the valid attribute names	  
+	 * @param {*} elem
+	 *  @param {Array} list an array of strings with the valid attribute names
 	*/
 	checkForUnknownAttributes(elem, list) {
 		// for each elem attributes
-		for (let i=0; i< elem.attributes.length; i++) {	
+		for (let i=0; i< elem.attributes.length; i++) {
 			let attrib = elem.attributes[i]
 			// is tag element not valid?
 			if (list.includes(attrib.name) === false) {
@@ -173,7 +173,7 @@ class MyFileReader  {
 		for (let i=0; i < descriptor.length; i++) {
 			list.push(descriptor[i].name)
 		}
-		return list 
+		return list
 	}
 	/**
 	 * returns the index of a string in a list. -1 if not found
@@ -197,68 +197,76 @@ class MyFileReader  {
 	 * @returns {THREE.Color} the color encoded in a THREE.Color object
 	 */
 	getRGBA(element, attributeName, required) {
-		
+
 		if (required == undefined) required = true;
-		
+
 		if (attributeName == null) {
-			throw new Error("color (rgba) attribute name is null."); 
+			throw new Error("color (rgba) attribute name is null.");
 		}
-		
+
 		if (element === null) {
-			throw new Error("element '" + attributeName + "' is null."); 
+			throw new Error("element '" + attributeName + "' is null.");
 		}
 
 		let value = element.getAttribute(attributeName);
 		if (value == null) {
 			if (required) {
-				throw new Error("element '" + element.id + ": color (rgba) value is null for attribute '" + attributeName + "'."); 
+				throw new Error("element '" + element.id + ": color (rgba) value is null for attribute '" + attributeName + "'.");
 			}
 		}
-		
+
 		let  temp = value.split(' ');
 		if (temp.length != 4) {
-			throw new Error("element '" + element.id + ": invalid " + temp.length + " number of color components for color (rgba) in attribute '" + attributeName + "'."); 
+			throw new Error("element '" + element.id + ": invalid " + temp.length + " number of color components for color (rgba) in attribute '" + attributeName + "'.");
 		}
-		
+
 		let rgba = new Array();
 		for (let i=0; i<4; i++) {
 			rgba.push(parseFloat(temp[i]));
-		}	
-		return new THREE.Color(rgba[0], rgba[1], rgba[2], rgba[3]);
+		}
+		let color = new THREE.Color(rgba[0], rgba[1], rgba[2])
+		// NOTE: 20231117 this is injected in the object because students are
+		// using it for transparency.
+		// the a has no effect in the threejs platform
+		// TODO: to be removed in 2024-2025
+		if (rgba[3] !== null) {
+			color.a = rgba[3]
+		}
+		return color
 	}
 
 	/**
 	 * returns a rectangle2D from an element for a particular attribute
 	 * @param {*} element the xml element
-	 * @param {String} attributeName the attribute name 
+	 * @param {String} attributeName the attribute name
 	 * @param {boolean} required if the attribte is required or not
 	 * @returns {Array} an array object with 4 elements: x1, y1, x2, y2
 	 */
 
 	getRectangle2D(element, attributeName, required) {
-		
+
 		if (required == undefined) required = true;
-		
+
 		if (element == null) {
 			throw new Error("element is null.");
 		}
 		if (attributeName == null) {
-			throw new Error("rectangle2D attribute name is null."); 
+			throw new Error("rectangle2D attribute name is null.");
 		}
-			
+
 		let value = element.getAttribute(attributeName);
 		if (value == null) {
 			if (required) {
-				throw new Error("element '" + element.id + ": rectangle2D value is null for attribute " + attributeName + "."); 
+				throw new Error("element '" + element.id + ": rectangle2D value is null for attribute " + attributeName + ".");
 			}
 			return null;
 		}
-		
+
 		let  temp = value.split(' ');
 		if (temp.length != 4) {
-			throw new Error("element '" + element.id + ": invalid " + temp.length + " number of components for a rectangle2D, in attribute " + attributeName + "."); 
+			throw new Error("element '" + element.id + ": invalid " + temp.length + " number of components for a rectangle2D, in attribute " + attributeName + ".");
 		}
-		
+
 		let rect = {};
 		rect.x1 = parseFloat(temp[0]);
 		rect.y1 = parseFloat(temp[1]);
@@ -270,79 +278,79 @@ class MyFileReader  {
 	/**
 	 * returns a vector3 from an element for a particular attribute
 	 * @param {*} element the xml element
-	 * @param {*} attributeName the attribute name 
+	 * @param {*} attributeName the attribute name
 	 * @param {*} required if the attribte is required or not
 	 * @returns {THREE.vector3} the vector3 encoded in a THREE.Vector3 object
 	 */
 
 	getVector3(element, attributeName, required) {
-		
+
 		if (required == undefined) required = true;
-		
+
 		if (element == null) {
-			throw new Error("element is null."); 
+			throw new Error("element is null.");
 		}
 		if (attributeName == null) {
-			throw new Error("vector3 attribute name is null."); 
+			throw new Error("vector3 attribute name is null.");
 		}
-			
+
 		let value = element.getAttribute(attributeName);
 		if (value == null) {
 			if (required) {
-				throw new Error("element '" + element.id + "': vector3 value is null for attribute '" + attributeName + "' in element '" + element.id + "'."); 
+				throw new Error("element '" + element.id + "': vector3 value is null for attribute '" + attributeName + "' in element '" + element.id + "'.");
 			}
 			return null;
 		}
-		
+
 		let  temp = value.split(' ');
 		if (temp.length != 3) {
-			throw new Error("element '" + element.id + "': invalid " + temp.length + " number of components for a vector3, in attribute " + attributeName + "."); 
+			throw new Error("element '" + element.id + "': invalid " + temp.length + " number of components for a vector3, in attribute " + attributeName + ".");
 		}
-		
+
 		let vector3 = new Array();
 		for (let i=0; i<3; i++) {
 			 vector3.push(parseFloat(temp[i]));
-		}	
+		}
 		return vector3;
 	}
 
-	
+
 	/**
 	 * returns a vector2 from an element for a particular attribute
 	 * @param {*} element the xml element
-	 * @param {*} attributeName the attribute name 
+	 * @param {*} attributeName the attribute name
 	 * @param {*} required if the attribte is required or not
 	 * @returns {THREE.vector3} the vector2 encoded in a THREE.Vector3 object
 	 */
 
 	getVector2(element, attributeName, required) {
-		
+
 		if (required == undefined) required = true;
-		
+
 		if (element == null) {
-			throw new Error("element is null."); 
+			throw new Error("element is null.");
 		}
 		if (attributeName == null) {
-			throw new Error("vector3 attribute name is null."); 
+			throw new Error("vector3 attribute name is null.");
 		}
-			
+
 		let value = element.getAttribute(attributeName);
 		if (value == null) {
 			if (required) {
-				throw new Error("element '" + element.id + ": vector2 value is null for attribute " + attributeName + "."); 
+				throw new Error("element '" + element.id + ": vector2 value is null for attribute " + attributeName + ".");
 			}
 			return null;
 		}
-		
+
 		let  temp = value.split(' ');
 		if (temp.length != 2) {
-			throw new Error("element '" + element.id + ": invalid " + temp.length + " number of components for a vector2, in attribute " + attributeName + "."); 
+			throw new Error("element '" + element.id + ": invalid " + temp.length + " number of components for a vector2, in attribute " + attributeName + ".");
 		}
-		
+
 		let vector2 = new Array();
 		for (let i=0; i<2; i++) {
 			 vector2.push(parseFloat(temp[i]));
-		}	
+		}
 		return vector2;
 	}
 	/**
@@ -354,33 +362,33 @@ class MyFileReader  {
 	 * @returns {String} the item
 	 */
 	getItem (element, attributeName, choices, required) {
-		
+
 		if (required == undefined) required = true;
-		
+
 		if (element == null) {
-			throw new Error("element is null."); 
+			throw new Error("element is null.");
 		}
 		if (attributeName == null) {
-			throw new Error("item attribute name is null."); 
+			throw new Error("item attribute name is null.");
 		}
-			
+
 		let value = element.getAttribute(attributeName);
 		if (value == null) {
 			if (required) {
-				throw new Error("element '" + element.id + ": item value is null for attribute " + attributeName + "."); 
+				throw new Error("element '" + element.id + ": item value is null for attribute " + attributeName + ".");
 			}
-			return null;		
+			return null;
 		}
-		
+
 		value = value.toLowerCase();
 		let index = this.indexOf(choices, value);
 		if (index < 0) {
-			throw new Error("element '" + element.id + ": value '" + value + "' is not a choice in [" + choices.toString() + "]"); 
+			throw new Error("element '" + element.id + ": value '" + value + "' is not a choice in [" + choices.toString() + "]");
 		}
-		
+
 		return value;
 	}
-	
+
 	/**
 	 * returns a string from an element for a particular attribute
 	 * @param {*} element the xml element
@@ -389,90 +397,91 @@ class MyFileReader  {
 	 * @returns {String} the string
 	 */
 	getString (element, attributeName, required) {
-		
+
 		if (required == undefined) required = true;
-		
+
 		if (element == null) {
-			throw new Error("element is null."); 
+			throw new Error("element is null.");
 		}
 		if (attributeName == null) {
-			throw new Error("string attribute name is null."); 
+			throw new Error("string attribute name is null.");
 		}
-			
+
 		let value = element.getAttribute(attributeName);
 		if (value == null && required) {
-			throw new Error("element '" + element.id + ": in element '" + element.id + "' string value is null for attribute '" + attributeName + "'."); 
+			throw new Error("element '" + element.id + ": in element '" + element.id + "' string value is null for attribute '" + attributeName + "'.");
 		}
 		return value;
 	}
-	
+
 	/**
 	 * checks if an element has a particular attribute
 	 * @param {*} element the xml element
-	 * @param {*} attributeName 
+	 * @param {*} attributeName
 	 * @returns {boolean} if the element has the attribute
 	 */
 	hasAttribute (element, attributeName) {
 		if (element == null) {
-			throw new Error("element is null."); 
+			throw new Error("element is null.");
 		}
 		if (attributeName == null) {
-			throw new Error("string attribute name is null."); 
+			throw new Error("string attribute name is null.");
 		}
-			
+
 		let value = element.getAttribute(attributeName);
 		return (value != null);
 	}
-	
+
 	/**
 	 * returns a boolean from an element for a particular attribute
 	 * @param {*} element the xml element
-	 * @param {*} attributeName the 
+	 * @param {*} attributeName the
 	 * @param {*} required if the attribte is required or not
 	 * @returns {boolean} the boolean value
 	 */
 	getBoolean(element, attributeName, required) {
-		
-		if (required == undefined) required = true;
-		
+
+		if (required === undefined) required = true;
+
 		let value = this.getItem(element, attributeName, ["true", "t", "1", "false", "f", "0"], required);
 		if (value == null && required)  {
-			throw new Error("element '" + element.id + ": expected boolean element " + attributeName +  " not found"); 
+			throw new Error("element '" + element.id + ": expected boolean element " + attributeName +  " not found");
 		}
 
 		if (value == "1" || value=="true" || value == "t") return true;
-		return false;		
+		if (value == "0" || value=="false" || value == "f") return false;
+		return null;
 	}
-	
+
 	/**
 	 * returns a integer from an element for a particular attribute
 	 * @param {*} element the xml element
-	 * @param {*} attributeName the 
+	 * @param {*} attributeName the
 	 * @param {*} required if the attribte is required or not
 	 * @returns {Integer} the integer value
 	 */
 	getInteger(element, attributeName, required) {
-		
+
 		if (required == undefined) required = true;
-		
+
 		let value = this.getString(element, attributeName, required);
 		if (value == null) {
 			return null;
 		}
 		return parseInt(value);
 	}
-	
+
 	/**
 	 * returns a float from an element for a particular attribute
 	 * @param {*} element the xml element
-	 * @param {*} attributeName the 
+	 * @param {*} attributeName the
 	 * @param {*} required if the attribte is required or not
 	 * @returns {Float} the float value
 	 */
 	getFloat(element, attributeName, required) {
-		
+
 		if (required == undefined) required = true;
-		
+
 		let value = this.getString(element, attributeName, required);
 		if (value == null) {
 			return null;
@@ -506,7 +515,7 @@ class MyFileReader  {
 		if (options.elem === null || options.elem === undefined) {
 			throw new Error("unable to load xml item because xml element is null or undefined");
 		}
-				
+
 		if (options.descriptor === null || options.descriptor === undefined) {
 			throw new Error("unable to load xml item because descriptor to parse element '" + options.elem.id + "' is null or undefined");
 		}
@@ -517,14 +526,14 @@ class MyFileReader  {
 		for (let i=0; i < options.descriptor.length; i++) {
 			let value = null;
 			let descriptor = options.descriptor[i]
-			if (descriptor.type==="string") 
+			if (descriptor.type==="string")
 				value = this.getString(options.elem, descriptor.name, descriptor.required);
 			else if (descriptor.type==="boolean")
 				value = this.getBoolean(options.elem, descriptor.name, descriptor.required);
 			else if (descriptor.type==="integer")
-				value = this.getInteger(options.elem, descriptor.name, descriptor.required);	
+				value = this.getInteger(options.elem, descriptor.name, descriptor.required);
 			else if (descriptor.type==="float")
-				value = this.getFloat(options.elem, descriptor.name, descriptor.required);	
+				value = this.getFloat(options.elem, descriptor.name, descriptor.required);
 			else if (descriptor.type==="vector3")
 				value = this.getVector3(options.elem, descriptor.name, descriptor.required);
 			else if (descriptor.type==="vector2")
@@ -537,13 +546,13 @@ class MyFileReader  {
 				value = this.getItem(options.elem, descriptor.name, descriptor.choices, descriptor.required);
 			else {
 				throw new Error("element '" + options.elem.id + " invalid type '" + descriptor.type + "' in descriptor");
-			} 
+			}
 
 			// if the value is null and the attribute is not required, then use the default value
 			if (value == null && descriptor.required == false && descriptor.default != undefined) {
 				value = descriptor.default;
 			}
-			
+
 			// store the value in the object
 			obj[descriptor.name] = value;
 		}
@@ -556,23 +565,23 @@ class MyFileReader  {
 		// return the object
 		return obj;
 	}
-	
+
 	/**
 	 * for all the children of a given type, of an element, loads each child content into an
 	 * array in the target object
-	 * @param {*} elem the parent of the children xml elements to consider 
+	 * @param {*} elem the parent of the children xml elements to consider
 	 * @param {*} targetObj the object to store the loaded children items
-	 * @param {*} attribute the name of the array attribute to create in the target object 
-	 * @param {*} type the element tag name to search and also the descriptor name 
+	 * @param {*} attribute the name of the array attribute to create in the target object
+	 * @param {*} type the element tag name to search and also the descriptor name
 	 */
 	loadChildElementsOfType(elem, targetObj, attribute, type) {
-		
+
 		this.checkForUnknownNodes(elem, [ type ])
-		
+
 		targetObj[attribute] = []
 		let elems = elem.getElementsByTagName(type)
 		let descriptor = this.data.descriptors[type];
-		for(let i=0; i < elems.length; i++) {			
+		for(let i=0; i < elems.length; i++) {
 			let obj = this.loadXmlItem({elem: elems[i], descriptor: descriptor, extras: [["type", type]]})
 			targetObj[attribute].push (obj)
 		}
@@ -580,7 +589,7 @@ class MyFileReader  {
 
 	/**
 	 * Check if an element exists. Reports a new error if it does not exist.
-	 * @param {*} elem the xml element 
+	 * @param {*} elem the xml element
 	 * @param {*} name the name of the xml element
 	 */
 	checkMandatoryElemExists(elem, name) {
@@ -621,7 +630,7 @@ class MyFileReader  {
 	}
 	/*
 	 * Load globals element
-	 * 
+	 *
 	 */
 	loadGlobals(rootElement) {
 		let elem = this.getAndCheck(rootElement, 'globals')
@@ -630,7 +639,7 @@ class MyFileReader  {
 
 	/*
 	 * Load skybox element
-	 * 
+	 *
 	 */
 	loadSkybox(rootElement) {
 		let elem = this.getAndCheck(rootElement, 'skybox')
@@ -639,44 +648,45 @@ class MyFileReader  {
 
 	/*
 	 * Load fog element
-	 * 
+	 *
 	 */
 	loadFog(rootElement) {
 		let elem = this.getAndCheck(rootElement, 'fog', 0, 1)
-		this.data.setFog(this.loadXmlItem({elem: elem, descriptor: this.data.descriptors["fog"], extras: [["type", "fog"]]}))
+		if (elem !== null && elem !== undefined)
+			this.data.setFog(this.loadXmlItem({elem: elem, descriptor: this.data.descriptors["fog"], extras: [["type", "fog"]]}))
 	}
 
 	/**
 	 * Load the textures element
-	 * @param {*} rootElement 
+	 * @param {*} rootElement
 	 */
 	loadTextures(rootElement) {
-	
+
 		let elem = this.getAndCheck(rootElement, 'textures')
 		this.loadXmlItems(elem, 'texture', this.data.descriptors["texture"], [["type", "texture"]], this.data.addTexture)
 	}
 
 	/**
 	 * Load the materials element
-	 * @param {*} rootElement 
+	 * @param {*} rootElement
 	 */
 	loadMaterials(rootElement) {
-	
+
 		let elem = this.getAndCheck(rootElement, 'materials')
 		this.loadXmlItems(elem, 'material', this.data.descriptors["material"], [["type", "material"]], this.data.addMaterial)
 	}
 
 	/**
 	 * Load the cameras element
-	 * @param {*} rootElement 
+	 * @param {*} rootElement
 	 */
 	loadCameras(rootElement) {
-	
+
 		let elem = this.getAndCheck(rootElement, 'cameras')
 
 		let id = this.getString(elem, "initial");
 		this.data.setActiveCameraId(id);
-		
+
 		let orthogonals =  elem.getElementsByTagName('orthogonal');
 		let perspectives =  elem.getElementsByTagName('perspective');
 		if (orthogonals === null && perspectives === null ) {
@@ -687,34 +697,34 @@ class MyFileReader  {
 		}
 
 		this.loadXmlItems(elem, 'orthogonal', this.data.descriptors["orthogonal"], [["type", "orthogonal"]], this.data.addCamera)
-	
+
 		this.loadXmlItems(elem, 'perspective', this.data.descriptors["perspective"], [["type", "perspective"]], this.data.addCamera)
 	}
 
 	/**
 	 * Load the nodes element
-	 * @param {*} rootElement 
+	 * @param {*} rootElement
 	 */
 	loadNodes(rootElement) {
-	
+
 		let graphs =  rootElement.getElementsByTagName('graph');
 		if (graphs == null || graphs.length != 1) {
 			throw new Error("graph scene element is missing.")
 		}
-		
+
 		let nodeElements =  graphs[0].getElementsByTagName('node');
 		if (nodeElements == null || nodeElements.length <=0) {
 			throw new Error("at least one node is required in the data.")
 		}
-		
+
 		let lodElements =  graphs[0].getElementsByTagName('lod');
 
 		let graph = graphs[0];
 		let rootId = this.getString(graph, "rootid");
-		
+
 		// set the root node id
 		this.data.setRootId(rootId);
-		
+
 		for (let i=0; i < nodeElements.length; i++) {
 			let nodeElement = nodeElements[i];
 			this.loadNode(nodeElement);
@@ -725,49 +735,49 @@ class MyFileReader  {
 			for (let i=0; i < lodElements.length; i++) {
 				let lodElement = lodElements[i];
 				this.loadLOD(lodElement);
-			}	
+			}
 		}
 	}
-	
+
 	/**
 	 * Load the data for a particular node elemment
 	 * @param {*} nodeElement the xml node element
 	 */
 	loadNode(nodeElement) {
-	
+
 		let id = this.getString(nodeElement, "id");
 
 		// get if node previously added (for instance because it was a child ref in other node)
-		let obj = this.data.getNode(id);
+		let obj = this.data.getNode(id)
 		if (obj == null) {
 			// otherwise add a new node
-			obj = this.data.createEmptyNode(id);			
+			obj = this.data.createEmptyNode(id)
 		}
-		
-		let castshadows = this.getBoolean(nodeElement, "castshadows", false);
-		let receiveShadows = this.getBoolean(nodeElement, "receiveshadows", false);
 
-		obj.castShadows = castshadows;
-		obj.receiveShadows = receiveShadows;
+		let castshadows = this.getBoolean(nodeElement, "castshadows", false)
+		let receiveShadows = this.getBoolean(nodeElement, "receiveshadows", false)
+
+		obj.castShadows = (castshadows !== null ? castshadows : false)
+		obj.receiveShadows = (receiveShadows !== null ? receiveShadows : false)
 
 		// load transformations
-		let transforms =  nodeElement.getElementsByTagName('transforms');
+		let transforms =  nodeElement.getElementsByTagName('transforms')
 		if (transforms !== null && transforms.length > 0) {
-			this.loadTransforms(obj, transforms[0]);
+			this.loadTransforms(obj, transforms[0])
 		}
-	
+
 		// load material refeences
-		let materialsRef =  nodeElement.getElementsByTagName('materialref');
+		let materialsRef =  nodeElement.getElementsByTagName('materialref')
 		if (materialsRef != null && materialsRef.length > 0) {
 			if (materialsRef.length != 1) {
 				throw new Error("in node " + id + ", " + materialsRef.length  + " materialref nodes found. Only one materialref is allowed.");
 			}
-			
+
 			let materialId = this.getString(materialsRef[0], "id");
 			obj['materialIds'].push(materialId);
 		}
-	
-		
+
+
 		// load children (primitives or other node references)
 		let childrens =  nodeElement.getElementsByTagName('children');
 		if (childrens == null || childrens.length != 1) {
@@ -776,15 +786,15 @@ class MyFileReader  {
 		this.loadChildren(obj, childrens[0]);
 		obj.loaded = true;
 	}
-	
+
 	/**
 	 * Load the transformations for a particular node element
 	 * @param {*} obj the node object
 	 * @param {*} transformsElement the transforms xml element
-	 * @returns 
+	 * @returns
 	 */
 	loadTransforms(obj, transformsElement) {
-	
+
 		for(let i=0; i<transformsElement.childNodes.length; i++) {
 			let temp = transformsElement.childNodes[i];
 			if (temp.nodeType==1) {
@@ -798,13 +808,13 @@ class MyFileReader  {
 				if (transform.tagName == "rotate") {
 					let factor = this.getVector3(transform, "value3");
 					// add a rotation
-					obj.transformations.push({type: "R", rotation: factor});		
+					obj.transformations.push({type: "R", rotation: factor});
 				}
 				else
 				if (transform.tagName == "translate") {
-					let translate = this.getVector3(transform, "value3");	
+					let translate = this.getVector3(transform, "value3");
 					// add a translation
-					obj.transformations.push({type: "T", translate: translate});		
+					obj.transformations.push({type: "T", translate: translate});
 				}
 				else {
 					return "unrecognized transformation " + transform.tagName + ".";
@@ -813,7 +823,7 @@ class MyFileReader  {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Load the children for a particular node element
 	 * @param {*} nodeObj the node object
@@ -821,7 +831,7 @@ class MyFileReader  {
 	 */
 
 	loadChildren(nodeObj, childrenElement) {
-		
+
 		// the allowed children types + noderef
 		let lightIds = ["spotlight", "pointlight", "directionallight"]
 
@@ -830,13 +840,13 @@ class MyFileReader  {
 			if (child.nodeType == 1) {
 				const id = child.tagName;
 				if (lightIds.includes(id)) {
-					let lightObj = this.loadLight(child)					
+					let lightObj = this.loadLight(child)
 					this.data.addChildToNode(nodeObj, lightObj)
 				}
-				else 
+				else
 				if (id == "primitive") {
 					let primitiveObj = this.data.createEmptyPrimitive()
-					this.loadPrimitive(child, primitiveObj)					
+					this.loadPrimitive(child, primitiveObj)
 					this.data.addChildToNode(nodeObj, primitiveObj)
 				}
 				else
@@ -874,10 +884,10 @@ class MyFileReader  {
 
 	/**
 	 * Loads a light object into a new object
-	 * @param {*} elem 
-	 * @returns 
+	 * @param {*} elem
+	 * @returns
 	 */
-	
+
 	loadLight(elem) {
 		const primitiveId = elem.tagName;
 		let descriptor = this.data.descriptors[primitiveId];
@@ -887,11 +897,11 @@ class MyFileReader  {
 
 	/**
 	 * For a given primitive element, loads the available representations into the primitive object
-	 * @param {XML element} parentElem 
+	 * @param {XML element} parentElem
 	 * @param {*} primitiveObj the primitive object to load data into
 	 */
 	loadPrimitive(parentElem, primitiveObj) {
-		
+
 		this.checkForUnknownNodes(parentElem, this.data.primitiveIds)
 
 		for(let i=0; i < this.data.primitiveIds.length; i++) {
@@ -908,7 +918,7 @@ class MyFileReader  {
 		}
 		if (primitiveObj.subtype === null) {
 			throw new Error ("primitive element has no recognized primitive instances")
-		} 
+		}
 		primitiveObj.loaded = true
 	}
 
@@ -917,7 +927,7 @@ class MyFileReader  {
 	 * @param {*} lodElement the xml lod element
 	 */
 	loadLOD(lodElement) {
-	
+
 		// get the id of the LOD
 		let id = this.getString(lodElement, "id");
 
@@ -925,7 +935,7 @@ class MyFileReader  {
 		let obj = this.data.getLOD(id);
 		if (obj == null) {
 			// otherwise add a new LOD
-			obj = this.data.createEmptyLOD(id);			
+			obj = this.data.createEmptyLOD(id);
 		}
 
 		// load LOD noderef (children) elements
@@ -947,7 +957,7 @@ class MyFileReader  {
 			let node = this.data.getNode(id)
 			if (node == null) {
 				// otherwise add a new node
-				node = this.data.createEmptyNode(id);			
+				node = this.data.createEmptyNode(id);
 			}
 			// store the node as child of this LOD
 			obj.children.push({ node: node, mindist: mindist, type: "lodnoderef" })
