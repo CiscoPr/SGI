@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { MyNurbsBuilder } from '../MyNurbsBuilder.js';
+import { TriangleEngine } from './TriangleEngine.js';
 
 /**
  *  This class contains the contents of the geometry engine
@@ -19,7 +20,7 @@ class ComponentsEngine  {
      */
     buildComponent(material) {
         console.log(this.params);
-        
+
         // create switch case for each light type
         switch(this.params.subtype) {
             case "rectangle":
@@ -82,11 +83,44 @@ class ComponentsEngine  {
     }
 
     buildTriangle(material) {
-        return null;
+
+        const triangleGeometry = new TriangleEngine(
+            this.params.representations[0].xyz1,
+            this.params.representations[0].xyz2,
+            this.params.representations[0].xyz3);
+
+        let triangleMesh;
+
+        if (material == null) triangleMesh = new THREE.Mesh(triangleGeometry);
+        else triangleMesh = new THREE.Mesh(triangleGeometry, material);
+
+        const triangle = new THREE.LOD();
+
+        triangle.addLevel(triangleMesh, this.params.representations[0].distance);
+
+        return triangle;
     }
 
     buildSphere(material) {
-        return null;
+        const radius = this.params.representations[0].radius;
+        const slices = this.params.representations[0].slices;
+        const stacks = this.params.representations[0].stacks;
+        const thetaStart = this.params.representations[0].thetastart;
+        const thetaLength = this.params.representations[0].thetalength;
+        const phiStart = this.params.representations[0].phistart;
+        const phiLength = this.params.representations[0].philength;
+
+        const sphereGeometry = new THREE.SphereGeometry(radius, slices, stacks,  phiStart, phiLength, thetaStart, thetaLength);
+
+        let sphereMesh;
+
+        if (material == null) sphereMesh = new THREE.Mesh(sphereGeometry);
+        else sphereMesh = new THREE.Mesh(sphereGeometry, material);
+
+        const sphere = new THREE.LOD();
+        sphere.addLevel(sphereMesh, this.params.representations[0].distance);
+
+        return sphere;
     }
 
     buildBox(material) {

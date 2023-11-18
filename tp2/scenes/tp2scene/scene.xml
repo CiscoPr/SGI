@@ -100,7 +100,6 @@
             bumpscale="0.1"
         />
 
-
         <material id="columnsApp"
             emissive="0.0 0.0 0.0 1"
             color="0.8 0.8 0.8 1.0"
@@ -233,7 +232,6 @@
             </children>
         </node>
 
-
 		<node id="floor">
 
 			<transforms>
@@ -250,6 +248,7 @@
                 </primitive>
             </children>
         </node>
+
 
 		<node id="wall">
 			<transforms>
@@ -320,6 +319,9 @@
         </node>
 
 		<node id="column1">
+            <transforms>
+                <translate value3="0.1 0.1 0.1"/>
+            </transforms>
 
 			<materialref id="columnsApp" />
 
@@ -332,7 +334,7 @@
 
         <node id="column2">
             <transforms>
-                <translate value3="15.5 0 0" />
+                <translate value3="15.5 0.1 0.1" />
             </transforms>
 			<materialref id="columnsApp" />
 
