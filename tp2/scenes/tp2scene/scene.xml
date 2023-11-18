@@ -44,7 +44,7 @@
         <texture id="floorTex" filepath="scenes/tp2scene/textures/floor.png"/>
         <texture id="doorTex" filepath="scenes/tp2scene/textures/door.png"/>
         <texture id="boardTex" filepath="scenes/tp2scene/textures/board.png"/>
-        <texture id="saveTex" filepath="scenes/tp2scene/textures/save.png"/>
+        <texture id="saveTex" filepath="scenes/tp2scene/videos/star_save.webm" isVideo="true"/>
     </textures>
 
     <materials>

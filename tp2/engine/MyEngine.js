@@ -145,8 +145,12 @@ class MyEngine  {
 
         // load texture
         let texture;
-        if (params.isVideo)
-            texture = new THREE.VideoTexture().load( params.filepath );
+        console.log("heyo: ", params);
+        if (params.isVideo){
+            console.log("the document, ", document.getElementById( 'star_save' ));
+            const video = document.getElementById( 'star_save' );
+            texture = new THREE.VideoTexture(video);
+        }
         else
             texture = new THREE.TextureLoader().load( params.filepath );
 

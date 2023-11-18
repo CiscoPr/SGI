@@ -15,11 +15,11 @@ class MyContents  {
     constructor(app) {
         this.app = app;
         this.axis = null;
-
         this.reader = new MyFileReader(app, this, this.onSceneLoaded);
-		this.reader.open("scenes/tp2scene/scene.xml");
-
+		this.reader.open("scenes/tp2scene/scene.xml")
         this.engine = new MyEngine(app, this);
+        this.engine.init();
+
     }
 
     /**
@@ -46,7 +46,6 @@ class MyContents  {
     onSceneLoaded(data) {
         console.info("scene data loaded " + data + ". visit MySceneData javascript class to check contents for each data item.");
         this.onAfterSceneLoadedAndBeforeRender(data);
-        this.engine.init();
     }
 
     output(obj, indent = 0) {
