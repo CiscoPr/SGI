@@ -58,7 +58,7 @@
             texlength_s="15"
             texlength_t="15"
             twosided = "true"
-            bumpref="scenes/tp2scene/textures/walls_bump.png"
+            bumpref="scenes/tp2scene/textures/walls_dump.png"
             bumpscale="0.5"
             />
 
@@ -71,7 +71,7 @@
             texlength_s="15"
             texlength_t="15"
             twosided = "true"
-            bumpref="scenes/tp2scene/textures/walls_bump.png"
+            bumpref="scenes/tp2scene/textures/walls_dump.png"
             bumpscale="0.5"
             />
 
@@ -96,7 +96,7 @@
             texlength_t="1"
             twosided = "true"
             transparent="true"
-            bumpref="scenes/tp2scene/textures/golden_flowers_bump.png"
+            bumpref="scenes/tp2scene/textures/golden_flowers_dump.png"
             bumpscale="0.1"
         />
 
@@ -110,7 +110,7 @@
             texlength_s="1"
             texlength_t="1"
             twosided = "true"
-            bumpref="scenes/tp2scene/textures/columns_bump.png"
+            bumpref="scenes/tp2scene/textures/columns_dump.png"
             bumpscale="0.15"
         />
 
@@ -159,7 +159,7 @@
             texlength_t="1"
             twosided = "true"
             transparent="false"
-            bumpref="scenes/tp2scene/textures/board_bump.png"
+            bumpref="scenes/tp2scene/textures/board_dump.png"
             bumpscale="0.25"
         />
 
