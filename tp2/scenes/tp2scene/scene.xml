@@ -320,6 +320,9 @@
         </node>
 
 		<node id="column1">
+            <transforms>
+                <translate value3="0.0 0.0 0.1"/>
+            </transforms>
 
 			<materialref id="columnsApp" />
 
@@ -332,7 +335,7 @@
 
         <node id="column2">
             <transforms>
-                <translate value3="15.5 0 0" />
+                <translate value3="15.5 0 0.1" />
             </transforms>
 			<materialref id="columnsApp" />
 
