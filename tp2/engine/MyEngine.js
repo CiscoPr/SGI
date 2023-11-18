@@ -145,7 +145,6 @@ class MyEngine  {
 
         // load texture
         let texture;
-        console.log("heyo: ", params);
         if (params.isVideo){
             console.log("the document, ", document.getElementById( 'star_save' ));
             const video = document.getElementById( 'star_save' );
@@ -164,11 +163,17 @@ class MyEngine  {
         if (id == null) return null;
         const params = this.data.getMaterial(id);
         if (params == null) return null;
-
+        let bumpMap = null;
         // get texture
+        if(params.bumpref == null)
+            console.log("no bump texture");
+        else
+            bumpMap = new THREE.TextureLoader().load(params.bumpref);
+            console.log("my bump map", bumpMap);
         const texture = this.getTexture(params.textureref);
         const side = params.twosided ? THREE.DoubleSide : THREE.FrontSide;
         const flatShading = params.shading == "flat" ? true : false;
+        console.log("bumpscale: ", params.bumpscale)
 
         // create new mesh phong material
         const material = new THREE.MeshPhongMaterial({
@@ -177,6 +182,8 @@ class MyEngine  {
             emissive: params.emissive,
             shininess: params.shininess,
             wireframe: params.wireframe,
+            bumpMap: bumpMap,
+            bumpScale: params.bumpscale * 1.0,
             flatShading: flatShading,
             map: texture,
             side: side,
