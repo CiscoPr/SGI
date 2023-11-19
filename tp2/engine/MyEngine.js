@@ -197,7 +197,9 @@ class MyEngine  {
             texture = new THREE.VideoTexture(video);
         }
         else
-            texture = new THREE.TextureLoader().load( params.filepath );
+            texture = new THREE.TextureLoader().load( params.filepath, function (texture){
+                texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        } );
 
         texture.generateMipmaps = params.mipmaps;
         texture.anisotropy = params.anisotropy;
@@ -213,13 +215,17 @@ class MyEngine  {
         // get texture
         if(params.bumpref == null)
             console.log("no bump texture");
-        else
-            bumpMap = new THREE.TextureLoader().load(params.bumpref);
+        else{
+            bumpMap = new THREE.TextureLoader().load(params.bumpref, function (texture){
+                texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+            } );
+            bumpMap.repeat.set(params.texlength_s, params.texlength_t);
             console.log("my bump map", bumpMap);
+        }
         const texture = this.getTexture(params.textureref);
         const side = params.twosided ? THREE.DoubleSide : THREE.FrontSide;
         const flatShading = params.shading == "flat" ? true : false;
-        console.log("bumpscale: ", params.bumpscale)
+
 
         // create new mesh phong material
         const material = new THREE.MeshPhongMaterial({
@@ -235,6 +241,8 @@ class MyEngine  {
             side: side,
             transparent: params.transparent,
         });
+
+        material.map.repeat.set(params.texlength_s, params.texlength_t);
 
         return material;
     }
