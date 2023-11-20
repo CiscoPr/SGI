@@ -281,11 +281,6 @@ class MySceneData  {
         return this.fog;
     }
 
-    getCameras() {
-        return this.cameras;
-    }
-
-
     setRootId(rootId) {
         this.rootId = rootId;
     }

@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import { MySceneData } from './../parser/MySceneData.js';
 import { LightsEngine } from './LightsEngine.js';
 import { ComponentsEngine } from './ComponentsEngine.js';
-import { CamerasEngine } from './CamerasEngine.js';
 
 
 /**
@@ -19,7 +18,7 @@ class MyEngine  {
         this.app = app;
         this.contents = contents;
         this.data = this.contents.reader.data;
-
+        this.showBumpTexture = true;
     }
 
     /**
@@ -39,7 +38,6 @@ class MyEngine  {
         this.dealWithFog();
         this.dealWithRoot();
         this.dealWithCameras();
-
     }
 
 
@@ -113,19 +111,66 @@ class MyEngine  {
 
 
     dealWithCameras() {
-        const cameras = this.data.getCameras();
-        if (cameras == null) return;
+        const aspect = window.innerWidth / window.innerHeight;
 
-        // create switch case for each camera type
-        for (let i = 0; i < cameras.length; i++) {
-            const cameraEngine = new CamerasEngine(cameras[i]);
-            const camera = cameraEngine.buildCamera();
-            this.app.cameras.push(camera);
+        const cameras = this.data.cameras;
+        if (cameras == null) return;
+        console.log ("my cameras", cameras);
+        // create cameras
+        for(let cam in cameras) {
+            console.log("cam: "+ JSON.stringify(cameras[cam]));
+            //if cam is perspective
+            if(cameras[cam].type == "perspective") {
+                const camera = new THREE.PerspectiveCamera(cameras[cam].fov, cameras[cam].an,cameras[cam].near, cameras[cam].far);
+                camera.position.set(cameras[cam].location[0], cameras[cam].location[1], cameras[cam].location[2]);
+                camera.lookAt(cameras[cam].target[0], cameras[cam].target[1], cameras[cam].target[2]);
+                this.app.cameras['Perspective'] = camera;
+            }
+            //if cam is orthogonal
+            if(cameras[cam].type == "orthogonal"){
+                this.dealWithOrthogonal(cameras,cam ,aspect);
+            }
+
+
         }
 
-        // set default camera
-        this.app.camera = this.app.cameras[0];
+
         console.info("Loaded Cameras");
+    }
+
+
+
+    dealWithOrthogonal(cameras,cam, aspect) {
+        const left = - cameras[cam].left / 2 * aspect
+        const right = cameras[cam].right /2 * aspect
+        const top = cameras[cam].top / 2
+        const bottom = -cameras[cam].bottom / 2
+        const near = -cameras[cam].near /2
+        const far =  cameras[cam].far
+        const cameraLeft = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
+        const cameraRight = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
+        const cameraTop = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
+        const cameraBottom = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
+
+        cameraLeft.up = new THREE.Vector3(0,1,0);
+        cameraLeft.position.set(-cameras[cam].location[0] /4,0,0);
+        cameraLeft.lookAt( cameras[cam].target);
+        this.app.cameras['Left'] = cameraLeft;
+
+        cameraRight.up = new THREE.Vector3(0,1,0);
+        cameraRight.position.set(cameras[cam].location[0] /4,0,0);
+        cameraRight.lookAt( cameras[cam].target );
+        this.app.cameras['Right'] = cameraRight;
+
+        cameraTop.up = new THREE.Vector3(0,0,1);
+        cameraTop.position.set(0, cameras[cam].location[1] /4, 0);
+        cameraTop.lookAt(cameras[cam].target);
+        this.app.cameras['Top'] = cameraTop;
+
+        cameraBottom.up = new THREE.Vector3(0,0,1);
+        cameraBottom.position.set(0, -cameras[cam].location[1] /4, 0);
+        cameraBottom.lookAt( cameras[cam].target );
+        this.app.cameras['Bottom'] = cameraBottom;
     }
 
     dealWithRoot() {
@@ -163,7 +208,7 @@ class MyEngine  {
             texture.minFilter = this.mapMinFilter(params.minfilter);
             texture.magFilter = this.mapMagFilter(params.magfilter);
             return texture;
-        }        
+        }
 
         // load mipmaps
         let level = 0;
@@ -183,8 +228,9 @@ class MyEngine  {
         const params = this.data.getMaterial(id);
         if (params == null) return null;
         let bumpMap = null;
+        // check if the Show Bump of the GUI is on or off
         // get texture
-        if(params.bumpref == null)
+        if(params.bumpref == null || this.showBumpTexture == false)
             console.log("no bump texture");
         else{
             bumpMap = new THREE.TextureLoader().load(params.bumpref, function (texture){
@@ -309,34 +355,34 @@ class MyEngine  {
 
     mapMagFilter(str) {
         if (str == "NearestFilter") return THREE.NearestFilter;
-        else return THREE.LinearFilter;   
+        else return THREE.LinearFilter;
     }
 
     /**
      * load an image and create a mipmap to be added to a texture at the defined level.
      * In between, add the image some text and control squares. These items become part of the picture
-     * 
+     *
      * @param {*} parentTexture the texture to which the mipmap is added
      * @param {*} level the level of the mipmap
      * @param {*} path the path for the mipmap image
      */
     loadMipmap(parentTexture, level, path)
     {
-        // load texture. On loaded call the function to create the mipmap for the specified level 
-        new THREE.TextureLoader().load(path, 
+        // load texture. On loaded call the function to create the mipmap for the specified level
+        new THREE.TextureLoader().load(path,
             function(mipmapTexture)  // onLoad callback
             {
                 const canvas = document.createElement('canvas')
                 const ctx = canvas.getContext('2d')
                 ctx.scale(1, 1);
-                
-                const img = mipmapTexture.image         
+
+                const img = mipmapTexture.image
                 canvas.width = img.width;
                 canvas.height = img.height
 
                 // first draw the image
                 ctx.drawImage(img, 0, 0 )
-                             
+
                 // set the mipmap image in the parent texture in the appropriate level
                 parentTexture.mipmaps[level] = canvas
             },
@@ -345,6 +391,10 @@ class MyEngine  {
                 console.error('Unable to load the image ' + path + ' as mipmap level ' + level + ".", err)
             }
         )
+    }
+
+    updateShowBumpTexture(value){
+
     }
 }
 
