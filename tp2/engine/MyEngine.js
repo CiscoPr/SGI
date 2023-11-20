@@ -103,7 +103,6 @@ class MyEngine  {
         ];
 
         const skyboxMesh = new THREE.Mesh(skyboxGeometry, skyboxMaterials);
-        console.log('my mesh', skyboxMesh)
         skyboxMesh.position.set(center[0], center[1], center[2]);
         this.app.scene.add(skyboxMesh);
         console.info("Loaded Skybox");
@@ -115,10 +114,8 @@ class MyEngine  {
 
         const cameras = this.data.cameras;
         if (cameras == null) return;
-        console.log ("my cameras", cameras);
         // create cameras
         for(let cam in cameras) {
-            console.log("cam: "+ JSON.stringify(cameras[cam]));
             //if cam is perspective
             if(cameras[cam].type == "perspective") {
                 const camera = new THREE.PerspectiveCamera(cameras[cam].fov, cameras[cam].an,cameras[cam].near, cameras[cam].far);
@@ -236,8 +233,6 @@ class MyEngine  {
             bumpMap = new THREE.TextureLoader().load(params.bumpref, function (texture){
                 texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
             } );
-            bumpMap.repeat.set(params.texlength_s, params.texlength_t);
-            console.log("my bump map", bumpMap);
         }
         const texture = this.getTexture(params.textureref);
         const side = params.twosided ? THREE.DoubleSide : THREE.FrontSide;
@@ -259,7 +254,6 @@ class MyEngine  {
             transparent: params.transparent,
         });
 
-        material.map.repeat.set(params.texlength_s, params.texlength_t);
 
         return material;
     }
@@ -325,8 +319,10 @@ class MyEngine  {
         // create switch case for each primitive type
         if (primitive.type == "primitive") {
             const material = this.getMaterial(materialid)
+            const ts = this.data.getMaterial(materialid).texlength_s;
+            const tt = this.data.getMaterial(materialid).texlength_t;
             const componentsEngine = new ComponentsEngine(primitive);
-            return componentsEngine.buildComponent(material);
+            return componentsEngine.buildComponent(material, ts, tt);
         } else if (lightTypes.includes(primitive.type)) {
             const lightEngine = new LightsEngine(primitive, this.app);
             return lightEngine.buildLight();
