@@ -18,7 +18,7 @@ class MyEngine  {
         this.app = app;
         this.contents = contents;
         this.data = this.contents.reader.data;
-
+        this.showBumpTexture = true;
     }
 
     /**
@@ -38,7 +38,6 @@ class MyEngine  {
         this.dealWithFog();
         this.dealWithRoot();
         this.dealWithCameras();
-
     }
 
 
@@ -209,7 +208,7 @@ class MyEngine  {
             texture.minFilter = this.mapMinFilter(params.minfilter);
             texture.magFilter = this.mapMagFilter(params.magfilter);
             return texture;
-        }        
+        }
 
         // load mipmaps
         let level = 0;
@@ -229,8 +228,9 @@ class MyEngine  {
         const params = this.data.getMaterial(id);
         if (params == null) return null;
         let bumpMap = null;
+        // check if the Show Bump of the GUI is on or off
         // get texture
-        if(params.bumpref == null)
+        if(params.bumpref == null || this.showBumpTexture == false)
             console.log("no bump texture");
         else{
             bumpMap = new THREE.TextureLoader().load(params.bumpref, function (texture){
@@ -355,34 +355,34 @@ class MyEngine  {
 
     mapMagFilter(str) {
         if (str == "NearestFilter") return THREE.NearestFilter;
-        else return THREE.LinearFilter;   
+        else return THREE.LinearFilter;
     }
 
     /**
      * load an image and create a mipmap to be added to a texture at the defined level.
      * In between, add the image some text and control squares. These items become part of the picture
-     * 
+     *
      * @param {*} parentTexture the texture to which the mipmap is added
      * @param {*} level the level of the mipmap
      * @param {*} path the path for the mipmap image
      */
     loadMipmap(parentTexture, level, path)
     {
-        // load texture. On loaded call the function to create the mipmap for the specified level 
-        new THREE.TextureLoader().load(path, 
+        // load texture. On loaded call the function to create the mipmap for the specified level
+        new THREE.TextureLoader().load(path,
             function(mipmapTexture)  // onLoad callback
             {
                 const canvas = document.createElement('canvas')
                 const ctx = canvas.getContext('2d')
                 ctx.scale(1, 1);
-                
-                const img = mipmapTexture.image         
+
+                const img = mipmapTexture.image
                 canvas.width = img.width;
                 canvas.height = img.height
 
                 // first draw the image
                 ctx.drawImage(img, 0, 0 )
-                             
+
                 // set the mipmap image in the parent texture in the appropriate level
                 parentTexture.mipmaps[level] = canvas
             },
@@ -391,6 +391,10 @@ class MyEngine  {
                 console.error('Unable to load the image ' + path + ' as mipmap level ' + level + ".", err)
             }
         )
+    }
+
+    updateShowBumpTexture(value){
+
     }
 }
 
