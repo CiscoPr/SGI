@@ -47,11 +47,6 @@ class ComponentsEngine  {
     buildRectangle(material, ts, tt) {
         const width = this.params.representations[0].xy2[0] - this.params.representations[0].xy1[0];
         const height = this.params.representations[0].xy2[1] - this.params.representations[0].xy1[1];
-
-        console.log("textuure_lenght", ts, tt)
-        console.log("width", width)
-        console.log("height", height)
-        console.log("my material",material)
         if(material.bumpMap != null) material.bumpMap.repeat = {x: width/ts, y: height/tt}
         if(material.map != null) material.map.repeat = {x: width/ts, y: height/tt}
 

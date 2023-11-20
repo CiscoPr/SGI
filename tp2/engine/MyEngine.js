@@ -189,7 +189,6 @@ class MyEngine  {
         // load texture
         let texture;
         if (params.isVideo){
-            console.log("the document, ", document.getElementById( 'star_save' ));
             const video = document.getElementById( 'star_save' );
             texture = new THREE.VideoTexture(video);
         }
@@ -260,15 +259,22 @@ class MyEngine  {
 
     dealWithNode(node, materialid) {
         if (node == null) return;
-
         if (node.type == "node") {
+            const currentNode = this.data.getNode(node.id);
+            // create group
             const group = new THREE.Group();
             for (let i = 0; i < node.children.length; i++) {
                 // add children to group
-                if (node.materialIds.length == 0)
+                if (node.materialIds.length == 0){
+                    if(currentNode.castShadows == true) node.children[i].castShadows = true;
+                    if(currentNode.receiveShadows == true) node.children[i].receiveShadows = true;
                     group.add(this.dealWithNode(node.children[i], materialid));
-                else
+                }
+                else{
+                    if(currentNode.castShadows == true) node.children[i].castShadows = true;
+                    if(currentNode.receiveShadows == true) node.children[i].receiveShadows = true;
                     group.add(this.dealWithNode(node.children[i], node.materialIds[0]));
+                }
             }
 
             // deal with transformations
