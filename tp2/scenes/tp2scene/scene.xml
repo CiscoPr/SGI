@@ -297,7 +297,7 @@
 
             <children>
                 <primitive>
-                    <box xyz1="0 0 0.0" xyz2="4.0 2.0 2.0" />
+                    <box xyz1="0 0 0.0" xyz2="4.0 2.0 0.49" />
                 </primitive>
             </children>
         </node>
