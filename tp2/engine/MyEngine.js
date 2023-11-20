@@ -266,6 +266,8 @@ class MyEngine  {
             for (let i = 0; i < node.children.length; i++) {
                 // add children to group
                 if (node.materialIds.length == 0){
+                    //if the parent node has the cast and receive shadows flags set to true, then the children will also have them
+                    // otherwise, the children will have the flags set to false
                     if(currentNode.castShadows == true) node.children[i].castShadows = true;
                     if(currentNode.receiveShadows == true) node.children[i].receiveShadows = true;
                     group.add(this.dealWithNode(node.children[i], materialid));
@@ -328,7 +330,7 @@ class MyEngine  {
             const ts = this.data.getMaterial(materialid).texlength_s;
             const tt = this.data.getMaterial(materialid).texlength_t;
             const componentsEngine = new ComponentsEngine(primitive);
-            return componentsEngine.buildComponent(material, ts, tt);
+            return componentsEngine.buildComponent(this.app, material, ts, tt);
         } else if (lightTypes.includes(primitive.type)) {
             const lightEngine = new LightsEngine(primitive, this.app);
             return lightEngine.buildLight();

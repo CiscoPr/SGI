@@ -5,7 +5,7 @@
 
     <globals background="0 0 0 1" ambient="0 0 0 1" />
 
-    <fog color="1.0 1.0 1.0 1.0" near="0.0" far="100.0" />
+    <fog color="0.0 0.0 0.0 0.8" near="0.0" far="100.0" />
 
     <skybox
        size="1000.0 1000.0 1000.0"
@@ -72,7 +72,7 @@
             texlength_t="8.0"
             twosided = "true"
             bumpref="scenes/tp2scene/textures/walls_bump.png"
-            bumpscale="0.6"
+            bumpscale="0.3"
             />
 
 		<material id="floorApp"
@@ -90,7 +90,6 @@
             specular="0 0 0 0"
             shininess="0"
             textureref="flowerBedTex"
-            twosided = "true"
             transparent="true"
             texlength_s="9.0"
             texlength_t="7.0"
@@ -116,8 +115,8 @@
             shininess="0"
             texlength_s = "5.0"
             texlength_t = "5.0"
-            textureref="friskTex"
             twosided = "true"
+            textureref="friskTex"
             transparent="true"
         />
 
@@ -128,8 +127,8 @@
             shininess="0"
             texlength_s = "5.0"
             texlength_t = "8.1"
-            textureref="torielTex"
             twosided = "true"
+            textureref="torielTex"
             transparent="true"
         />
 
@@ -164,7 +163,6 @@
             texlength_s = "5.0"
             texlength_t = "5.0"
             textureref="saveTex"
-            twosided = "true"
             transparent="true"
         />
 
@@ -172,7 +170,7 @@
 
     <graph rootid="scene">
 
-		<node id="scene" castshadows="true" receiveshadows="true">
+		<node id="scene">
             <children>
                 <noderef id="leftWall" />
 				<noderef id="rightWall" />
@@ -182,30 +180,29 @@
                 <noderef id="entities"/>
                 <noderef id="save"/>
 
-                <spotlight id="saveLight" enabled="true"
+                <pointlight id="saveLight" enabled="true"
                     color="1.0 1.0 1.0 1"
-                    intensity="50.0"
+                    intensity="16.0"
                     distance="1000"
-                    decay="1.5"
+                    decay="0.7"
                     castshadow="true"
-                    position="10.0 3.0 2.0"
-                    target="10.0 3.0 5.0"
-                    penumbra="1.0"
-                    angle="10.0"
+                    position="10.0 1.0 2.0"
+                    shadowfar = "1000"
+                    shadowmapsize = "1024"
                 />
 
                 <directionallight id="ruins" enabled="true"
                     color="1.0 1.0 1.0 1"
-                    intensity="2.0"
-                    castshadow="true"
+                    intensity="5.0"
+                    castshadow="false"
                     position="2 2 4"
                 />
 
                 <directionallight id="ruins2" enabled="true"
-                color="1.0 1.0 1.0 1"
-                intensity="2.0"
-                castshadow="true"
-                position="-2 -2 -4"
+                    color="1.0 1.0 1.0 1"
+                    intensity="5.0"
+                    castshadow="false"
+                    position="-2 -2 -4"
                 />
 
 
@@ -244,7 +241,7 @@
         </node>
 
 
-		<node id="wall">
+		<node id="wall" receiveshadows="true">
 			<transforms>
 				<rotate value3="-90 0.0 0.0" />
             </transforms>
@@ -254,7 +251,7 @@
             </children>
         </node>
 
-		<node id="leftWall">
+		<node id="leftWall" receiveshadows="true">
 			<transforms>
 				<translate value3="0 0 20" />
 				<rotate value3="0.0 90 0.0" />
@@ -271,7 +268,7 @@
             </children>
         </node>
 
-        <node id="door">
+        <node id="door" receiveshadows="true">
             <transforms>
                 <translate value3="5.0 0 0.1" />
             </transforms>
@@ -285,7 +282,7 @@
             </children>
         </node>
 
-		<node id="rightWall">
+		<node id="rightWall" receiveshadows="true">
 			<materialref id="rightWallApp" />
 
             <children>
@@ -297,7 +294,7 @@
         </node>
 
 
-        <node id="board">
+        <node id="board" castshadows="true">
             <transforms>
                 <translate value3="12.0 5.0 0.5" />
                 <rotate value3="0.0 180 0.0" />
@@ -354,7 +351,7 @@
             </children>
         </node>
 
-        <node id="entities">
+        <node id="entities"  castshadows="true">
             <transforms>
                 <translate value3="-2.0 0.0 0.0" />
             </transforms>
@@ -364,9 +361,9 @@
             </children>
         </node>
 
-        <node id="frisk">
+        <node id="frisk" castshadows="true">
             <transforms>
-                <translate value3="6.0 0.0 15.0" />
+                <translate value3="5.0 0.2 15.0" />
                 <rotate value3="0.0 90.0 0.0" />
             </transforms>
 
@@ -379,9 +376,9 @@
             </children>
         </node>
 
-        <node id="toriel">
+        <node id="toriel" castshadows="true">
             <transforms>
-                <translate value3="6.0 0.0 11.0" />
+                <translate value3="5.0 0.2 11.0" />
                 <rotate value3="0.0 90.0 0.0" />
             </transforms>
 

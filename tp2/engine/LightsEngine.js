@@ -78,7 +78,7 @@ class LightsEngine  {
         const light = new THREE.SpotLight(this.params.color.getHex(), this.params.intensity, this.params.distance, this.params.angle, this.params.penumbra, this.params.decay);
         light.position.set(this.params.position[0], this.params.position[1], this.params.position[2]);
         light.castShadow = this.params.castshadow;
-
+        console.log("my cast shadow, " , light.shadow)
         if (light.castShadow) {
             light.shadow.mapSize.width = this.params.shadowmapsize;
             light.shadow.mapSize.height = this.params.shadowmapsize;
@@ -93,7 +93,7 @@ class LightsEngine  {
 
         // create helper
         const helper = new THREE.SpotLightHelper(light);
-        //this.app.scene.add(helper);
+        this.app.scene.add(helper);
 
         // add target to light
 
