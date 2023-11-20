@@ -18,13 +18,11 @@ class ComponentsEngine  {
     /**
      * Builds the light
      */
-    buildComponent(material, ts, tt) {
-        console.log(this.params);
-
+    buildComponent(app ,material, ts, tt) {
         // create switch case for each light type
         switch(this.params.subtype) {
             case "rectangle":
-                return this.buildRectangle(material,ts, tt);
+                return this.buildRectangle(app, material,ts, tt);
             case "cylinder":
                 return this.buildCylinder(material);
             case "triangle":
@@ -44,28 +42,33 @@ class ComponentsEngine  {
         }
     }
 
-    buildRectangle(material, ts, tt) {
+    buildRectangle(app, material, ts, tt) {
         const width = this.params.representations[0].xy2[0] - this.params.representations[0].xy1[0];
         const height = this.params.representations[0].xy2[1] - this.params.representations[0].xy1[1];
-
-        console.log("textuure_lenght", ts, tt)
-        console.log("width", width)
-        console.log("height", height)
-        console.log("my material",material)
         if(material.bumpMap != null) material.bumpMap.repeat = {x: width/ts, y: height/tt}
         if(material.map != null) material.map.repeat = {x: width/ts, y: height/tt}
 
         const rectangleGeometry = new THREE.PlaneGeometry(width , height,
             this.params.representations[0].parts_x, this.params.representations[0].parts_y);
 
-        let rectangleMesh;
+            let rectangleMesh;
 
-        if (material == null) rectangleMesh = new THREE.Mesh(rectangleGeometry);
-        else rectangleMesh = new THREE.Mesh(rectangleGeometry, material);
+            if (material == null) rectangleMesh = new THREE.Mesh(rectangleGeometry);
+            else rectangleMesh = new THREE.Mesh(rectangleGeometry, material);
+
+        // get the cast and receive shadow flags
+        const castShadowFlag = this.params.castShadows;
+        const receiveShadowFlag = this.params.receiveShadows;
+        rectangleMesh.castShadow = castShadowFlag;
+        rectangleMesh.receiveShadow = receiveShadowFlag;
+
+        console.log("My mesh", rectangleMesh)
 
         rectangleMesh.position.set(this.params.representations[0].xy1[0], this.params.representations[0].xy1[1], 0);
         rectangleMesh.position.x += width / 2;
         rectangleMesh.position.y += height / 2;
+
+        app.scene.add(rectangleMesh);
 
         const rectangle = new THREE.LOD();
         rectangle.addLevel(rectangleMesh, this.params.representations[0].distance);
@@ -82,6 +85,11 @@ class ComponentsEngine  {
 
         if (material == null) cylinderMesh = new THREE.Mesh(cylinderGeometry);
         else cylinderMesh = new THREE.Mesh(cylinderGeometry, material);
+
+        const castShadowFlag = this.params.castShadows;
+        const receiveShadowFlag = this.params.receiveShadows;
+        cylinderMesh.castShadow = castShadowFlag;
+        cylinderMesh.receiveShadow = receiveShadowFlag;
 
         const cylinder = new THREE.LOD();
         cylinder.addLevel(cylinderMesh, this.params.representations[0].distance);
@@ -100,6 +108,12 @@ class ComponentsEngine  {
 
         if (material == null) triangleMesh = new THREE.Mesh(triangleGeometry);
         else triangleMesh = new THREE.Mesh(triangleGeometry, material);
+
+
+        const castShadowFlag = this.params.castShadows;
+        const receiveShadowFlag = this.params.receiveShadows;
+        triangleMesh.castShadow = castShadowFlag;
+        triangleMesh.receiveShadow = receiveShadowFlag;
 
         const triangle = new THREE.LOD();
 
@@ -124,6 +138,11 @@ class ComponentsEngine  {
         if (material == null) sphereMesh = new THREE.Mesh(sphereGeometry);
         else sphereMesh = new THREE.Mesh(sphereGeometry, material);
 
+        const castShadowFlag = this.params.castShadows;
+        const receiveShadowFlag = this.params.receiveShadows;
+        sphereMesh.castShadow = castShadowFlag;
+        sphereMesh.receiveShadow = receiveShadowFlag;
+
         const sphere = new THREE.LOD();
         sphere.addLevel(sphereMesh, this.params.representations[0].distance);
 
@@ -141,6 +160,11 @@ class ComponentsEngine  {
         material.transparent = true;
         if (material == null) boxMesh = new THREE.Mesh(boxGeometry, new THREE.MeshBasicMaterial({ color: 0x00ff00 }));
         else boxMesh = new THREE.Mesh(boxGeometry, material);
+
+        const castShadowFlag = this.params.castShadows;
+        const receiveShadowFlag = this.params.receiveShadows;
+        boxMesh.castShadow = castShadowFlag;
+        boxMesh.receiveShadow = receiveShadowFlag;
 
         boxMesh.position.set(width / 2, height / 2, depth / 2);
 
@@ -173,13 +197,16 @@ class ComponentsEngine  {
         const builder = new MyNurbsBuilder();
         let surfaceData = builder.build(controlPoints, degree_u, degree_v,
             this.params.representations[0].parts_u, this.params.representations[0].parts_v, material);
+        let nurbsMesh;
+        if (material == null) nurbsMesh = new THREE.Mesh(surfaceData);
+        else nurbsMesh = new THREE.Mesh(surfaceData, material);
 
-        if (material == null) return new THREE.Mesh(surfaceData);
-        else return new THREE.Mesh(surfaceData, material);
-    }
+        const castShadowFlag = this.params.castShadows;
+        const receiveShadowFlag = this.params.receiveShadows;
+        nurbsMesh.castShadow = castShadowFlag;
+        nurbsMesh.receiveShadow = receiveShadowFlag;
 
-    buildSkybox(material) {
-        return null;
+        return nurbsMesh;
     }
 
 }
