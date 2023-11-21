@@ -36,7 +36,7 @@ class ComponentsEngine  {
             case "skybox":
                 return this.buildSkybox(material);
             default:
-                console.error("Geometry type not found");
+                console.error("Geometry type not found: ", this.params.subtype);
                 return;
 
         }
@@ -75,6 +75,10 @@ class ComponentsEngine  {
     }
 
     buildCylinder(material) {
+        if(this.params.representations[0].capsclose == false)
+            this.params.representations[0].capsclose = true;
+        else
+            this.params.representations[0].capsclose = false;
         const cylinderGeometry = new THREE.CylinderGeometry(this.params.representations[0].top, this.params.representations[0].base,
             this.params.representations[0].height, this.params.representations[0].slices, this.params.representations[0].stacks,
             this.params.representations[0].capsclose, this.params.representations[0].thetastart, this.params.representations[0].thetalength);
