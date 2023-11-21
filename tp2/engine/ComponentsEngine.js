@@ -176,7 +176,7 @@ class ComponentsEngine  {
         const controlPoints = [];
         const degree_u = this.params.representations[0].degree_u;
         const degree_v = this.params.representations[0].degree_v;
-
+        const copy = this.params.representations[0].controlpoints.slice();
         console.log("params:", this.params.representations[0].controlpoints);
         for (let i = 0; i < degree_u+1; i++) {
             controlPoints.push([]);
@@ -185,6 +185,7 @@ class ComponentsEngine  {
                 this.params.representations[0].controlpoints.shift();
             }
         }
+        this.params.representations[0].controlpoints = copy;
 
         console.info(controlPoints);
 

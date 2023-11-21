@@ -292,8 +292,13 @@ class MyEngine  {
         // create switch case for each primitive type
         if (primitive.type == "primitive") {
             const material = this.getMaterial(materialid)
-            const ts = this.data.getMaterial(materialid).texlength_s;
-            const tt = this.data.getMaterial(materialid).texlength_t;
+            let ts;
+            let tt;
+            if(material == null) console.log("material is null");
+            else {
+                ts = this.data.getMaterial(materialid).texlength_s;
+                tt = this.data.getMaterial(materialid).texlength_t;
+            }
             const componentsEngine = new ComponentsEngine(primitive);
             return componentsEngine.buildComponent(this.app, material, ts, tt);
         } else if (lightTypes.includes(primitive.type)) {
