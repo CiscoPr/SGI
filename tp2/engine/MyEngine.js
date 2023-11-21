@@ -22,6 +22,7 @@ class MyEngine  {
         this.data = this.contents.reader.data;
         this.showBumpTexture = true;
         this.skybox = null;
+        this.lights = [];
     }
 
     /**
@@ -238,7 +239,7 @@ class MyEngine  {
             transparent: params.transparent,
         });
 
-
+        console.log("my material", material);
         return material;
     }
 
@@ -305,6 +306,7 @@ class MyEngine  {
             return componentsEngine.buildComponent(this.app, material, ts, tt);
         } else if (lightTypes.includes(primitive.type)) {
             const lightEngine = new LightsEngine(primitive, this.app);
+            this.lights.push(lightEngine.buildLight());
             return lightEngine.buildLight();
         }
 
@@ -312,19 +314,40 @@ class MyEngine  {
         return;
     }
 
-
+    /**
+     * removes or adds the skybox to the scene
+     * @param {String} value
+     */
     updateSkybox(value){
         if(value === 'off'){
-            console.log("removed skybox", this.app.scene.children[1]);
+            console.log("removed skybox");
+            // this is the current index of the skybox
             this.app.scene.children[1] = new THREE.Object3D();
 
         }
         else{
-            console.log("added skybox", this.skybox);
+            console.log("added skybox");
             this.app.scene.children[1] = this.skybox;
         }
 
     }
+
+
+    updateLights(value){
+        console.log("materials: ",this.app.scene.children[2].children);
+        if(value === 'off'){
+            console.log("Removed scene lights")
+            // this is the current index of the lights
+            this.app.scene.children[2].children = this.app.scene.children[2].children.slice(0, -3);
+            console.log("materials: ",this.app.scene.children[2].children);
+        }else{
+            console.log("Added scene lights")
+            for(let i = 0; i < this.lights.length; i++)
+            this.app.scene.children[2].children.push(this.lights[i]);
+        }
+
+    }
+
 }
 
 export { MyEngine };
