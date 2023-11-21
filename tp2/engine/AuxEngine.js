@@ -29,7 +29,7 @@ class AuxEngine {
                     break;
                 case "R":
                     const rotation = transformation.rotation;
-                    const euler = new THREE.Euler(rotation[0] * Math.PI / 180, rotation[1] * Math.PI / 180, rotation[2] * Math.PI / 180, "XYZ");
+                    const euler = new THREE.Euler(rotation[0] , rotation[1] , rotation[2] , "XYZ");
 
                     group.applyMatrix4(new THREE.Matrix4().makeRotationFromEuler(euler));
                     break;

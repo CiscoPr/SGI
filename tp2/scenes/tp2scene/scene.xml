@@ -227,7 +227,7 @@
 
             <transforms>
 				<translate value3="0 0 -0.5" />
-				<rotate value3="0 180.0 0.0" />
+				<rotate value3="0 3.14 0.0" />
             </transforms>
 
             <children>
@@ -241,7 +241,7 @@
 
 			<transforms>
 				<translate value3="0 0 20" />
-				<rotate value3="-90 0.0 0.0" />
+				<rotate value3="-1.57 0.0 0.0" />
             </transforms>
 
 			<materialref id="floorApp" />
@@ -257,7 +257,7 @@
 
 		<node id="wall" receiveshadows="true">
 			<transforms>
-				<rotate value3="-90 0.0 0.0" />
+				<rotate value3="-1.57 0.0 0.0" />
             </transforms>
 
             <children>
@@ -268,7 +268,7 @@
 		<node id="leftWall" receiveshadows="true">
 			<transforms>
 				<translate value3="0 0 20" />
-				<rotate value3="0.0 90 0.0" />
+				<rotate value3="0.0 1.57 0.0" />
             </transforms>
 
 			<materialref id="leftWallApp" />
@@ -311,7 +311,7 @@
         <node id="board" castshadows="true">
             <transforms>
                 <translate value3="12.0 5.0 0.5" />
-                <rotate value3="0.0 180 0.0" />
+                <rotate value3="0.0 3.14 0.0" />
             </transforms>
 
             <materialref id="boardApp" />
@@ -386,7 +386,7 @@
         <node id="frisk">
             <transforms>
                 <translate value3="5.0 0.2 15.0" />
-                <rotate value3="0.0 90.0 0.0" />
+                <rotate value3="0.0 1.57 0.0" />
             </transforms>
 
             <materialref id="friskApp" />
@@ -401,7 +401,7 @@
         <node id="toriel">
             <transforms>
                 <translate value3="5.0 0.2 11.0" />
-                <rotate value3="0.0 90.0 0.0" />
+                <rotate value3="0.0 1.57 0.0" />
             </transforms>
 
             <materialref id="torielApp" />
@@ -415,7 +415,7 @@
 
         <node id="flowey">
             <transforms>
-                <rotate value3="0.0 90.0 0.0" />
+                <rotate value3="0.0 1.57 0.0" />
                 <translate value3="-11.5 0.2 12.0" />
             </transforms>
 

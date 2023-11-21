@@ -310,7 +310,7 @@ class MyEngine  {
             return lightEngine.buildLight();
         }
 
-        console.error("Primitive type not found");
+        console.error("Primitive type not found:" + primitive.type);
         return;
     }
 
