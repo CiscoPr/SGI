@@ -113,5 +113,38 @@ class AuxEngine {
     }
 
 
+
+    calVertexColor(p1x, p1y, p1z, p2x, p2y, p2z, p3x, p3y, p3z, radius, color_p, color_c) {
+        const colors = [];
+
+        // origin
+        const origin = new THREE.Vector3(0, 0, 0)
+        const tValues = []; 
+
+        // generate 3d vectors for each point
+        const p1 = new THREE.Vector3(p1x, p1y, p1z);
+        const p2 = new THREE.Vector3(p2x, p2y, p2z);
+        const p3 = new THREE.Vector3(p3x, p3y, p3z);
+
+        // calculate t value
+        tValues.push(origin.distanceTo(p1) / radius);
+        tValues.push(origin.distanceTo(p2) / radius);
+        tValues.push(origin.distanceTo(p3) / radius);
+
+        // for cycle
+        for (let i = 0; i < 3; i++) {
+            let r = color_c.r + (color_p.r - color_c.r) * tValues[i];
+            let g = color_c.g + (color_p.g - color_c.g) * tValues[i];
+            let b = color_c.b + (color_p.b - color_c.b) * tValues[i];
+            let a = color_c.a + (color_p.a - color_c.a) * tValues[i];
+            
+            colors.push(r, g, b, a);
+        }
+
+
+        return colors;
+    }
+
+
 }
 export { AuxEngine };
