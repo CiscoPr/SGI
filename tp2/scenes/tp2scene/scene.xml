@@ -360,11 +360,13 @@
 
             <children>
                 <primitive>
-                    <nurbs degree_u="1" degree_v="1" parts_u="20" parts_v="20">
-                        <controlpoint xx="0" yy="0" zz="0" />
-                        <controlpoint xx="0" yy="5" zz="0" />
-                        <controlpoint xx="5" yy="0" zz="0" />
-                        <controlpoint xx="5" yy="5" zz="0" />
+                    <nurbs degree_u="1" degree_v="2" parts_u="20" parts_v="20">
+                        <controlpoint xx="-1" yy="-1" zz="0" />
+                        <controlpoint xx="-1" yy="3.5" zz="1.0" />
+                        <controlpoint xx="-1" yy="6" zz="0" />
+                        <controlpoint xx="8" yy="-1" zz="0" />
+                        <controlpoint xx="8" yy="3.5" zz="1.0"/>
+                        <controlpoint xx="8" yy="6" zz="0" />
                     </nurbs>
                 </primitive>
             </children>
