@@ -62,8 +62,6 @@ class ComponentsEngine  {
         rectangleMesh.castShadow = castShadowFlag;
         rectangleMesh.receiveShadow = receiveShadowFlag;
 
-        console.log("My mesh", rectangleMesh)
-
         rectangleMesh.position.set(this.params.representations[0].xy1[0], this.params.representations[0].xy1[1], 0);
         rectangleMesh.position.x += width / 2;
         rectangleMesh.position.y += height / 2;
@@ -179,16 +177,12 @@ class ComponentsEngine  {
         const degree_u = this.params.representations[0].degree_u;
         const degree_v = this.params.representations[0].degree_v;
 
-        for (let i = 0; i < this.params.representations[0].controlpoints.length; i += degree_u * 2) {
-            const rows= this.params.representations[0].controlpoints.slice(i, degree_u * 2);
-            console.info(rows);
-            console.info(rows.length);
-            for (let j = 0; j < rows.length; j++) {
-                const controlPoint = [];
-                controlPoint.push(rows[j].xx);
-                controlPoint.push(rows[j].yy);
-                controlPoint.push(rows[j].zz);
-                controlPoints.push(controlPoint);
+        console.log("params:", this.params.representations[0].controlpoints);
+        for (let i = 0; i < degree_u+1; i++) {
+            controlPoints.push([]);
+            for (let j = 0; j < degree_v+1; j++) {
+                controlPoints[i].push(this.params.representations[0].controlpoints[0]);
+                this.params.representations[0].controlpoints.shift();
             }
         }
 
