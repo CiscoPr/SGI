@@ -21,6 +21,7 @@ class MyEngine  {
         this.contents = contents;
         this.data = this.contents.reader.data;
         this.showBumpTexture = true;
+        this.skybox = null;
     }
 
     /**
@@ -111,6 +112,7 @@ class MyEngine  {
 
         const skyboxMesh = new THREE.Mesh(skyboxGeometry, skyboxMaterials);
         skyboxMesh.position.set(center[0], center[1], center[2]);
+        this.skybox = skyboxMesh;
         this.app.scene.add(skyboxMesh);
         console.info("Loaded Skybox");
     }
@@ -311,7 +313,16 @@ class MyEngine  {
     }
 
 
-    updateShowBumpTexture(value){
+    updateSkybox(value){
+        if(value === 'off'){
+            console.log("removed skybox", this.app.scene.children[1]);
+            this.app.scene.children[1] = new THREE.Object3D();
+
+        }
+        else{
+            console.log("added skybox", this.skybox);
+            this.app.scene.children[1] = this.skybox;
+        }
 
     }
 }

@@ -35,16 +35,27 @@ class MyGuiInterface  {
         cameraFolder.add(this.app, 'activeCameraName', cameraNames ).name("active camera");
         cameraFolder.open()
 
+
+        console.log("my data", this.contents.engine.data.skyboxes)
+        var data = {
+            turnSkyboxOn :'on'
+        }
+        
+        const skyboxFolder = this.datgui.addFolder('Skybox')
+        skyboxFolder.add(data, 'turnSkyboxOn', {On:'on', Off: 'off'}).name("Show skybox").onChange((value) => {
+            this.contents.engine.updateSkybox(value);
+        });
+        skyboxFolder.open()
+
+        /*
         var text ={
             showBumpTexture: 'on',
         }
-
-        /*
         const bumpFolder = this.datgui.addFolder('Bump')
         bumpFolder.add(text, 'showBumpTexture', { On: 'on', Off: 'off' }).name("Show Bump").onChange((value) => {
             this.contents.engine.updateShowBumpTexture(value === 'on');
         });
-        */
+*/
     }
 }
 
