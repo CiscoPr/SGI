@@ -342,11 +342,15 @@ class MyEngine  {
 
 
     updateLights(value){
+        const lightsNames = ["PointLight", "DirectionalLight", "SpotLight"];
+        let indexes = [];
         console.log("materials: ",this.app.scene.children[2].children);
         if(value === 'off'){
             console.log("Removed scene lights")
-            // this is the current index of the lights
-            this.app.scene.children[2].children = this.app.scene.children[2].children.slice(0, -3);
+            this.app.scene.children[2].children = this.app.scene.children[2].children.filter((child, index) => {
+                if(lightsNames.includes(child.type)) indexes.push(index);
+                return !lightsNames.includes(child.type);
+            });
             console.log("materials: ",this.app.scene.children[2].children);
         }else{
             console.log("Added scene lights")
