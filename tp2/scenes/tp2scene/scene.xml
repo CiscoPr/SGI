@@ -431,7 +431,8 @@
 
         <node id="save">
             <transforms>
-                <translate value3="7.5 0.0 2.0" />
+                <translate value3="5.5 -0.5 2.0" />
+                <scale value3="2 1.5 1.5" />
             </transforms>
 
             <materialref id="saveApp" />
