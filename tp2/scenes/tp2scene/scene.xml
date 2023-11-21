@@ -361,27 +361,30 @@
 
 		<node id="column1">
             <transforms>
-                <translate value3="0.1 0.1 0.1"/>
+                <translate value3="3.0 5.0 0.1"/>
+                <rotate value3="0.0 -1.57 0.0" />
             </transforms>
 
 			<materialref id="columnsApp" />
 
             <children>
                 <primitive>
-                    <box xyz1="0.0 0.0 0.0" xyz2="4.5 10.0 1.5" />
+                    <!--box xyz1="0.0 0.0 0.0" xyz2="4.5 10.0 1.5" /-->
+                    <cylinder base="3.0" top="3.0" height="10.0" slices="20" stacks="20" capsclose="false" thetalength="3.14"/>
                 </primitive>
             </children>
         </node>
 
         <node id="column2">
             <transforms>
-                <translate value3="15.5 0.1 0.1" />
+                <translate value3="17.0 5.0 0.1" />
+                <rotate value3="0.0 -1.57 0.0" />
             </transforms>
 			<materialref id="columnsApp" />
 
             <children>
                 <primitive>
-                    <box xyz1="0.0 0.0 0.0" xyz2="4.5 10.0 1.5" />
+                    <cylinder base="3.0" top="3.0" height="10.0" slices="20" stacks="20" capsclose="false" thetalength="3.14"/>
                 </primitive>
             </children>
         </node>
