@@ -70,6 +70,8 @@ class MyNurbsBuilder  {
 
         let stackedPoints = [];
 
+        console.log("cp", controlPoints)
+
         for (var i = 0; i < controlPoints.length; i++) {
 
             let row = controlPoints[i];
@@ -80,15 +82,19 @@ class MyNurbsBuilder  {
 
                 let item = row[j];
 
-                newRow.push(new THREE.Vector4(item[0],
+                console.log("item", item)
 
-                item[1], item[2], item[3]));
+                let newPoint = new THREE.Vector3(item.xx, item.yy, item.zz);
+
+                newRow.push(newPoint);
 
             }
 
             stackedPoints[i] = newRow;
 
         }
+
+        console.log("sp", stackedPoints)
 
 
         const nurbsSurface = new NURBSSurface( degree1, degree2,
@@ -102,7 +108,7 @@ class MyNurbsBuilder  {
         return geometry;
 
 
-       
+
 
         function getSurfacePoint( u, v, target ) {
 

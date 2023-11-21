@@ -3,7 +3,7 @@
 
 	<!-- Credits of the original file go to Group 1, class 1 of course LAIG school year 2013/2014, FEUP, University of Porto -->
 
-    <globals background="0 0 0 1" ambient="0 0 0 1" />
+    <globals background="0 0 0 1" ambient="1.0 1.0 1.0 1" />
 
     <fog color="0.0 0.0 0.0 0.8" near="0.0" far="100.0" />
 
@@ -44,6 +44,7 @@
         <texture id="floorTex" filepath="scenes/tp2scene/textures/floor.png"/>
         <texture id="doorTex" filepath="scenes/tp2scene/textures/door.png"/>
         <texture id="boardTex" filepath="scenes/tp2scene/textures/board.png"/>
+        <texture id="floweyTex" filepath="scenes/tp2scene/textures/flowey.png"/>
         <texture id="saveTex" filepath="scenes/tp2scene/videos/star_save.webm" isVideo="true"/>
     </textures>
 
@@ -95,6 +96,7 @@
             texlength_t="7.0"
             bumpref="scenes/tp2scene/textures/golden_flowers_bump.png"
             bumpscale="0.1"
+            twosided = "true"
         />
 
         <material id="columnsApp"
@@ -153,6 +155,18 @@
             transparent="false"
             bumpref="scenes/tp2scene/textures/board_bump.png"
             bumpscale="0.25"
+        />
+
+        <material id="floweyApp"
+            emissive="0.0 0.0 0.0 1"
+            color="0.8 0.8 0.8 0.8"
+            specular="0 0 0 0"
+            shininess="0"
+            texlength_s = "3.0"
+            texlength_t = "3.0"
+            textureref="floweyTex"
+            transparent="true"
+            twosided = "true"
         />
 
         <material id="saveApp"
@@ -220,7 +234,7 @@
 
             <transforms>
 				<translate value3="0 0 -0.5" />
-				<rotate value3="0 180.0 0.0" />
+				<rotate value3="0 3.14 0.0" />
             </transforms>
 
             <children>
@@ -234,7 +248,7 @@
 
 			<transforms>
 				<translate value3="0 0 20" />
-				<rotate value3="-90 0.0 0.0" />
+				<rotate value3="-1.57 0.0 0.0" />
             </transforms>
 
 			<materialref id="floorApp" />
@@ -250,7 +264,7 @@
 
 		<node id="wall" receiveshadows="true">
 			<transforms>
-				<rotate value3="-90 0.0 0.0" />
+				<rotate value3="-1.57 0.0 0.0" />
             </transforms>
 
             <children>
@@ -261,7 +275,7 @@
 		<node id="leftWall" receiveshadows="true">
 			<transforms>
 				<translate value3="0 0 20" />
-				<rotate value3="0.0 90 0.0" />
+				<rotate value3="0.0 1.57 0.0" />
             </transforms>
 
 			<materialref id="leftWallApp" />
@@ -321,7 +335,7 @@
         <node id="board" castshadows="true">
             <transforms>
                 <translate value3="12.0 5.0 0.5" />
-                <rotate value3="0.0 180 0.0" />
+                <rotate value3="0.0 3.14 0.0" />
             </transforms>
 
             <materialref id="boardApp" />
@@ -370,7 +384,14 @@
 
             <children>
                 <primitive>
-                    <rectangle xy1="-1.0 -1.0" xy2="8.0 6.0" />
+                    <nurbs degree_u="1" degree_v="2" parts_u="20" parts_v="20">
+                        <controlpoint xx="-1" yy="-1" zz="0" />
+                        <controlpoint xx="-1" yy="3.5" zz="1.0" />
+                        <controlpoint xx="-1" yy="6" zz="0" />
+                        <controlpoint xx="8" yy="-1" zz="0" />
+                        <controlpoint xx="8" yy="3.5" zz="1.0"/>
+                        <controlpoint xx="8" yy="6" zz="0" />
+                    </nurbs>
                 </primitive>
             </children>
         </node>
@@ -382,13 +403,14 @@
             <children>
                 <noderef id="frisk" />
                 <noderef id="toriel" />
+                <noderef id="flowey"/>
             </children>
         </node>
 
-        <node id="frisk" castshadows="true">
+        <node id="frisk">
             <transforms>
                 <translate value3="5.0 0.2 15.0" />
-                <rotate value3="0.0 90.0 0.0" />
+                <rotate value3="0.0 1.57 0.0" />
             </transforms>
 
             <materialref id="friskApp" />
@@ -400,10 +422,10 @@
             </children>
         </node>
 
-        <node id="toriel" castshadows="true">
+        <node id="toriel">
             <transforms>
                 <translate value3="5.0 0.2 11.0" />
-                <rotate value3="0.0 90.0 0.0" />
+                <rotate value3="0.0 1.57 0.0" />
             </transforms>
 
             <materialref id="torielApp" />
@@ -415,10 +437,26 @@
             </children>
         </node>
 
+        <node id="flowey">
+            <transforms>
+                <rotate value3="0.0 1.57 0.0" />
+                <translate value3="-11.5 0.2 12.0" />
+            </transforms>
+
+            <materialref id="floweyApp" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0.0 0.0" xy2="3.0 3.0" />
+                </primitive>
+            </children>
+        </node>
+
 
         <node id="save">
             <transforms>
-                <translate value3="7.5 0.0 2.0" />
+                <translate value3="5.5 -0.5 2.0" />
+                <scale value3="2 1.5 1.5" />
             </transforms>
 
             <materialref id="saveApp" />

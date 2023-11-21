@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { MySceneData } from './../parser/MySceneData.js';
 import { LightsEngine } from './LightsEngine.js';
 import { ComponentsEngine } from './ComponentsEngine.js';
+import { AuxEngine } from './AuxEngine.js';
+import { CamerasEngine } from './CamerasEngine.js';
 
 
 /**
@@ -19,6 +21,8 @@ class MyEngine  {
         this.contents = contents;
         this.data = this.contents.reader.data;
         this.showBumpTexture = true;
+        this.skybox = null;
+        this.lights = [];
     }
 
     /**
@@ -41,6 +45,10 @@ class MyEngine  {
     }
 
 
+    /**
+     * Deals with the global scene options
+     * @returns
+     */
     dealWithGlobals() {
         const globals = this.data.getOptions();
         if (globals == null) return;
@@ -58,6 +66,10 @@ class MyEngine  {
         }
     }
 
+    /**
+     * Deals with and sets the fog of the scene
+     * @returns
+     */
     dealWithFog() {
         const fog = this.data.getFog();
         if (fog == null) return;
@@ -70,16 +82,13 @@ class MyEngine  {
         console.info("Loaded Fog");
     }
 
+    /**
+     * Deals with and sets the skybox of the scene
+     * @returns
+     */
     dealWithSkybox() {
         const skybox = this.data.getSkybox();
         if (skybox == null) return;
-
-        //added skybox {"size":[100,100,100],
-        //"center": [0, 0, 0], "emissive": 0,
-        //"intensity": 10, "up": "scenes/tp2scene/textures/skybox.png",
-        //"down": "scenes/tp2scene/textures/skybox.png", "left": "scenes/tp2scene/textures/skybox.png",
-        //"right": "scenes/tp2scene/textures/skybox.png", "front": "scenes/tp2scene/textures/skybox.png",
-        //"back": "scenes/tp2scene/textures/skybox.png", "type": "skybox", "id": "default", "custom": { }
 
         // set skybox
         const size = skybox.size;
@@ -104,11 +113,15 @@ class MyEngine  {
 
         const skyboxMesh = new THREE.Mesh(skyboxGeometry, skyboxMaterials);
         skyboxMesh.position.set(center[0], center[1], center[2]);
+        this.skybox = skyboxMesh;
         this.app.scene.add(skyboxMesh);
         console.info("Loaded Skybox");
     }
 
-
+    /**
+     * With the help of the CamerasEngine, deals with the cameras of the scene
+     * @returns
+     */
     dealWithCameras() {
         const aspect = window.innerWidth / window.innerHeight;
 
@@ -118,58 +131,21 @@ class MyEngine  {
         for(let cam in cameras) {
             //if cam is perspective
             if(cameras[cam].type == "perspective") {
-                const camera = new THREE.PerspectiveCamera(cameras[cam].fov, cameras[cam].an,cameras[cam].near, cameras[cam].far);
-                camera.position.set(cameras[cam].location[0], cameras[cam].location[1], cameras[cam].location[2]);
-                camera.lookAt(cameras[cam].target[0], cameras[cam].target[1], cameras[cam].target[2]);
-                this.app.cameras['Perspective'] = camera;
+                new CamerasEngine(this.app).dealWithPerspective(cameras, cam);
             }
             //if cam is orthogonal
             if(cameras[cam].type == "orthogonal"){
-                this.dealWithOrthogonal(cameras,cam ,aspect);
+                new CamerasEngine(this.app).dealWithOrthogonal(cameras,cam ,aspect);
             }
-
-
         }
-
 
         console.info("Loaded Cameras");
     }
 
-
-
-    dealWithOrthogonal(cameras,cam, aspect) {
-        const left = - cameras[cam].left / 2 * aspect
-        const right = cameras[cam].right /2 * aspect
-        const top = cameras[cam].top / 2
-        const bottom = -cameras[cam].bottom / 2
-        const near = -cameras[cam].near /2
-        const far =  cameras[cam].far
-        const cameraLeft = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
-        const cameraRight = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
-        const cameraTop = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
-        const cameraBottom = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
-
-        cameraLeft.up = new THREE.Vector3(0,1,0);
-        cameraLeft.position.set(-cameras[cam].location[0] /4,0,0);
-        cameraLeft.lookAt( cameras[cam].target);
-        this.app.cameras['Left'] = cameraLeft;
-
-        cameraRight.up = new THREE.Vector3(0,1,0);
-        cameraRight.position.set(cameras[cam].location[0] /4,0,0);
-        cameraRight.lookAt( cameras[cam].target );
-        this.app.cameras['Right'] = cameraRight;
-
-        cameraTop.up = new THREE.Vector3(0,0,1);
-        cameraTop.position.set(0, cameras[cam].location[1] /4, 0);
-        cameraTop.lookAt(cameras[cam].target);
-        this.app.cameras['Top'] = cameraTop;
-
-        cameraBottom.up = new THREE.Vector3(0,0,1);
-        cameraBottom.position.set(0, -cameras[cam].location[1] /4, 0);
-        cameraBottom.lookAt( cameras[cam].target );
-        this.app.cameras['Bottom'] = cameraBottom;
-    }
-
+    /**
+     * Starts the traversal of the scene graph
+     * @returns
+     */
     dealWithRoot() {
         const root = this.data.getNode(this.data.rootId);
         if (root == null) return;
@@ -181,6 +157,11 @@ class MyEngine  {
         this.app.scene.add(rootGroup);
     }
 
+    /**
+     * Gets and applies the texture applied to the material
+     * @param {String} id
+     * @returns
+     */
     getTexture(id) {
         if (id == null) return null;
         const params = this.data.getTexture(id);
@@ -201,8 +182,8 @@ class MyEngine  {
         texture.generateMipmaps = params.mipmaps
 
         if (texture.generateMipmaps) {
-            texture.minFilter = this.mapMinFilter(params.minfilter);
-            texture.magFilter = this.mapMagFilter(params.magfilter);
+            texture.minFilter = new AuxEngine().mapMinFilter(params.minfilter);
+            texture.magFilter = new AuxEngine().mapMagFilter(params.magfilter);
             return texture;
         }
 
@@ -211,7 +192,7 @@ class MyEngine  {
         while (level < 8) {
             let mLevel = "mipmap" + level;
             if (params[mLevel] == null) break;
-            this.loadMipmap(texture, level, params[mLevel])
+            new AuxEngine().loadMipmap(texture, level, params[mLevel])
             level++;
         }
 
@@ -219,13 +200,18 @@ class MyEngine  {
         return texture;
     }
 
+    /**
+     * Gets the material and applies the bumpmap (if it exists)
+     * @param {String} id
+     * @returns
+     */
     getMaterial(id) {
         if (id == null) return null;
         const params = this.data.getMaterial(id);
         if (params == null) return null;
         let bumpMap = null;
-        // check if the Show Bump of the GUI is on or off
-        // get texture
+
+        // gets the bump texture if it exists
         if(params.bumpref == null || this.showBumpTexture == false)
             console.log("no bump texture");
         else{
@@ -253,10 +239,16 @@ class MyEngine  {
             transparent: params.transparent,
         });
 
-
+        console.log("my material", material);
         return material;
     }
 
+    /**
+     * Deals with each node of the tree and its children
+     * @param {Object} node
+     * @param {String} materialid
+     * @returns
+     */
     dealWithNode(node, materialid) {
         if (node == null) return;
         if (node.type == "node") {
@@ -281,7 +273,7 @@ class MyEngine  {
 
             // deal with transformations
             const transformations = node.transformations;
-            this.applyTransformations(group, transformations);
+            new AuxEngine().applyTransformations(group, transformations);
 
             return group;
         } else if (node.type == "lod") {
@@ -297,36 +289,12 @@ class MyEngine  {
         return this.primitiveRouter(node, materialid);
     }
 
-    applyTransformations(group, transformations) {
-        for (let i = transformations.length - 1; i >= 0; i--) {
-            const transformation = transformations[i];
-            let currentMatrix = new THREE.Matrix4();
-            switch (transformation.type) {
-                case "T":
-                    const translation = transformation.translate;
-                    const translationVector = new THREE.Vector3(translation[0], translation[1], translation[2]);
-
-                    group.applyMatrix4(new THREE.Matrix4().makeTranslation(translationVector));
-                    break;
-                case "R":
-                    const rotation = transformation.rotation;
-                    const euler = new THREE.Euler(rotation[0] * Math.PI / 180, rotation[1] * Math.PI / 180, rotation[2] * Math.PI / 180, "XYZ");
-
-                    group.applyMatrix4(new THREE.Matrix4().makeRotationFromEuler(euler));
-                    break;
-                case "S":
-                    const scale = transformation.scale;
-
-                    group.applyMatrix4(new THREE.Matrix4().makeScale(scale[0], scale[1], scale[2]));
-                    break;
-                default:
-                    console.error("Transformation type not found");
-                    break;
-            }
-        }
-    }
-
-
+    /**
+     * Deals with each primitive of the tree
+     * @param {Object} primitive
+     * @param {String} materialid
+     * @returns
+     */
     primitiveRouter(primitive, materialid) {
         if (primitive == null) return;
 
@@ -335,79 +303,59 @@ class MyEngine  {
         // create switch case for each primitive type
         if (primitive.type == "primitive") {
             const material = this.getMaterial(materialid)
-            const ts = this.data.getMaterial(materialid).texlength_s;
-            const tt = this.data.getMaterial(materialid).texlength_t;
+            let ts;
+            let tt;
+            if(material == null) console.log("material is null");
+            else {
+                ts = this.data.getMaterial(materialid).texlength_s;
+                tt = this.data.getMaterial(materialid).texlength_t;
+            }
             const componentsEngine = new ComponentsEngine(primitive);
             return componentsEngine.buildComponent(this.app, material, ts, tt);
         } else if (lightTypes.includes(primitive.type)) {
             const lightEngine = new LightsEngine(primitive, this.app);
+            this.lights.push(lightEngine.buildLight());
             return lightEngine.buildLight();
         }
 
-        console.error("Primitive type not found");
+        console.error("Primitive type not found:" + primitive.type);
         return;
     }
 
-    mapMinFilter(str) {
-        switch (str) {
-          case "NearestFilter":
-              return THREE.NearestFilter;
-          case "NearestMipmapNearestFilter":
-              return THREE.NearestMipmapNearestFilter;
-          case "NearestMipmapLinearFilter":
-              return THREE.NearestMipmapLinearFilter;
-          case "LinearFilter":
-              return THREE.LinearFilter;
-          case "LinearMipmapNearestFilter":
-              return THREE.LinearMipmapNearestFilter;
-          default:
-            return THREE.LinearMipmapLinearFilter;
-        }
-    }
-
-    mapMagFilter(str) {
-        if (str == "NearestFilter") return THREE.NearestFilter;
-        else return THREE.LinearFilter;
-    }
-
     /**
-     * load an image and create a mipmap to be added to a texture at the defined level.
-     * In between, add the image some text and control squares. These items become part of the picture
-     *
-     * @param {*} parentTexture the texture to which the mipmap is added
-     * @param {*} level the level of the mipmap
-     * @param {*} path the path for the mipmap image
+     * removes or adds the skybox to the scene
+     * @param {String} value
      */
-    loadMipmap(parentTexture, level, path)
-    {
-        // load texture. On loaded call the function to create the mipmap for the specified level
-        new THREE.TextureLoader().load(path,
-            function(mipmapTexture)  // onLoad callback
-            {
-                const canvas = document.createElement('canvas')
-                const ctx = canvas.getContext('2d')
-                ctx.scale(1, 1);
+    updateSkybox(value){
+        if(value === 'off'){
+            console.log("removed skybox");
+            // this is the current index of the skybox
+            this.app.scene.children[1] = new THREE.Object3D();
 
-                const img = mipmapTexture.image
-                canvas.width = img.width;
-                canvas.height = img.height
-
-                // first draw the image
-                ctx.drawImage(img, 0, 0 )
-
-                // set the mipmap image in the parent texture in the appropriate level
-                parentTexture.mipmaps[level] = canvas
-            },
-            undefined, // onProgress callback currently not supported
-            function(err) {
-                console.error('Unable to load the image ' + path + ' as mipmap level ' + level + ".", err)
-            }
-        )
-    }
-
-    updateShowBumpTexture(value){
+        }
+        else{
+            console.log("added skybox");
+            this.app.scene.children[1] = this.skybox;
+        }
 
     }
+
+
+    updateLights(value){
+        console.log("materials: ",this.app.scene.children[2].children);
+        if(value === 'off'){
+            console.log("Removed scene lights")
+            // this is the current index of the lights
+            this.app.scene.children[2].children = this.app.scene.children[2].children.slice(0, -3);
+            console.log("materials: ",this.app.scene.children[2].children);
+        }else{
+            console.log("Added scene lights")
+            for(let i = 0; i < this.lights.length; i++)
+            this.app.scene.children[2].children.push(this.lights[i]);
+        }
+
+    }
+
 }
 
 export { MyEngine };
