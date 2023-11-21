@@ -284,6 +284,14 @@ class MyEngine  {
             this.applyTransformations(group, transformations);
 
             return group;
+        } else if (node.type == "lod") {
+            const lod = new THREE.LOD();
+            for (let i = 0; i < node.children.length; i++) {
+                const child = node.children[i];
+                const childGroup = this.dealWithNode(child.node, materialid);
+                lod.addLevel(childGroup, child.mindist);
+            }
+            return lod;
         }
 
         return this.primitiveRouter(node, materialid);

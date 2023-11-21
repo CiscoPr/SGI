@@ -166,13 +166,19 @@
             transparent="true"
         />
 
+        <material id="test"
+            emissive="0.0 0.0 0.0 1"
+			color="0.2 0.6 0.3 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            />
+
     </materials>
 
     <graph rootid="scene">
 
 		<node id="scene">
             <children>
-                <noderef id="leftWall" />
 				<noderef id="rightWall" />
 				<noderef id="floor" />
                 <noderef id="column1"/>
@@ -205,6 +211,7 @@
                     position="-2 -2 -4"
                 />
 
+                <lodref id="lod1"/>
 
             </children>
         </node>
@@ -258,6 +265,23 @@
             </transforms>
 
 			<materialref id="leftWallApp" />
+
+            <children>
+                <noderef id="door"/>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="20 10" />
+                </primitive>
+
+            </children>
+        </node>
+
+        <node id="leftWall2" receiveshadows="true">
+			<transforms>
+				<translate value3="0 0 20" />
+				<rotate value3="0.0 90 0.0" />
+            </transforms>
+
+			<materialref id="test" />
 
             <children>
                 <noderef id="door"/>
@@ -406,5 +430,9 @@
             </children>
         </node>
 
+        <lod id="lod1">
+            <noderef id="leftWall" mindist="0"/>
+            <noderef id="leftWall2" mindist="20"/>
+        </lod>
     </graph>
 </yaf>
