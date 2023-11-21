@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { MyNurbsBuilder } from '../MyNurbsBuilder.js';
 import { TriangleEngine } from './TriangleEngine.js';
+import { AuxEngine } from './AuxEngine.js';
 
 /**
  *  This class contains the contents of the geometry engine
@@ -35,6 +36,8 @@ class ComponentsEngine  {
                 return this.buildNurb(material);
             case "skybox":
                 return this.buildSkybox(material);
+            case "polygon":
+                return this.buildPolygon();
             default:
                 console.error("Geometry type not found");
                 return;
@@ -202,6 +205,76 @@ class ComponentsEngine  {
         nurbsMesh.receiveShadow = receiveShadowFlag;
 
         return nurbsMesh;
+    }
+
+    buildPolygon() {
+        // create auxiliary tool
+        const auxEngine = new AuxEngine();
+
+        // create group
+        const group = new THREE.Group();
+
+        const radius = this.params.representations[0].radius;
+        const slices = this.params.representations[0].slices;
+        const stacks = this.params.representations[0].stacks;
+        const angle = Math.PI * 2 / slices;
+        const step = radius / stacks;
+        const color_p = this.params.representations[0].color_p;
+        const color_c = this.params.representations[0].color_c;
+
+        // create cycle for each slice
+        for (let i = 0; i < slices; i++) {
+            // create group for each slice
+            const sliceGroup = new THREE.Group();
+            // create cycle for each stack
+            for (let j = 1; j <= stacks; j++) {
+                if (j == 1) {
+                    // create triangle
+                    let p1x = 0; const p1y = 0; const p1z = 0;
+                    let p2x = step * j * Math.cos(angle * i); let p2y = step * j * Math.sin(angle * i); let p2z = 0;
+                    let p3x = step * j * Math.cos(angle * (i + 1)); let p3y = step * j * Math.sin(angle * (i + 1)); let p3z = 0;
+                    let vertexColors = auxEngine.calVertexColor(p1x, p1y, p1z, p2x, p2y, p2z, p3x, p3y, p3z, radius, color_p, color_c);
+                    let triangleSurface = new TriangleEngine(p1x, p1y, p1z, p2x, p2y, p2z, p3x, p3y, p3z, vertexColors);
+                    let triangleMesh = new THREE.Mesh(triangleSurface, new THREE.MeshPhongMaterial( {
+                        side: THREE.DoubleSide,
+                        vertexColors: true,
+                        transparent:true
+                    } ));
+                    sliceGroup.add(triangleMesh);
+                    continue;
+                }
+
+                // create first triangle
+                let p1x = step * (j - 1) * Math.cos(angle * i); let p1y = step  * (j - 1) * Math.sin(angle * i); let p1z = 0;
+                let p2x = step * j * Math.cos(angle * i); let p2y = step  * j * Math.sin(angle * i); let p2z = 0;
+                let p3x = step * (j - 1) * Math.cos(angle * (i + 1)); let p3y = step * (j - 1) * Math.sin(angle * (i + 1)); let p3z = 0;
+                let vertexColors = auxEngine.calVertexColor(p1x, p1y, p1z, p2x, p2y, p2z, p3x, p3y, p3z, radius, color_p, color_c);
+                let triangleSurface = new TriangleEngine(p1x, p1y, p1z, p2x, p2y, p2z, p3x, p3y, p3z, vertexColors);
+                let triangleMesh = new THREE.Mesh(triangleSurface, new THREE.MeshPhongMaterial( {
+					side: THREE.DoubleSide,
+					vertexColors: true,
+                    transparent:true
+				} ));
+                sliceGroup.add(triangleMesh);
+
+                // create second triangle
+                p1x = step * (j - 1) * Math.cos(angle * (i + 1)); p1y = step * (j - 1) * Math.sin(angle * (i + 1)); p1z = 0;
+                p2x = step * j * Math.cos(angle * i); p2y = step  * j * Math.sin(angle * i); p2z = 0;
+                p3x = step * j * Math.cos(angle * (i + 1)); p3y = step * j * Math.sin(angle * (i + 1)); p3z = 0;
+                vertexColors = auxEngine.calVertexColor(p1x, p1y, p1z, p2x, p2y, p2z, p3x, p3y, p3z, radius, color_p, color_c);
+                triangleSurface = new TriangleEngine(p1x, p1y, p1z, p2x, p2y, p2z, p3x, p3y, p3z, vertexColors);
+                triangleMesh = new THREE.Mesh(triangleSurface, new THREE.MeshPhongMaterial( {
+					side: THREE.DoubleSide,
+					vertexColors: true,
+                    transparent:true
+				} ));
+                sliceGroup.add(triangleMesh);
+
+            }
+            group.add(sliceGroup);
+        }
+
+        return group;
     }
 
 }

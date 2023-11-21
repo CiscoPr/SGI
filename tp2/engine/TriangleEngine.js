@@ -1,17 +1,30 @@
 import * as THREE from 'three';
 
-class TriangleEngine extends THREE.BufferGeometry{
-    constructor(p1, p2, p3, afs = 1, aft = 1){
-        super();
-        this.p1 = new THREE.Vector3(p1[0], p1[1], p1[2]);
-        this.p2 = new THREE.Vector3(p2[0], p2[1], p2[2]);
-        this.p3 = new THREE.Vector3(p3[0], p3[1], p3[2]);
-        this.initBuffers();
-    }
+/**
+ * MyTriangle
+ * @constructor
+ * @param x1 - x coordinate vertex 1
+ * @param y1 - y coordinate vertex 1
+ * @param x2 - x coordinate vertex 2
+ * @param y2 - y coordinate vertex 2
+ * @param x3 - x coordinate vertex 3
+ * @param y3 - y coordinate vertex 3
+ * @param afs - afs texture coordinate
+ * @param aft - aft texture coordinate
+ */
+class TriangleEngine extends THREE.BufferGeometry {
+	constructor(x1, y1, z1, x2, y2, z2, x3, y3, z3, vertexColors,  afs = 1, aft = 1) {
+		super();
+		
+        this.p1 = new THREE.Vector3(x1, y1, z1)
+		this.p2 = new THREE.Vector3(x2, y2, z2)
+		this.p3 = new THREE.Vector3(x3, y3, z3)
+        this.initBuffers(vertexColors);
+	}
 
-    initBuffers(){
+	initBuffers(vertexColors) {
 
-        //CALCULATING NORMALS
+        //CALCULATING NORMALS 
         var vectorAx = this.p2.x - this.p1.x
 		var vectorAy = this.p2.y - this.p1.y
 		var vectorAz = this.p2.z - this.p1.z
@@ -23,10 +36,10 @@ class TriangleEngine extends THREE.BufferGeometry{
 		var crossProductX = vectorAy * vectorBz - vectorBy * vectorAz
 		var crossProductY = vectorBx * vectorAz - vectorAx * vectorBz
 		var crossProductZ = vectorAx * vectorBy - vectorBx * vectorAy
-
+		
 		var normal = new THREE.Vector3(crossProductX, crossProductY, crossProductZ)
         normal.normalize()
-        
+
         //TEXTURE COORDINATES
 		let a = this.p1.distanceTo(this.p2);
 		let b = this.p2.distanceTo(this.p3);
@@ -42,11 +55,11 @@ class TriangleEngine extends THREE.BufferGeometry{
 			...this.p3.toArray(),	//2
 
         ] );
-
+		
 		const indices = [
             0, 1, 2
         ];
-
+		
 		const normals = [
 			...normal.toArray(),
 			...normal.toArray(),
@@ -69,7 +82,9 @@ class TriangleEngine extends THREE.BufferGeometry{
         this.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
         this.setAttribute( 'normal', new THREE.Float32BufferAttribute( normals, 3 ) );
         this.setAttribute('uv', new THREE.Float32BufferAttribute( uvs, 2));
-    }
+		this.setAttribute( 'color', new THREE.Float32BufferAttribute( vertexColors, 4 ) );
+	}
+
 }
 
 export { TriangleEngine };
