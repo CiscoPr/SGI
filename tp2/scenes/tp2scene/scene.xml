@@ -207,6 +207,7 @@
                 <noderef id="entities"/>
                 <noderef id="save"/>
 
+
                 <pointlight id="saveLight" enabled="true"
                     color="1.0 1.0 1.0 1"
                     intensity="16.0"
@@ -265,6 +266,7 @@
                 <lodref id="flowerLod"/>
                 <primitive>
                     <rectangle xy1="0 0" xy2="20 20" />
+
                 </primitive>
             </children>
         </node>
@@ -356,6 +358,7 @@
             </children>
         </node>
 
+
 		<node id="column1">
             <transforms>
                 <translate value3="0.1 0.1 0.1"/>
@@ -387,6 +390,7 @@
             <transforms>
                 <translate value3="5.0 6.0 0.1" />
                 <scale value3="1.5 1.7 1.0" />
+
             </transforms>
 
             <materialref id="flowerBedApp" />
@@ -478,12 +482,50 @@
             <materialref id="floweyApp" />
 
             <children>
+                <noderef id="friendlyPellat1"/>
+                <noderef id="friendlyPellat2"/>
+                <noderef id="friendlyPellat3"/>
                 <primitive>
                     <rectangle xy1="0.0 0.0" xy2="3.0 3.0" />
                 </primitive>
             </children>
         </node>
 
+        <node id="friendlyPellat1">
+            <transforms>
+                <translate value3="-1.0 3.0 0.0" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <polygon radius="0.15" stacks="10" slices="10" color_c="1.0 1.0 1.0 1.0" color_p="0.1 0.1 0.1 1.1"/>
+                </primitive>
+            </children>
+        </node>
+
+        <node id="friendlyPellat2">
+            <transforms>
+                <translate value3="4.0 3.0 0.0" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <polygon radius="0.15" stacks="10" slices="10" color_c="1.0 1.0 1.0 1.0" color_p="0.1 0.1 0.1 1.1"/>
+                </primitive>
+            </children>
+        </node>
+
+        <node id="friendlyPellat3">
+            <transforms>
+                <translate value3="1.5 4.0 0.0" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <polygon radius="0.15" stacks="10" slices="10" color_c="1.0 1.0 1.0 1.0" color_p="0.1 0.1 0.1 1.1"/>
+                </primitive>
+            </children>
+        </node>
 
         <node id="save">
             <transforms>
