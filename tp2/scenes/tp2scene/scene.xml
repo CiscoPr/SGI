@@ -337,14 +337,14 @@
 
         <node id="plants2">
             <transforms>
-                <translate value3="2.5 5.0 0.1" />
+                <translate value3="3.0 6.0 0.1" />
             </transforms>
 
             <materialref id="plantsApp" />
 
             <children>
                 <primitive>
-                    <cylinder base="0.15" top="0.15" height="10.0" slices="20" stacks="20" capsclose="false"/>
+                    <cylinder base="0.15" top="0.15" height="8.0" slices="20" stacks="20" capsclose="false"/>
                 </primitive>
             </children>
         </node>
