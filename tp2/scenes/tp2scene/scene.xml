@@ -195,6 +195,17 @@
             twosided = "true"
         />
 
+        <material id="plantsApp"
+            emissive="0.0 0.0 0.0 1"
+            color="0.0 0.4 0.0 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            twosided = "true"
+            wireframe="true"
+        />
+
+
+
     </materials>
 
     <graph rootid="scene">
@@ -282,6 +293,8 @@
 
             <children>
                 <noderef id="door"/>
+                <noderef id="plants"/>
+                <noderef id="plants2"/>
                 <primitive>
                     <rectangle xy1="0 0" xy2="20 10" />
                 </primitive>
@@ -299,10 +312,40 @@
 
             <children>
                 <noderef id="door"/>
+                <noderef id="plants"/>
+                <noderef id="plants2"/>
                 <primitive>
                     <rectangle xy1="0 0" xy2="20 10" />
                 </primitive>
 
+            </children>
+        </node>
+
+        <node id="plants">
+            <transforms>
+                <translate value3="3.5 5.0 0.1" />
+            </transforms>
+
+            <materialref id="plantsApp" />
+
+            <children>
+                <primitive>
+                    <cylinder base="0.15" top="0.15" height="10.0" slices="20" stacks="20" capsclose="false"/>
+                </primitive>
+            </children>
+        </node>
+
+        <node id="plants2">
+            <transforms>
+                <translate value3="2.5 5.0 0.1" />
+            </transforms>
+
+            <materialref id="plantsApp" />
+
+            <children>
+                <primitive>
+                    <cylinder base="0.15" top="0.15" height="10.0" slices="20" stacks="20" capsclose="false"/>
+                </primitive>
             </children>
         </node>
 
