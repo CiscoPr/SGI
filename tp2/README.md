@@ -12,19 +12,15 @@
 
 - In this project, we resort to the scene graph structure and create a concise scene structure where groups of objects can be manipulated, whether by applying transformations or by changing the materials. We thus take full advantage of object hierarchies and heritage of properties. After parsing the XML file, we create a scene comprised of groups on three.js, by using recursive calls to apply a BFS-like algorithm that processes the information on the scene graph. In the end we render the root group of the scene, which contains all the other groups and objects.
 
-- Lods are used on the app trougth three.js, in order to optimize the rendering of the scene. Given the distance of the camera to a certain structure, the user might decide to show a less detailed version of it if it is further away or show it with more detail in case it is close for example;
+- In order to optimize the rendering of the scene, lods are used on the app trougth three.js. Given the distance of the camera to a certain structure, the user might decide to show a less detailed version of it if it is further away or show it with more detail in case it is close for example;
 
-- For advanced textures, We apply video textures, sky boxes, mipmaps and bumptextures, thus adding more dynamic alternatives to the use of textures in the scene;
+- For advanced textures, we apply video textures, sky boxes, mipmaps and bumptextures, thus adding more dynamic alternatives to the use of textures in the scene;
 
-- Wireframes?? Não sei o que isto tem de tao especial
+- We allow a large number of primitives to be drawn as wireframes if specified in the XML file.
 
-- We implement the polygon structure based on buffer geometry. This is applied to render objetcs that can be easily drawn using only triangles. Being one of the simplest strucutres, by writing data direccly into buffers, we can optimize the rendering of the scene;
+- We implement the polygon structure based on buffer geometry. This is applied to render objects that can be easily drawn using only triangles. Being one of the simplest structures and by writing data directly into buffers, we can optimize the rendering of the scene;
 
-- Interface?
-
--
-
-- Scene
+### Scene
   This scene represents one of the first areas from the indie game Undertale, reuniting various elements from it:ief description of the created scene
   - 2 walls with a repeated texture, bump map, associated to LOD's and that receive shadows
   - 1 plane with texture of an entrance door (taken from the game itself) which receives shadows
