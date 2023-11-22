@@ -31,7 +31,7 @@
   - 2 columns that were initially rectangles but both were changed to cylander primitives, both have textures and bump maps
   - 1 board with a bump map and which casts a shadow into the wall
   - 1 nurb corresponding to the golden flower bed with the "transparent" attribute and also has an associated bump map and a LOD
-  - 3 planes associated to materials also with the "transparent" attribute representing three different characters from the game (Frisk, Toriel and Flowey)
+  - 3 planes associated to materials also with the "transparent" attribute representing three different characters from the game (Frisk, Toriel and Flowey), which cast shadows
   - 1 plane with a video texture and the attribute "transparent" corresponding to the "Save Game" icon in the above mentioned game
   - 3 small polygons arround Flowey that correspond to an special attack from this creature in the game, in which it throws at the player several little white pellats
   - 2 green wireframes which represent vines plants that can be found thorughout the ruins in the game
@@ -43,9 +43,34 @@
   - GUI with 3 methods:
     - active camera: the user can change between the perspective camera and 4 different orthogonal cameras: **Right**, **Left**, **Top**, **Bottom**
     - show skybox: the user can choose to display the skybox or not
-    - turn on the lights: the user can turn on or off the different lights that were used (for a beautiful scenario the user can turn off the used lights and look at the skybox :)- To access the scene xml, click [here](scenes/tp2scene/scene.xml)
+    - turn on the lights: the user can turn on or off the different lights that were used (for a beautiful scenario the user can turn off the used lights and look at the skybox :)
+  - To access the scene xml, click [here](scenes/tp2scene/scene.xml)
 
-Here is a quic## Issues/Problems
+Here is a quick recap of the evolution of the project over time:
+<figure>
+  <img
+  src="screenshots/tp2_v1.png"
+  alt="Version1">
+  <figcaption align="center">Fig.01 - First Version </figcaption>
+</figure>
+
+<figure>
+  <img
+  src="screenshots/tp2_v2.png"
+  alt="Version1">
+  <figcaption align="center">Fig.02 - Second Version </figcaption>
+</figure>
+
+<figure>
+  <img
+  src="screenshots/tp2_v3.png"
+  alt="Version1">
+  <figcaption align="center">Fig.03 - Final Version </figcaption>
+</figure>
+
+
+
+## Issues/Problems
 
 - The GUI is not as complete as we wished for: we tried to implement methods that could change the Bump Scale of certain materials (which had associated bump maps). However, this was not possible due to both time restrictions and the complexity of this process;
 - Although we don't have manual mipmaps on the e XML scene, we still created methods that take care of them, in case they exist;
