@@ -185,6 +185,7 @@
 			color="1.0 0.5 1.2 1.0"
             specular="0 0 0 0"
             shininess="0"
+            twosided = "true"
         />
 
         <material id="flowerLodApp"
