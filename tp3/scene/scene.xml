@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-16" standalone="yes"?>
+<yaf>
+
+	<!-- Credits of the original file go to Group 1, class 1 of course LAIG school year 2013/2014, FEUP, University of Porto -->
+
+    <globals background="0 0 0 1" ambient="1.0 1.0 1.0 1" />
+
+    <fog color="0.0 0.0 0.0 0.8" near="0.0" far="100.0" />
+
+    <skybox
+       size="1000.0 1000.0 1000.0"
+       center="10.0 10.0 10.0"
+       emissive="0.0 0.0 0.0 1"  intensity="0"
+       front="scenes/tp2scene/textures/skybox.png" back="scenes/tp2scene/textures/skybox.png"
+       up="scenes/tp2scene/textures/skybox.png" down="scenes/tp2scene/textures/skybox.png"
+       left="scenes/tp2scene/textures/sky_up.png" right="scenes/tp2scene/textures/under_skybox.png" />
+
+    <cameras initial="cam1" >
+        <perspective id="cam1"
+            angle="60"
+            near="0.1"
+            far="1000"
+            location="20 20 10"
+            target="0 0.0 0" />
+
+        <orthogonal id="cam2"
+            near="20"
+            far="20"
+            location="5.0 5.0 5.0"
+            target="10.0 10.0 10.0"
+            left="20"
+            right="20"
+            bottom="20"
+            top="20" />
+    </cameras>
+
+    <!-- bloco de texturas. Este bloco tem de existir mas pode estar vazio, se nao forem usadas texturas -->
+    <textures>
+    </textures>
+
+    <materials>
+    </materials>
+
+    <graph rootid="scene">
+
+		<node id="scene">
+        </node>
+
+
+    </graph>
+</yaf>

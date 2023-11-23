@@ -1,5 +1,8 @@
 import * as THREE from 'three';
 import { MyAxis } from './MyAxis.js';
+import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
 
 /**
  *  This class contains the contents of out application
@@ -20,12 +23,12 @@ class MyContents {
    */
   init() {
     // create once
-    /*
+
     if (this.axis === null) {
       // create and attach the axis to the scene
       this.axis = new MyAxis(this);
       this.app.scene.add(this.axis);
-    }*/
+    }
 
     //-------------------------------------------------------------------------------
 
@@ -45,6 +48,16 @@ class MyContents {
     this.app.scene.add(ambientLight);
 
     //--------------------------------------------------------------------------------
+
+    const loader = new GLTFLoader().setPath('models/');
+    loader.load('tifa.glb', async (gltf) => {
+      const model = gltf.scene;
+      model.position.set(0, 0, 0);
+      model.scale.set(10.0, 10.0, 10.0);
+      this.app.scene.add(gltf.scene);
+    });
+
+
   }
 
 
