@@ -8,18 +8,18 @@
     <fog color="0.0 0.0 0.0 0.8" near="0.0" far="100.0" />
 
     <skybox
-       size="1000.0 1000.0 1000.0"
-       center="10.0 10.0 10.0"
+       size="3000.0 2000.0 3000.0"
+       center="0.0 990.0 0.0"
        emissive="0.0 0.0 0.0 1"  intensity="0"
-       front="scenes/tp2scene/textures/skybox.png" back="scenes/tp2scene/textures/skybox.png"
-       up="scenes/tp2scene/textures/skybox.png" down="scenes/tp2scene/textures/skybox.png"
-       left="scenes/tp2scene/textures/sky_up.png" right="scenes/tp2scene/textures/under_skybox.png" />
+       front="scene/textures/skybox/midgar.jpg" back="scene/textures/skybox/midgar.jpg"
+       up="scene/textures/skybox/midgar.jpg" down="scene/textures/skybox/midgar.jpg"
+       left="scene/textures/skybox/dark-clouds.jpg" right="scene/textures/skybox/midgar.jpg" />
 
     <cameras initial="cam1" >
         <perspective id="cam1"
             angle="60"
             near="0.1"
-            far="1000"
+            far="4000"
             location="20 20 10"
             target="0 0.0 0" />
 
@@ -44,6 +44,8 @@
     <graph rootid="scene">
 
 		<node id="scene">
+            <children>
+            </children>
         </node>
 
 
