@@ -58,6 +58,7 @@ class MyContents {
     const loader = new GLTFLoader().setPath('models/');
     loader.load('cloud.glb', async (gltf) => {
       const model = gltf.scene;
+      model.position.set(0, 2.5, 0);
       model.scale.set(10.0, 10.0, 10.0);
       this.app.scene.add(gltf.scene);
     });
@@ -65,7 +66,7 @@ class MyContents {
     const loader2 = new GLTFLoader().setPath('models/');
     loader.load('tifa.glb', async (gltf) => {
       const model = gltf.scene;
-      model.position.set(5, 0, 0);
+      model.position.set(5, 2.5, 0);
       model.scale.set(10.0, 10.0, 10.0);
       this.app.scene.add(gltf.scene);
     });
