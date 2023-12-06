@@ -4,7 +4,7 @@ import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MyEngine } from './engine/MyEngine.js';
 import { MyFileReader } from './parser/MyFileReader.js';
-
+import {MyTrack} from './components/MyTrack.js';
 
 /**
  *  This class contains the contents of out application
@@ -21,6 +21,9 @@ class MyContents {
 		this.reader.open("scene/scene.xml")
     this.engine = new MyEngine(app, this);
     this.engine.init();
+
+    // components
+    this.track = null;
 
   }
 
@@ -58,18 +61,22 @@ class MyContents {
     const loader = new GLTFLoader().setPath('models/');
     loader.load('cloud.glb', async (gltf) => {
       const model = gltf.scene;
-      model.position.set(0, 2.5, 0);
-      model.scale.set(10.0, 10.0, 10.0);
+      model.position.set(-1, 6, 0);
+      model.scale.set(20.0, 20.0, 20.0);
       this.app.scene.add(gltf.scene);
     });
 
     const loader2 = new GLTFLoader().setPath('models/');
     loader.load('tifa.glb', async (gltf) => {
       const model = gltf.scene;
-      model.position.set(5, 2.5, 0);
-      model.scale.set(10.0, 10.0, 10.0);
+      model.position.set(5, 6, 0);
+      model.scale.set(20.0, 20.0, 20.0);
       this.app.scene.add(gltf.scene);
     });
+
+
+    //build components
+    this.track = new MyTrack(this.app.scene);
 
 
   }
