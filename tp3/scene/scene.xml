@@ -9,11 +9,11 @@
 
     <skybox
        size="15000.0 10000.0 15000.0"
-       center="0.0 4500.0 0.0"
+       center="0.0 4600.0 0.0"
        emissive="0.0 0.0 0.0 1"  intensity="0"
-       front="scene/textures/skybox/5.jpg" back="scene/textures/skybox/11.jpg"
-       up="scene/textures/skybox/6.jpg" down="scene/textures/skybox/4.jpg"
-       left="scene/textures/skybox/7.jpg" right="scene/textures/skybox/1.jpg" />
+       front="scene/textures/skybox/pz.jpeg" back="scene/textures/skybox/nz.png"
+       up="scene/textures/skybox/px.png" down="scene/textures/skybox/nx.jpeg"
+       left="scene/textures/skybox/py.png" right="scene/textures/skybox/ny.png" />
 
     <cameras initial="cam1" >
         <perspective id="cam1"

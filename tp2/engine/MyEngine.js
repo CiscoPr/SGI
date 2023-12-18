@@ -100,6 +100,7 @@ class MyEngine  {
         const leftTex = skybox.left;
         const rightTex = skybox.right;
         const frontTex = skybox.front;
+        const backTex = skybox.back;
 
         const skyboxGeometry = new THREE.BoxGeometry(skybox.size[0], skybox.size[1], skybox.size[2]);
         const skyboxMaterials = [
@@ -108,7 +109,7 @@ class MyEngine  {
             new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load(leftTex), side: THREE.BackSide, fog:false, emissive: emissive, emissiveIntensity: intensity }),
             new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load(rightTex), side: THREE.BackSide, fog:false, emissive: emissive, emissiveIntensity: intensity }),
             new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load(frontTex), side: THREE.BackSide, fog:false, emissive: emissive, emissiveIntensity: intensity }),
-            new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load(frontTex), side: THREE.BackSide, fog:false, emissive: emissive, emissiveIntensity: intensity }),
+            new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load(backTex), side: THREE.BackSide, fog:false, emissive: emissive, emissiveIntensity: intensity }),
         ];
 
         const skyboxMesh = new THREE.Mesh(skyboxGeometry, skyboxMaterials);
