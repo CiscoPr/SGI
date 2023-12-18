@@ -8,11 +8,11 @@
     <!--fog color="1.0 1.0 1.0 0.8" near="0.0" far="100.0" /-->
 
     <skybox
-       size="15000.0 10000.0 15000.0"
-       center="0.0 4600.0 0.0"
+       size="20000.0 15000.0 20000.0"
+       center="0.0 6000.0 0.0"
        emissive="0.0 0.0 0.0 1"  intensity="0"
-       front="scene/textures/skybox/pz.jpeg" back="scene/textures/skybox/nz.png"
-       up="scene/textures/skybox/px.png" down="scene/textures/skybox/nx.jpeg"
+       front="scene/textures/skybox/pz.png" back="scene/textures/skybox/nz.png"
+       up="scene/textures/skybox/px.png" down="scene/textures/skybox/nx.png"
        left="scene/textures/skybox/py.png" right="scene/textures/skybox/ny.png" />
 
     <cameras initial="cam1" >
@@ -20,7 +20,7 @@
             angle="60"
             near="0.1"
             far="50000"
-            location="20 20 10"
+            location="-1000 1000 -1000"
             target="0 0.0 0" />
 
         <orthogonal id="cam2"
@@ -46,8 +46,8 @@
         specular="0 0 0 0"
         shininess="0"
         textureref="terrainTex"
-        texlength_s = "100.0"
-        texlength_t = "100.0"
+        texlength_s = "200.0"
+        texlength_t = "200.0"
         twosided = "true"
         transparent="false"
         bumpref="scene/textures/elements/terrain.png"
