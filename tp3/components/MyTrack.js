@@ -8,7 +8,7 @@ class MyTrack {
     constructor(scene) {
         this.scene = scene;
         this.segments = 100;
-        this.width = 10;
+        this.width = 60;
         this.textureRepeat = 10;
         this.showWireframe = false;
         this.showMesh = true;
@@ -16,9 +16,9 @@ class MyTrack {
         this.closedCurve = false;
 
         this.path = new THREE.CatmullRomCurve3([
-            new THREE.Vector3(-50, 0.1, 50),
-            new THREE.Vector3(0, 0.1, 0),
-            new THREE.Vector3(50, 0.1, 50)
+            new THREE.Vector3(-200, 0, 200),
+            new THREE.Vector3(0, 0, 0),
+            new THREE.Vector3(200, 0, 200)
         ]);
 
         this.buildCurve();
@@ -85,7 +85,8 @@ class MyTrack {
         this.curve.add(this.line);
 
         this.curve.rotateZ(Math.PI);
-        this.curve.scale.set(1,0.2,1);
+        this.curve.scale.set(1, 0.2, 1);
+        this.curve.position.set(0, -5.1, 0);
         this.scene.add(this.curve);
     }
 }
