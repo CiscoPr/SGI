@@ -5,6 +5,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MyEngine } from './engine/MyEngine.js';
 import { MyFileReader } from './parser/MyFileReader.js';
 import {MyTrack} from './components/MyTrack.js';
+import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 
 /**
  *  This class contains the contents of out application
@@ -25,6 +26,12 @@ class MyContents {
     // components
     this.track = null;
 
+    this.bottomRightWheel = null;
+    this.bottomLeftWheel = null;
+    this.topRightWheel = null;
+    this.topLeftWheel = null;
+    this.carCloudWheels= new THREE.Group();
+    this.carCloud = new THREE.Group();
   }
 
   /**
@@ -58,15 +65,18 @@ class MyContents {
 
     //--------------------------------------------------------------------------------
 
+    const gridHelper = new THREE.GridHelper(100, 100);
+    gridHelper.position.y = 0.5;
+    this.app.scene.add(gridHelper);
+
     const loader = new GLTFLoader().setPath('models/');
     loader.load('cloud.glb', async (gltf) => {
       const model = gltf.scene;
-      model.position.set(-1, 6, 0);
+      model.position.set(20, 12, 0);
       model.scale.set(20.0, 20.0, 20.0);
       this.app.scene.add(gltf.scene);
     });
 
-    const loader2 = new GLTFLoader().setPath('models/');
     loader.load('tifa.glb', async (gltf) => {
       const model = gltf.scene;
       model.position.set(5, 6, 0);
@@ -74,10 +84,31 @@ class MyContents {
       this.app.scene.add(gltf.scene);
     });
 
+    loader.load('carCloud.glb', async (gltf) => {
+      const model = gltf.scene;
+      model.position.set(20, 6, 0);
+      model.scale.set(40.0, 40.0, 40.0);
+      this.bottomRightWheel = model.getObjectByName('bottomRightWheel');
+      this.bottomLeftWheel = model.getObjectByName('bottomLeftWheel');
+      this.topRightWheel = model.getObjectByName('topRightWheel');
+      this.topLeftWheel = model.getObjectByName('topLeftWheel');
+      this.carCloudWheels.add(this.bottomRightWheel);
+      this.carCloudWheels.add(this.bottomLeftWheel);
+      this.carCloudWheels.add(this.topRightWheel);
+      this.carCloudWheels.add(this.topLeftWheel);
+      this.carCloudWheels.scale.set(0.04, 0.04, 0.04);
+      this.carCloudWheels.position.set(20, 6, 0);
+      this.carCloud.add(this.carCloudWheels);
+      this.carCloud.add(model);
+      this.app.scene.add(this.carCloud);
+
+    });
+
+
 
     //build components
     this.track = new MyTrack(this.app.scene);
-    
+
 
 
   }
@@ -146,6 +177,12 @@ class MyContents {
     }
 
     update() {
+        const time = (Date.now() % 6000) / 6000;
+        for (let i = 0; i < this.carCloudWheels.children.length; i++) {
+          const wheel = this.carCloudWheels.children[i];
+          wheel.center = new THREE.Vector3(0, 0, 0);
+          wheel.rotation.x = time * Math.PI * 2;
+        }
 
     }
 }
