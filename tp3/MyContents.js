@@ -74,7 +74,7 @@ class MyContents {
       const model = gltf.scene;
       model.position.set(20, 12, 0);
       model.scale.set(20.0, 20.0, 20.0);
-      this.app.scene.add(gltf.scene);
+      this.carCloud.add(model);
     });
 
     loader.load('tifa.glb', async (gltf) => {
@@ -183,7 +183,6 @@ class MyContents {
           wheel.center = new THREE.Vector3(0, 0, 0);
           wheel.rotation.x = time * Math.PI * 2;
         }
-
     }
 }
 
