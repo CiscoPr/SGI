@@ -6,6 +6,7 @@ import { MyEngine } from './engine/MyEngine.js';
 import { MyFileReader } from './parser/MyFileReader.js';
 import {MyTrack} from './components/MyTrack.js';
 import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
+import { CarController } from './controller/CarController.js';
 
 /**
  *  This class contains the contents of out application
@@ -32,6 +33,8 @@ class MyContents {
     this.topLeftWheel = null;
     this.carCloudWheels= new THREE.Group();
     this.carCloud = new THREE.Group();
+    this.spotLight = null;
+    this.carControls = new CarController(this.carCloud, this.app);
   }
 
   /**
@@ -48,16 +51,6 @@ class MyContents {
 
     //-------------------------------------------------------------------------------
 
-    // add a point light on top of the model
-    const pointLight = new THREE.PointLight(0xffffff, 500, 0);
-    pointLight.position.set(0, 20, 0);
-    this.app.scene.add(pointLight);
-    // add a point light helper for the previous point light
-    const sphereSize = 0.5;
-    const pointLightHelper = new THREE.PointLightHelper(pointLight, sphereSize);
-    this.app.scene.add(pointLightHelper);
-
-    //-------------------------------------------------------------------------------
 
     // add an ambient light
     const ambientLight = new THREE.AmbientLight(0x555555);
@@ -72,6 +65,9 @@ class MyContents {
     const loader = new GLTFLoader().setPath('models/');
     loader.load('cloud.glb', async (gltf) => {
       const model = gltf.scene;
+      model.traverse(function (object){
+        if (object.isMesh) object.castShadow = true;
+      });
       model.position.set(20, 12, 0);
       model.scale.set(20.0, 20.0, 20.0);
       this.carCloud.add(model);
@@ -79,6 +75,9 @@ class MyContents {
 
     loader.load('tifa.glb', async (gltf) => {
       const model = gltf.scene;
+      model.traverse(function (object){
+        if (object.isMesh) object.castShadow = true;
+      });
       model.position.set(5, 6, 0);
       model.scale.set(20.0, 20.0, 20.0);
       this.app.scene.add(gltf.scene);
@@ -86,6 +85,10 @@ class MyContents {
 
     loader.load('carCloud.glb', async (gltf) => {
       const model = gltf.scene;
+      model.traverse(function (object){
+        if (object.isMesh) object.castShadow = true;
+      }
+      );
       model.position.set(20, 6, 0);
       model.scale.set(40.0, 40.0, 40.0);
       this.bottomRightWheel = model.getObjectByName('bottomRightWheel');
@@ -101,7 +104,28 @@ class MyContents {
       this.carCloud.add(this.carCloudWheels);
       this.carCloud.add(model);
       this.app.scene.add(this.carCloud);
+    //--------------------------------------------------------------------------------
 
+
+      // add a point light on the back of the model
+      const pointLightBack = new THREE.PointLight(0xffffff, 900, 20);
+      pointLightBack.position.set(this.carCloudWheels.position.x, this.carCloudWheels.position.y + 10, this.carCloudWheels.position.z-5);
+      this.app.scene.add(pointLightBack);
+      // add a point light helper for the previous point light
+      const sphereSizeBack = 0.5;
+      const pointLightBackHelper = new THREE.PointLightHelper(pointLightBack, sphereSizeBack);
+      //this.app.scene.add(pointLightBackHelper);
+
+      // add a point light on th front of the model
+      const pointLightFront = new THREE.PointLight(0xffffff, 900, 20);
+      pointLightFront.position.set(this.carCloudWheels.position.x, this.carCloudWheels.position.y + 10, this.carCloudWheels.position.z+15);
+      this.app.scene.add(pointLightFront);
+      // add a point light helper for the previous point light
+      const sphereSizeFront = 0.5;
+      const pointLightFrontHelper = new THREE.PointLightHelper(pointLightFront, sphereSizeFront);
+      //this.app.scene.add(pointLightFrontHelper);
+
+      //-------------------------------------------------------------------------------
     });
 
 
@@ -176,7 +200,31 @@ class MyContents {
         }
     }
 
+
+    controlKeys(model, app){
+        const keysPressed = {};
+        document.addEventListener('keydown', (e) => {
+            console.log(e.key);
+            keysPressed[e.key.toLowerCase()] = true;
+            if(keysPressed['w']){
+                this.carControls.setState('accelerate');
+            }
+            if(keysPressed['s']){
+                this.carControls.setState('decelerate');
+            }
+        }, false);
+        document.addEventListener('keyup', (e) => {
+            console.log(e.key);
+            keysPressed[e.key.toLowerCase()] = false;
+        }, false);
+
+
+    }
+
+
+
     update() {
+      this.controlKeys(this.carCloud, this.app);
         const time = (Date.now() % 6000) / 6000;
         for (let i = 0; i < this.carCloudWheels.children.length; i++) {
           const wheel = this.carCloudWheels.children[i];

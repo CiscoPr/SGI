@@ -41,7 +41,7 @@ class MyEngine  {
         this.dealWithSkybox();
         this.dealWithFog();
         this.dealWithRoot();
-        this.dealWithCameras();
+        //this.dealWithCameras();
     }
 
 

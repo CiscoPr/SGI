@@ -71,12 +71,10 @@ class MyApp  {
         const aspect = window.innerWidth / window.innerHeight;
 
         // Create a basic perspective camera
-        const perspective1 = new THREE.PerspectiveCamera( 75, aspect, 0.1, 10000 )
-        perspective1.position.set(10,10,3)
-        const perspective2 = new THREE.PerspectiveCamera( 75, aspect, 0.1, 10000 )
-        perspective2.position.set(1,5,9)
+        const perspective1 = new THREE.PerspectiveCamera( 75, aspect, 0.1, 50000 )
+        //perspective1.position.set(4100, 100, 3200)
+        perspective1.position.set(5, 10, 20)
         this.cameras['Perspective'] = perspective1
-        this.cameras['Perspective2'] = perspective2
 
         // defines the frustum size for the orthographic cameras
         const left = -this.frustumSize / 2 * aspect
@@ -199,9 +197,10 @@ class MyApp  {
             this.contents.update()
         }
 
+
+        this.controls.target = this.contents.carCloudWheels.position;
         // required if controls.enableDamping or controls.autoRotate are set to true
         this.controls.update();
-
         // render the scene
         this.renderer.render(this.scene, this.activeCamera);
 
@@ -211,6 +210,8 @@ class MyApp  {
         this.lastCameraName = this.activeCameraName
         this.stats.end()
     }
+
+
 }
 
 
