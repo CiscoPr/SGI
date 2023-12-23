@@ -16,25 +16,7 @@ class CarController {
         // Add event listeners for keypresses
         window.addEventListener('keydown', (e) => this.handleKeyDown(e));
         window.addEventListener('keyup', (e) => this.handleKeyUp(e));
-        /*
-              // add a point light on the back of the model
-      this.pointLightBack = new THREE.PointLight(0xffffff, 900, 20);
-      this.pointLightBack.position.set(this.carCloudWheels.position.x, this.carCloudWheels.position.y + 10, this.carCloudWheels.position.z-5);
-      this.app.scene.add(this.pointLightBack);
-      // add a point light helper for the previous point light
-      //const sphereSizeBack = 0.5;
-      //const pointLightBackHelper = new THREE.PointLightHelper(pointLightBack, sphereSizeBack);
-      //this.app.scene.add(pointLightBackHelper);
 
-      // add a point light on th front of the model
-      this.pointLightFront = new THREE.PointLight(0xffffff, 900, 20);
-      this.pointLightFront.position.set(this.carCloudWheels.position.x, this.carCloudWheels.position.y + 10, this.carCloudWheels.position.z+15);
-      this.app.scene.add(this.pointLightFront);
-      // add a point light helper for the previous point light
-      const sphereSizeFront = 0.5;
-      const pointLightFrontHelper = new THREE.PointLightHelper(pointLightFront, sphereSizeFront);
-      //this.app.scene.add(pointLightFrontHelper);
-        */
     }
 
     handleKeyDown(event) {
