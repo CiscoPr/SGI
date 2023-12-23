@@ -34,7 +34,7 @@ class MyContents {
     this.carCloudWheels= new THREE.Group();
     this.carCloud = new THREE.Group();
     this.spotLight = null;
-    this.carControls = new CarController(this.carCloud, this.app);
+    this.carController = new CarController(this.carCloud);
   }
 
   /**
@@ -103,29 +103,14 @@ class MyContents {
       this.carCloudWheels.position.set(20, 6, 0);
       this.carCloud.add(this.carCloudWheels);
       this.carCloud.add(model);
-      this.app.scene.add(this.carCloud);
-    //--------------------------------------------------------------------------------
-
-
-      // add a point light on the back of the model
       const pointLightBack = new THREE.PointLight(0xffffff, 900, 20);
       pointLightBack.position.set(this.carCloudWheels.position.x, this.carCloudWheels.position.y + 10, this.carCloudWheels.position.z-5);
-      this.app.scene.add(pointLightBack);
-      // add a point light helper for the previous point light
-      const sphereSizeBack = 0.5;
-      const pointLightBackHelper = new THREE.PointLightHelper(pointLightBack, sphereSizeBack);
-      //this.app.scene.add(pointLightBackHelper);
-
-      // add a point light on th front of the model
+      this.carCloud.add(pointLightBack);
       const pointLightFront = new THREE.PointLight(0xffffff, 900, 20);
       pointLightFront.position.set(this.carCloudWheels.position.x, this.carCloudWheels.position.y + 10, this.carCloudWheels.position.z+15);
-      this.app.scene.add(pointLightFront);
-      // add a point light helper for the previous point light
-      const sphereSizeFront = 0.5;
-      const pointLightFrontHelper = new THREE.PointLightHelper(pointLightFront, sphereSizeFront);
-      //this.app.scene.add(pointLightFrontHelper);
+      this.carCloud.add(pointLightFront);
+      this.app.scene.add(this.carCloud);
 
-      //-------------------------------------------------------------------------------
     });
 
 
@@ -201,30 +186,10 @@ class MyContents {
     }
 
 
-    controlKeys(model, app){
-        const keysPressed = {};
-        document.addEventListener('keydown', (e) => {
-            console.log(e.key);
-            keysPressed[e.key.toLowerCase()] = true;
-            if(keysPressed['w']){
-                this.carControls.setState('accelerate');
-            }
-            if(keysPressed['s']){
-                this.carControls.setState('decelerate');
-            }
-        }, false);
-        document.addEventListener('keyup', (e) => {
-            console.log(e.key);
-            keysPressed[e.key.toLowerCase()] = false;
-        }, false);
-
-
-    }
-
 
 
     update() {
-      this.controlKeys(this.carCloud, this.app);
+        this.carController.update();
         const time = (Date.now() % 6000) / 6000;
         for (let i = 0; i < this.carCloudWheels.children.length; i++) {
           const wheel = this.carCloudWheels.children[i];

@@ -158,6 +158,26 @@ class MyApp  {
                 this.controls.object = this.activeCamera
             }
         }
+
+        // Update the camera position to follow the car
+        if (this.contents && this.contents.carController) {
+            const car = this.contents.carController.model;
+            const carPosition = car.position;
+            let offset = new THREE.Vector3(20, 20, -25); // Adjust this offset to get the desired camera position
+
+            // Rotate the offset by the car's rotation
+            offset.applyQuaternion(car.quaternion);
+
+            const cameraPosition = carPosition.clone().add(offset);
+            this.activeCamera.position.lerp(cameraPosition, 0.5); // Smoothly move the camera
+
+            // Make the camera look at the car
+            let lookAtOffset = new THREE.Vector3(20, 0, 25); // Adjust this offset to get the desired lookAt position
+            lookAtOffset.applyQuaternion(car.quaternion);
+            const lookAtPosition = carPosition.clone().add(lookAtOffset);
+            this.controls.target.lerp(lookAtPosition, 0.5); // Smoothly move the target
+            this.controls.update();
+        }
     }
 
     /**
@@ -198,9 +218,6 @@ class MyApp  {
         }
 
 
-        this.controls.target = this.contents.carCloudWheels.position;
-        // required if controls.enableDamping or controls.autoRotate are set to true
-        this.controls.update();
         // render the scene
         this.renderer.render(this.scene, this.activeCamera);
 
