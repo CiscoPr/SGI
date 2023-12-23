@@ -58,9 +58,9 @@ class MyContents {
 
     //--------------------------------------------------------------------------------
 
-    const gridHelper = new THREE.GridHelper(100, 100);
-    gridHelper.position.y = 0.5;
-    this.app.scene.add(gridHelper);
+    //const gridHelper = new THREE.GridHelper(100, 100);
+    //gridHelper.position.y = 0.5;
+    //this.app.scene.add(gridHelper);
 
     const loader = new GLTFLoader().setPath('models/');
     loader.load('cloud.glb', async (gltf) => {
@@ -80,7 +80,7 @@ class MyContents {
       });
       model.position.set(5, 6, 0);
       model.scale.set(20.0, 20.0, 20.0);
-      this.app.scene.add(gltf.scene);
+      //this.app.scene.add(gltf.scene);
     });
 
     loader.load('carCloud.glb', async (gltf) => {
@@ -109,6 +109,12 @@ class MyContents {
       const pointLightFront = new THREE.PointLight(0xffffff, 900, 20);
       pointLightFront.position.set(this.carCloudWheels.position.x, this.carCloudWheels.position.y + 10, this.carCloudWheels.position.z+15);
       this.carCloud.add(pointLightFront);
+      this.carCloud.position.set(4200, 25, -4000);
+      //go throught the group and cast and receive shadow
+      this.carCloud.traverse(function (object){
+        if (object.isMesh) object.castShadow = true;
+        if (object.isMesh) object.receiveShadow = true;
+      });
       this.app.scene.add(this.carCloud);
 
     });
@@ -189,13 +195,29 @@ class MyContents {
 
 
     update() {
-        this.carController.update();
-        const time = (Date.now() % 6000) / 6000;
-        for (let i = 0; i < this.carCloudWheels.children.length; i++) {
+      const [speed, turn] = this.carController.update();
+      const time = (Date.now() % 6000) / 6000;
+      const turnAngle = turn * Math.PI/2 ; // Adjust this value to get the desired turn angle
+
+      for (let i = 0; i < this.carCloudWheels.children.length; i++) {
           const wheel = this.carCloudWheels.children[i];
           wheel.center = new THREE.Vector3(0, 0, 0);
-          wheel.rotation.x = time * Math.PI * 2;
-        }
+          //wheel.rotation.x = time * Math.PI * 5 * speed;
+          console.log("my angle", turnAngle)
+          // If the wheel is a front wheel, set its y rotation based on the turn direction
+          if ((wheel.name === "topLeftWheel" || wheel.name === "topRightWheel")) {
+            if(turnAngle !== 0){
+              wheel.rotation.y = turnAngle;
+            }
+            else{
+              wheel.rotation.y = 0;
+              wheel.rotation.x = time * Math.PI * 5 * speed;
+            }
+          }else{
+            wheel.rotation.x = time * Math.PI * 5 * speed;
+          }
+      }
+
     }
 }
 

@@ -119,6 +119,8 @@ class MyTrack {
         );
 
         this.mesh = new THREE.Mesh(geometry, this.material);
+        this.mesh.castShadow = true;
+        this.mesh.receiveShadow = true;
         this.wireframe = new THREE.Mesh(geometry, this.wireframeMaterial);
 
         let points = this.path1.getPoints(this.segments);
@@ -136,6 +138,8 @@ class MyTrack {
         );
 
         this.mesh2 = new THREE.Mesh(geometry2, this.material);
+        this.mesh2.castShadow = true;
+        this.mesh2.receiveShadow = true;
         this.wireframe2 = new THREE.Mesh(geometry2, this.wireframeMaterial);
 
         let points2 = this.path2.getPoints(this.segments);
@@ -153,6 +157,8 @@ class MyTrack {
         );
 
         this.mesh3 = new THREE.Mesh(geometry3, this.material);
+        this.mesh3.castShadow = true;
+        this.mesh3.receiveShadow = true;
         this.wireframe3 = new THREE.Mesh(geometry3, this.wireframeMaterial);
 
         let points3 = this.path3.getPoints(this.segments);
@@ -170,6 +176,8 @@ class MyTrack {
         );
 
         this.mesh4 = new THREE.Mesh(geometry4, this.material);
+        this.mesh4.castShadow = true;
+        this.mesh4.receiveShadow = true;
         this.wireframe4 = new THREE.Mesh(geometry4, this.wireframeMaterial);
 
         let points4 = this.path4.getPoints(this.segments);
@@ -188,6 +196,8 @@ class MyTrack {
         );
 
         this.mesh5 = new THREE.Mesh(geometry5, this.material);
+        this.mesh5.castShadow = true;
+        this.mesh5.receiveShadow = true;
         this.wireframe5 = new THREE.Mesh(geometry5, this.wireframeMaterial);
 
         let points5 = this.path5.getPoints(this.segments);
@@ -206,6 +216,8 @@ class MyTrack {
         );
 
         this.mesh6 = new THREE.Mesh(geometry6, this.material);
+        this.mesh6.castShadow = true;
+        this.mesh6.receiveShadow = true;
         this.wireframe6 = new THREE.Mesh(geometry6, this.wireframeMaterial);
 
         let points6 = this.path6.getPoints(this.segments);
@@ -223,6 +235,8 @@ class MyTrack {
         );
 
         this.mesh7 = new THREE.Mesh(geometry7, this.material);
+        this.mesh7.castShadow = true;
+        this.mesh7.receiveShadow = true;
         this.wireframe7 = new THREE.Mesh(geometry7, this.wireframeMaterial);
 
         let points7 = this.path7.getPoints(this.segments);
@@ -240,6 +254,8 @@ class MyTrack {
         );
 
         this.mesh8 = new THREE.Mesh(geometry8, this.material);
+        this.mesh8.castShadow = true;
+        this.mesh8.receiveShadow = true;
         this.wireframe8 = new THREE.Mesh(geometry8, this.wireframeMaterial);
 
         let points8 = this.path8.getPoints(this.segments);
@@ -257,6 +273,8 @@ class MyTrack {
         );
 
         this.mesh9 = new THREE.Mesh(geometry9, this.material);
+        this.mesh9.castShadow = true;
+        this.mesh9.receiveShadow = true;
         this.wireframe9 = new THREE.Mesh(geometry9, this.wireframeMaterial);
 
         let points9 = this.path9.getPoints(this.segments);

@@ -65,6 +65,7 @@
 
         <node id="terrain" receiveshadows="true">
             <transforms>
+                <translate value3="0 15 0" />
                 <rotate value3="1.57 0.0 0.0" />
             </transforms>
 
