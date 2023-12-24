@@ -7,6 +7,7 @@ class CarController {
         this.maxSpeed = 10;
         this.acceleration = 0.5;
         this.accelerating = false;
+        this.sIsPressed = false;
         this.deceleration = 0.5;
         this.turnSpeed = 0;
         this.maxTurnSpeed = 0.03;
@@ -29,9 +30,10 @@ class CarController {
                 this.accelerate();
                 break;
             case 's':
-                this.accelerating = true;
-                this.direction = -1;
-                this.decelerate();
+                this.sIsPressed = true;
+                //this.accelerating = true;
+                //this.direction = -1;
+                this.sAccelerate();
                 break;
             case 'a':
                 this.turnDirection = 1;
@@ -51,8 +53,9 @@ class CarController {
                 this.decelerate();
                 break;
             case 's':
+                this.sIsPressed = false;
                 this.accelerating = false;
-                this.decelerate();
+                this.sDecelerate();
                 break;
             case 'a':
                 this.turning = false;
@@ -88,17 +91,44 @@ class CarController {
         }
     }
 
+    sAccelerate() {
+        console.log("sAccelerate", this.speed, this.turnSpeed)
+        if (this.speed > 0 && this.turnSpeed > 0) {
+            this.speed -= this.deceleration * 6;
+            this.turnSpeed -= 0.006;
+        }
+        else if(this.speed <= 0 && this.turnSpeed <= 0){
+            this.speed -= this.deceleration;
+            this.turnSpeed -= 0.001;
+            if(this.speed < -this.maxSpeed && this.turnSpeed < -this.maxTurnSpeed){
+                this.speed = -this.maxSpeed;
+                this.turnSpeed = -this.maxTurnSpeed;
+            }
+        }
+
+    }
+
+    sDecelerate() {
+        if (this.speed < 0 && this.turnSpeed < 0) {
+            this.speed += this.deceleration;
+            this.turnSpeed += 0.001;
+        }
+        else{
+            this.speed = 0;
+            this.turnSpeed = 0;
+        }
+    }
+
     decelerate() {
 
         if (this.speed > 0 && this.turnSpeed > 0) {
             this.speed -= this.deceleration;
             this.turnSpeed -= 0.001;
         }
-        else{
+        else if(!this.sIsPressed){
             this.speed = 0;
             this.turnSpeed = 0;
         }
-        console.log(this.turnSpeed);
     }
 
     turn() {
@@ -108,9 +138,15 @@ class CarController {
     update() {
         if (this.accelerating) {
             this.accelerate();
-        } else if (!this.turning && this.speed > 0) {
+        } else if (!this.accelerating && this.speed > 0) {
             this.decelerate();
+        }else if(this.sIsPressed){
+            this.sAccelerate();
         }
+        else if(!this.sIsPressed && this.speed < 0){
+            this.sDecelerate();
+        }
+
 
 
         if (this.turning) {
