@@ -203,7 +203,7 @@
 
         <node id="tube3">
             <transforms>
-                <translate value3="-8500 2500 5000" />
+                <translate value3="-10000 2500 5000" />
                 <rotate value3="0.0 -0.9 0.0" />
             </transforms>
 
@@ -231,7 +231,7 @@
             </children>
         </node>
 
-        <node id="walls">
+        <node id="walls" receiveshadows="true">
             <transforms>
                 <translate value3="0 1000 0" />
                 <rotate value3="1.57 0.0 0.0" />
