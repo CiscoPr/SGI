@@ -175,7 +175,7 @@ class MyApp  {
 
         // Update the camera position to follow the car
         if (this.contents && this.contents.carController) {
-            const car = this.contents.carController.model;
+            const car = this.contents.carModel.car;
             const carPosition = car.position;
             let offset = new THREE.Vector3(20, 20, -25);
 

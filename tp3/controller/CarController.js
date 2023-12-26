@@ -150,12 +150,33 @@ class CarController {
 
 
         if (this.turning) {
-            this.model.rotateY(this.turnDirection * this.turnSpeed);
+            this.model.car.rotateY(this.turnDirection * this.turnSpeed);
 
         }
 
-        this.model.translateZ(this.speed * this.direction);
-        return [this.speed, this.turnSpeed * this.turnDirection];
+        this.model.car.translateZ(this.speed * this.direction);
+
+        const time = (Date.now() % 6000) / 6000;
+		const turnAngle = this.turnSpeed * this.turnDirection * Math.PI/2 ; // Adjust this value to get the desired turn angle
+
+		for (let i = 0; i < this.model.carWheels.children.length; i++) {
+				const wheel = this.model.carWheels.children[i];
+				wheel.center = new THREE.Vector3(0, 0, 0);
+				//wheel.rotation.x = time * Math.PI * 5 * speed;
+				console.log("my angle", turnAngle)
+				// If the wheel is a front wheel, set its y rotation based on the turn direction
+				if ((wheel.name === "topLeftWheel" || wheel.name === "topRightWheel")) {
+					if(turnAngle !== 0){
+						wheel.rotation.y = turnAngle;
+					}
+					else{
+						wheel.rotation.y = 0;
+						wheel.rotation.x = time * Math.PI * 5 * this.speed;
+					}
+				} else {
+					wheel.rotation.x = time * Math.PI * 5 * this.speed;
+				}
+		}
 
     }
 }
