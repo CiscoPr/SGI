@@ -20,7 +20,7 @@
             angle="60"
             near="0.1"
             far="50000"
-            location="-1000 1000 -1000"
+            location="-30 10 30"
             target="0 0.0 0" />
 
         <orthogonal id="cam2"
@@ -63,8 +63,9 @@
             </children>
         </node>
 
-        <node id="terrain">
+        <node id="terrain" receiveshadows="true">
             <transforms>
+                <translate value3="0 15 0" />
                 <rotate value3="1.57 0.0 0.0" />
             </transforms>
 
