@@ -29,8 +29,6 @@ class MyTrack {
             new THREE.Vector3(-3000, 0, -5000),
             new THREE.Vector3(-4000, 0, -3500),
             new THREE.Vector3(-4000, 0, -2000),
-            //new THREE.Vector3(5000, 0, -5000),
-            //new THREE.Vector3(-3000, 0, -5000),
         ]);
 
 

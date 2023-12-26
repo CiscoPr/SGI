@@ -109,7 +109,7 @@ class MyContents {
       const pointLightFront = new THREE.PointLight(0xffffff, 900, 20);
       pointLightFront.position.set(this.carCloudWheels.position.x, this.carCloudWheels.position.y + 10, this.carCloudWheels.position.z+15);
       this.carCloud.add(pointLightFront);
-      this.carCloud.position.set(4200, 25, -4000);
+      this.carCloud.position.set(4100, 25, 0);
       //go throught the group and cast and receive shadow
       this.carCloud.traverse(function (object){
         if (object.isMesh) object.castShadow = true;
