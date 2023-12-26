@@ -122,6 +122,26 @@ class MyContents {
     //build components
     this.track = new MyTrack(this.app.scene);
 
+
+    loader.load('buildings.glb', async (gltf) => {
+      const model = gltf.scene;
+      model.traverse(function (object){
+        if (object.isMesh) object.castShadow = true;
+      });
+      model.rotation.y = -Math.PI/2;
+      model.position.set(6000, 150, -4500);
+      model.scale.set(600.0, 600.0, 600.0);
+      this.app.scene.add(model);
+      const model2 = gltf.scene.clone();
+      model2.traverse(function (object){
+        if (object.isMesh) object.castShadow = true;
+      });
+      model2.rotation.y = -Math.PI/2;
+      model2.position.set(-6000, 150, -4500);
+      model2.scale.set(600.0, 600.0, 600.0);
+      this.app.scene.add(model2);
+    });
+
   }
 
 

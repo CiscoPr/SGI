@@ -176,7 +176,7 @@ class MyApp  {
         if (this.contents && this.contents.carController) {
             const car = this.contents.carController.model;
             const carPosition = car.position;
-            let offset = new THREE.Vector3(20, 20, -25);
+            let offset = new THREE.Vector3(20, 15, -50);
 
             // Rotate the offset by the car's rotation
             offset.applyQuaternion(car.quaternion);
