@@ -183,7 +183,7 @@ class MyApp  {
             offset.applyQuaternion(car.quaternion);
 
             const cameraPosition = carPosition.clone().add(offset);
-            this.activeCamera.position.lerp(cameraPosition, 0.5); // Smoothly move the camera
+            this.activeCamera.position.lerp(cameraPosition, 1.0); // Smoothly move the camera
 
             // Make the camera look at the car
             let lookAtOffset = new THREE.Vector3(20, 0, 25);
