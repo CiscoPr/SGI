@@ -38,6 +38,8 @@ class ComponentsEngine  {
                 return this.buildSkybox(material);
             case "polygon":
                 return this.buildPolygon();
+            case "torus":
+                return this.buildTorus(material);
             default:
                 console.error("Geometry type not found: ", this.params.subtype);
                 return;
@@ -279,6 +281,31 @@ class ComponentsEngine  {
         }
 
         return group;
+    }
+
+    buildTorus(material) {
+        const radius = this.params.representations[0].radius;
+        const tube = this.params.representations[0].tube;
+        const radialSegments = this.params.representations[0].radialSegments;
+        const tubularSegments = this.params.representations[0].tubularSegments;
+        const arc = this.params.representations[0].arc;
+
+        const torusGeometry = new THREE.TorusGeometry(radius, tube, radialSegments, tubularSegments, arc);
+
+        let torusMesh;
+
+        if (material == null) torusMesh = new THREE.Mesh(torusGeometry);
+        else torusMesh = new THREE.Mesh(torusGeometry, material);
+
+        const castShadowFlag = this.params.castShadows;
+        const receiveShadowFlag = this.params.receiveShadows;
+        torusMesh.castShadow = castShadowFlag;
+        torusMesh.receiveShadow = receiveShadowFlag;
+
+        const torus = new THREE.LOD();
+        torus.addLevel(torusMesh, this.params.representations[0].distance);
+
+        return torus;
     }
 
 }

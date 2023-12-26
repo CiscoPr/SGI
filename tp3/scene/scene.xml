@@ -8,7 +8,7 @@
     <!--fog color="1.0 1.0 1.0 0.8" near="0.0" far="100.0" /-->
 
     <skybox
-       size="20000.0 15000.0 20000.0"
+       size="25000.0 20000.0 25000.0"
        center="0.0 6000.0 0.0"
        emissive="0.0 0.0 0.0 1"  intensity="0"
        front="scene/textures/skybox/pz.png" back="scene/textures/skybox/nz.png"
@@ -37,6 +37,8 @@
     <!-- bloco de texturas. Este bloco tem de existir mas pode estar vazio, se nao forem usadas texturas -->
     <textures>
         <texture id="terrainTex" filepath="scene/textures/elements/terrain.png"/>
+        <texture id="shinraTex" filepath="scene/textures/elements/shinra.png"/>
+        <texture id="wallsTex" filepath="scene/textures/elements/walls.png"/>
     </textures>
 
     <materials>
@@ -53,6 +55,28 @@
         bumpref="scene/textures/elements/terrain.png"
         bumpscale="0.2"
         />
+
+        <material id="shinraApp"
+        emissive="0.0 0.0 0.0 1"
+        color="0.8 0.8 0.8 1.0"
+        specular="0 0 0 0"
+        shininess="0"
+        textureref="shinraTex"
+        twosided = "true"
+        transparent="false"
+        bumpscale="0.2"
+        />
+
+        <material id="wallsApp"
+        emissive="0.0 0.0 0.0 1"
+        color="0.8 0.8 0.8 1.0"
+        specular="0 0 0 0"
+        shininess="0"
+        textureref="wallsTex"
+        twosided = "true"
+        bumpref="scene/textures/elements/wallsbump.png"
+        bumpscale="0.2"
+        />
     </materials>
 
     <graph rootid="scene">
@@ -60,6 +84,66 @@
 		<node id="scene">
             <children>
                 <noderef id="terrain" />
+                <noderef id="tubes"/>
+                <noderef id="walls"/>
+
+                <pointlight id="tube1Light" enabled="true"
+                color="1.0 1.0 1.0 1"
+                intensity="50.0"
+                distance="5000"
+                decay="0.3"
+                castshadow="true"
+                position="5500 6000 -10000"
+                shadowfar = "1000"
+                shadowmapsize = "1024"
+                />
+
+                <pointlight id="tube2Light" enabled="true"
+                color="1.0 1.0 1.0 1"
+                intensity="50.0"
+                distance="7000"
+                decay="0.2"
+                castshadow="true"
+                position="-8000 8500 -9000"
+                shadowfar = "1000"
+                shadowmapsize = "1024"
+                />
+
+                <pointlight id="tube3Light" enabled="true"
+                color="1.0 1.0 1.0 1"
+                intensity="50.0"
+                distance="7000"
+                decay="0.2"
+                castshadow="true"
+                position="-8000 8500 5500"
+                shadowfar = "1000"
+                shadowmapsize = "1024"
+                />
+
+                <pointlight id="tube4Light" enabled="true"
+                color="1.0 1.0 1.0 1"
+                intensity="50.0"
+                distance="5000"
+                decay="0.3"
+                castshadow="true"
+                position="9500 6000 5000"
+                shadowfar = "1000"
+                shadowmapsize = "1024"
+                />
+
+                <pointlight id="midgarLight" enabled="true"
+                color="1.0 1.0 1.0 1"
+                intensity="45.0"
+                distance="9000"
+                decay="0.2"
+                castshadow="true"
+                position="500 7000 10000"
+                shadowfar = "1000"
+                shadowmapsize = "1024"
+                />
+
+
+
             </children>
         </node>
 
@@ -73,11 +157,92 @@
 
             <children>
                 <primitive>
-                    <rectangle xy1="9000.0 9000.0" xy2="-9000.0 -9000.0" />
+                    <rectangle xy1="15000.0 15000.0" xy2="-15000.0 -15000.0" />
                 </primitive>
             </children>
         </node>
 
+        <node id="tubes">
+            <children>
+                <noderef id="tube1" />
+                <noderef id="tube2"/>
+                <noderef id="tube3"/>
+                <noderef id="tube4"/>
+            </children>
+        </node>
+
+        <node id="tube1">
+            <transforms>
+                <translate value3="5500 2500 -10000" />
+                <rotate value3="0.0 2.50 0.0" />
+            </transforms>
+
+            <materialref id="shinraApp" />
+
+            <children>
+                <primitive>
+                    <cylinder base="3000" top="2500" height="5000.0" slices="20" stacks="20" capsclose="false"/>
+                </primitive>
+            </children>
+        </node>
+
+        <node id="tube2">
+            <transforms>
+                <translate value3="-8000 2500 -9000" />
+                <rotate value3="0.0 -2.50 0.0" />
+            </transforms>
+
+            <materialref id="shinraApp" />
+
+            <children>
+                <primitive>
+                    <cylinder base="3000" top="2500" height="5000.0" slices="20" stacks="20" capsclose="false"/>
+                </primitive>
+            </children>
+        </node>
+
+        <node id="tube3">
+            <transforms>
+                <translate value3="-8500 2500 5000" />
+                <rotate value3="0.0 -0.9 0.0" />
+            </transforms>
+
+            <materialref id="shinraApp" />
+
+            <children>
+                <primitive>
+                    <cylinder base="3000" top="2500" height="5000.0" slices="20" stacks="20" capsclose="false"/>
+                </primitive>
+            </children>
+        </node>
+
+        <node id="tube4">
+            <transforms>
+                <translate value3="9500 2500 5000" />
+                <rotate value3="0.0 0.9 0.0" />
+            </transforms>
+
+            <materialref id="shinraApp" />
+
+            <children>
+                <primitive>
+                    <cylinder base="3000" top="2500" height="5000.0" slices="20" stacks="20" capsclose="false"/>
+                </primitive>
+            </children>
+        </node>
+
+        <node id="walls">
+            <transforms>
+                <translate value3="0 1000 0" />
+                <rotate value3="1.57 0.0 0.0" />
+            </transforms>
+            <materialref id="wallsApp" />
+            <children>
+                <primitive>
+                    <torus radius="12000.0" tube="2000.0" />
+                </primitive>
+            </children>
+        </node>
 
     </graph>
 </yaf>

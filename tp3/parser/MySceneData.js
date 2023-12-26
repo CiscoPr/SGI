@@ -115,6 +115,13 @@ class MySceneData  {
             {name: "distance", type: "float", required: false, default: 0.0}, // The distance at which to display this level of detail. Default 0.0.
 		]
 
+        this.descriptors["torus"] = [
+            {name: "radius", type: "float", required: false, default: 1.0},
+            {name: "tube", type: "float", required: false, default: 0.4},
+            {name: "arc", type: "float", required: false, default: 2 * Math.PI},
+            {name: "radialsegments", type: "integer", required: false, default: 12},
+            {name: "tubularsegments", type: "integer", required: false, default: 48},
+        ]
         /*
             In the following primitives, distance is to be used with LODs (later classes)
         */
@@ -241,7 +248,7 @@ class MySceneData  {
 
         this.primaryNodeIds = ["globals", "fog", "skybox" ,"textures", "materials", "cameras", "graph"]
 
-        this.primitiveIds = ["cylinder", "rectangle", "triangle", "sphere", "nurbs" , "box", "model3d", "skybox", "lod", "polygon" ]
+        this.primitiveIds = ["cylinder", "rectangle", "triangle", "sphere", "nurbs" , "box", "model3d", "skybox", "lod", "polygon", "torus" ]
     }
 
     createCustomAttributeIfNotExists(obj) {

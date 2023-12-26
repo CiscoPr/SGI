@@ -73,8 +73,7 @@ class MyApp  {
 
         // Create a basic perspective camera
         const perspective1 = new THREE.PerspectiveCamera( 75, aspect, 0.1, 50000 )
-        //perspective1.position.set(4100, 100, 3200)
-        perspective1.position.set(5, 10, 20)
+        perspective1.position.set(4100, 100, 3200)
         this.cameras['Perspective'] = perspective1
 
         // defines the frustum size for the orthographic cameras
@@ -156,7 +155,6 @@ class MyApp  {
             this.lastCameraName = this.activeCameraName;
             this.activeCamera = this.cameras[this.activeCameraName]
             document.getElementById("camera").innerHTML = this.activeCameraName
-
             // call on resize to update the camera aspect ratio
             // among other things
             this.onResize()
@@ -173,6 +171,7 @@ class MyApp  {
             }
         }
 
+        /*
         // Update the camera position to follow the car
         if (this.contents && this.contents.carController) {
             const car = this.contents.carController.model;
@@ -192,6 +191,7 @@ class MyApp  {
             this.controls.target.lerp(lookAtPosition, 0.5); // Smoothly move the target
             this.controls.update();
         }
+        */
     }
 
     /**
