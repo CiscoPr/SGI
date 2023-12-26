@@ -5,6 +5,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MyEngine } from './engine/MyEngine.js';
 import { MyFileReader } from './parser/MyFileReader.js';
 import {MyTrack} from './components/MyTrack.js';
+import { MyFireworks } from './components/MyFireworks.js';
 
 /**
  *  This class contains the contents of out application
@@ -24,7 +25,7 @@ class MyContents {
 
     // components
     this.track = null;
-
+    this.fireworks = null;
   }
 
   /**
@@ -77,9 +78,13 @@ class MyContents {
 
     //build components
     this.track = new MyTrack(this.app.scene);
+    this.fireworks = new MyFireworks(this.app.scene);
+    this.fireworks.init();
     
-
-
+    
+    
+    //this.fireworks.remove();
+    //this.fireworks = null;
   }
 
 
@@ -146,7 +151,7 @@ class MyContents {
     }
 
     update() {
-
+        if (this.fireworks) this.fireworks.update();
     }
 }
 
