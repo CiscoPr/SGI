@@ -84,6 +84,8 @@ class MyTrack {
         );
 
         this.mesh = new THREE.Mesh(geometry, this.material);
+        this.mesh.castShadow = true;
+        this.mesh.receiveShadow = true;
         this.wireframe = new THREE.Mesh(geometry, this.wireframeMaterial);
 
         let points = this.path1.getPoints(this.segments);
@@ -103,9 +105,6 @@ class MyTrack {
         this.curve.add(this.mesh);
         this.curve.add(this.wireframe);
         this.curve.add(this.line);
-
-
-
 
 
         this.curve.rotateZ(Math.PI);

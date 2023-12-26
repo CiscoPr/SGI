@@ -68,15 +68,14 @@ class MyApp  {
      * initializes all the cameras
      */
     initCameras() {
+        const listener = new THREE.AudioListener();
         const aspect = window.innerWidth / window.innerHeight;
 
         // Create a basic perspective camera
-        const perspective1 = new THREE.PerspectiveCamera( 75, aspect, 0.1, 10000 )
-        perspective1.position.set(10,10,3)
-        const perspective2 = new THREE.PerspectiveCamera( 75, aspect, 0.1, 10000 )
-        perspective2.position.set(1,5,9)
+        const perspective1 = new THREE.PerspectiveCamera( 75, aspect, 0.1, 50000 )
+        //perspective1.position.set(4100, 100, 3200)
+        perspective1.position.set(5, 10, 20)
         this.cameras['Perspective'] = perspective1
-        this.cameras['Perspective2'] = perspective2
 
         // defines the frustum size for the orthographic cameras
         const left = -this.frustumSize / 2 * aspect
@@ -127,8 +126,21 @@ class MyApp  {
      * @param {String} cameraName
      */
     setActiveCamera(cameraName) {
+        const listener = new THREE.AudioListener();
         this.activeCameraName = cameraName
         this.activeCamera = this.cameras[this.activeCameraName]
+        this.activeCamera.add( listener );
+
+        const audioLoader = new THREE.AudioLoader();
+
+        const sound = new THREE.Audio( listener );
+
+        audioLoader.load('./scene/audio/FightOn.mp3', function( buffer ) {
+            sound.setBuffer( buffer );
+            sound.setLoop( true );
+            sound.setVolume( 0.1);
+            sound.play();
+        } );
     }
 
     /**
@@ -159,6 +171,26 @@ class MyApp  {
             else {
                 this.controls.object = this.activeCamera
             }
+        }
+
+        // Update the camera position to follow the car
+        if (this.contents && this.contents.carController) {
+            const car = this.contents.carController.model;
+            const carPosition = car.position;
+            let offset = new THREE.Vector3(20, 20, -25);
+
+            // Rotate the offset by the car's rotation
+            offset.applyQuaternion(car.quaternion);
+
+            const cameraPosition = carPosition.clone().add(offset);
+            this.activeCamera.position.lerp(cameraPosition, 1.0); // Smoothly move the camera
+
+            // Make the camera look at the car
+            let lookAtOffset = new THREE.Vector3(20, 0, 25);
+            lookAtOffset.applyQuaternion(car.quaternion);
+            const lookAtPosition = carPosition.clone().add(lookAtOffset);
+            this.controls.target.lerp(lookAtPosition, 0.5); // Smoothly move the target
+            this.controls.update();
         }
     }
 
@@ -199,8 +231,6 @@ class MyApp  {
             this.contents.update()
         }
 
-        // required if controls.enableDamping or controls.autoRotate are set to true
-        this.controls.update();
 
         // render the scene
         this.renderer.render(this.scene, this.activeCamera);
@@ -211,6 +241,8 @@ class MyApp  {
         this.lastCameraName = this.activeCameraName
         this.stats.end()
     }
+
+
 }
 
 
