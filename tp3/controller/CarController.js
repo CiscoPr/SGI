@@ -194,10 +194,13 @@ class CarController {
             }
             }
         //console.log("closestPoint", closestPointDistance);
-        if(closestPointDistance > 250){
+        if(closestPointDistance > 250 && (this.model.position.x > 4300 || this.model.position.x < 3700)){
             console.log("you're out of the track");
+
+            this.maxSpeed = 5;
         }
         else{
+            this.maxSpeed = 10;
             console.log("you're in the track");
         }
 
