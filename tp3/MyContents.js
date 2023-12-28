@@ -36,22 +36,8 @@ class MyContents {
 
     // controllers
     this.player = null;
-    //this.automaticCarController = new AutomaticCarController(this.carCloud);
-    this.keyPoints = [
-      new THREE.Vector3(4000, 0, 0),
-      new THREE.Vector3(4000, 0, 6000),
-      new THREE.Vector3(-1500, 0, 6000),
-      new THREE.Vector3(-4000, 0, 6000),
-      new THREE.Vector3(-4000, 0, 2000),
-      new THREE.Vector3(2000, 0, 2000),
-      new THREE.Vector3(2000, 0, -1000),
-      new THREE.Vector3(-5000, 0, -1000),
-      new THREE.Vector3(-5000, 0, -5000),
-      new THREE.Vector3(3000, 0, -5000),
-      new THREE.Vector3(4000, 0, -3500),
-      new THREE.Vector3(4000, 0, -2000),
-      new THREE.Vector3(4000, 0, 0),
-    ]
+
+
   }
 
   /**
@@ -84,17 +70,15 @@ class MyContents {
 		const material = new THREE.MeshBasicMaterial({color: 0xffff00});
 		material.wireframe = true;
     this.carSphere = new THREE.Mesh(geometry, material);
-		this.app.scene.add(this.carSphere);
+		//this.app.scene.add(this.carSphere);
 
     // place dynamic components
     this.playerCar.car.position.set(4100, 25, 0);
     this.app.scene.add(this.playerCar.car);
 
     // start controllers
-    this.carController = new CarController(this.playerCar.car, this.playerCar.carWheels, this.track);
-
-    this.debugKeyFrames();
-
+    // this.carController = new CarController(this.playerCar.car, this.playerCar.carWheels, this.track);
+    this.automaticCarController = new AutomaticCarController(this.app, this.playerCar.car, this.playerCar.carWheels, this.track);
 
     const loader = new GLTFLoader().setPath('models/');
 
@@ -205,36 +189,19 @@ class MyContents {
 
 
 
-    debugKeyFrames(){
-        let spline = new THREE.CatmullRomCurve3([...this.keyPoints]);
 
-        // Setup visual control points
-
-        for (let i = 0; i < this.keyPoints.length; i++) {
-            const geometry = new THREE.SphereGeometry(80, 32, 32)
-            const material = new THREE.MeshBasicMaterial({ color: 0x0000ff })
-            const sphere = new THREE.Mesh(geometry, material)
-            sphere.position.set(... this.keyPoints[i])
-            this.app.scene.add(sphere)
-        }
-
-        const tubeGeometry = new THREE.TubeGeometry(spline, 100, 50, 10, false)
-        const tubeMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 })
-        const tubeMesh = new THREE.Mesh(tubeGeometry, tubeMaterial)
-        this.app.scene.add(tubeMesh);
-    }
 
 
     update() {
-
-      if (this.carController != null ) this.carController.update();
+      if(this.automaticCarController != null) this.automaticCarController.update();
+      //if (this.carController != null ) this.carController.update();
       if (this.carSphere != null ){
         let chassisCenter = this.playerCar.getChassisCenter();
         let x = chassisCenter.x;
         let y = chassisCenter.y;
         let z = chassisCenter.z;
         this.carSphere.position.set(x, y, z);
-        console.log("spherePos", this.carSphere.position)
+        //console.log("spherePos", this.carSphere.position)
       }
 
     }

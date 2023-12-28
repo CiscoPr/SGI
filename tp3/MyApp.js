@@ -172,7 +172,7 @@ class MyApp  {
         }
 
 
-
+        /*
         // Update the camera position to follow the car
         if (this.contents && this.contents.carController) {
             const car = this.contents.carController.model;
@@ -192,7 +192,26 @@ class MyApp  {
             this.controls.target.lerp(lookAtPosition, 0.5); // Smoothly move the target
             this.controls.update();
         }
-        
+        */
+
+        if (this.contents && this.contents.automaticCarController) {
+            const car = this.contents.automaticCarController.model;
+            const carPosition = car.position;
+            let offset = new THREE.Vector3(0, 15, -50);
+
+            // Rotate the offset by the car's rotation
+            offset.applyQuaternion(car.quaternion);
+
+            const cameraPosition = carPosition.clone().add(offset);
+            this.activeCamera.position.lerp(cameraPosition, 1.0); // Smoothly move the camera
+
+            // Make the camera look at the car
+            let lookAtOffset = new THREE.Vector3(0, 0, 25);
+            lookAtOffset.applyQuaternion(car.quaternion);
+            const lookAtPosition = carPosition.clone().add(lookAtOffset);
+            this.controls.target.lerp(lookAtPosition, 1.0); // Smoothly move the target
+            this.controls.update();
+        }
     }
 
     /**
