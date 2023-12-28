@@ -7,7 +7,7 @@ class MyCar {
         this.car = new THREE.Group();
         this.characterModel = null;
         this.carModel = null;
-        this.radius = 20;
+        this.radius = 15;
         this.modelRendered = false;
         this.getModels(character);
         this.build();
