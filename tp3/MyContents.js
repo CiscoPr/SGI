@@ -8,6 +8,7 @@ import {MyTrack} from './components/MyTrack.js';
 import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { CarController } from './controller/CarController.js';
 import { AutomaticCarController } from './controller/AutomaticCarController.js';
+import { MyCar } from './components/MyCar.js'
 
 /**
  *  This class contains the contents of out application
@@ -24,19 +25,18 @@ class MyContents {
 		this.reader.open("scene/scene.xml")
     this.engine = new MyEngine(app, this);
     this.engine.init();
+    this.modelsrendered = false;
 
     // components
     this.track = null;
+    this.playerCar = null;
 
-    this.bottomRightWheel = null;
-    this.bottomLeftWheel = null;
-    this.topRightWheel = null;
-    this.topLeftWheel = null;
-    this.carCloudWheels= new THREE.Group();
-    this.carCloud = new THREE.Group();
-    this.spotLight = null;
-    this.carController = new CarController(this.carCloud);
-    this.automaticCarController = new AutomaticCarController(this.carCloud);
+    // helpers
+    this.carSphere;
+
+    // controllers
+    this.player = null;
+    //this.automaticCarController = new AutomaticCarController(this.carCloud);
     this.keyPoints = [
       new THREE.Vector3(4000, 0, 0),
       new THREE.Vector3(4000, 0, 6000),
@@ -75,70 +75,28 @@ class MyContents {
 
     //--------------------------------------------------------------------------------
 
-    //const gridHelper = new THREE.GridHelper(100, 100);
-    //gridHelper.position.y = 0.5;
-    //this.app.scene.add(gridHelper);
+    // build components
+    this.track = new MyTrack(this.app.scene);
+    this.playerCar = new MyCar("cloud");
+
+    // build helpers
+    const geometry = new THREE.SphereGeometry(this.playerCar.radius);
+		const material = new THREE.MeshBasicMaterial({color: 0xffff00});
+		material.wireframe = true;
+    this.carSphere = new THREE.Mesh(geometry, material);
+		this.app.scene.add(this.carSphere);
+
+    // place dynamic components
+    this.playerCar.car.position.set(4100, 25, 0);
+    this.app.scene.add(this.playerCar.car);
+
+    // start controllers
+    this.carController = new CarController(this.playerCar.car, this.playerCar.carWheels, this.track);
+
+    this.debugKeyFrames();
+
 
     const loader = new GLTFLoader().setPath('models/');
-    loader.load('cloud.glb', async (gltf) => {
-      const model = gltf.scene;
-      model.traverse(function (object){
-        if (object.isMesh) object.castShadow = true;
-      });
-      model.position.set(0, 12, 0);
-      model.scale.set(20.0, 20.0, 20.0);
-      this.carCloud.add(model);
-    });
-
-    loader.load('tifa.glb', async (gltf) => {
-      const model = gltf.scene;
-      model.traverse(function (object){
-        if (object.isMesh) object.castShadow = true;
-      });
-      model.position.set(5, 6, 0);
-      model.scale.set(20.0, 20.0, 20.0);
-      //this.app.scene.add(gltf.scene);
-    });
-
-    loader.load('carCloud.glb', async (gltf) => {
-      const model = gltf.scene;
-      model.traverse(function (object){
-        if (object.isMesh) object.castShadow = true;
-      }
-      );
-      model.position.set(0, 6, 0);
-      model.scale.set(40.0, 40.0, 40.0);
-      this.bottomRightWheel = model.getObjectByName('bottomRightWheel');
-      this.bottomLeftWheel = model.getObjectByName('bottomLeftWheel');
-      this.topRightWheel = model.getObjectByName('topRightWheel');
-      this.topLeftWheel = model.getObjectByName('topLeftWheel');
-      this.carCloudWheels.add(this.bottomRightWheel);
-      this.carCloudWheels.add(this.bottomLeftWheel);
-      this.carCloudWheels.add(this.topRightWheel);
-      this.carCloudWheels.add(this.topLeftWheel);
-      this.carCloudWheels.scale.set(0.04, 0.04, 0.04);
-      this.carCloudWheels.position.set(0, 6, 0);
-      this.carCloud.add(this.carCloudWheels);
-      this.carCloud.add(model);
-      const pointLightBack = new THREE.PointLight(0xffffff, 900, 20);
-      pointLightBack.position.set(this.carCloudWheels.position.x, this.carCloudWheels.position.y + 10, this.carCloudWheels.position.z-5);
-      this.carCloud.add(pointLightBack);
-      const pointLightFront = new THREE.PointLight(0xffffff, 900, 20);
-      pointLightFront.position.set(this.carCloudWheels.position.x, this.carCloudWheels.position.y + 10, this.carCloudWheels.position.z+15);
-      this.carCloud.add(pointLightFront);
-      this.carCloud.position.set(4100, 25, 0);
-      //go throught the group and cast and receive shadow
-      this.carCloud.traverse(function (object){
-        if (object.isMesh) object.castShadow = true;
-        if (object.isMesh) object.receiveShadow = true;
-      });
-      this.app.scene.add(this.carCloud);
-      this.debugKeyFrames();
-    });
-
-    //build components
-    this.track = new MyTrack(this.app.scene);
-
 
     loader.load('buildings.glb', async (gltf) => {
       const model = gltf.scene;
@@ -268,51 +226,15 @@ class MyContents {
 
 
     update() {
-      const [speed, turn] = this.carController.update();
-      const time = (Date.now() % 6000) / 6000;
-      const turnAngle = turn * Math.PI/2 ; // Adjust this value to get the desired turn angle
 
-      const arrayPoints = this.track.path1.getSpacedPoints(10000);
-
-      //console.log("arrayPoints", arrayPoints);
-      let closestPointIndex = 0;
-      let closestPointDistance = arrayPoints[0].distanceTo(this.carCloud.position);
-
-      for(let i = 0; i < arrayPoints.length; i++){
-        //get the closest point
-        let currentDistance = arrayPoints[i].distanceTo(this.carCloud.position);
-        if(currentDistance < closestPointDistance){
-          closestPointIndex = i;
-          closestPointDistance = currentDistance;
-        }
-      }
-
-      console.log("closestPoint", closestPointDistance);
-
-      if(closestPointDistance > 250){
-       console.log("you're out of the track");
-      }
-
-
-
-
-      for (let i = 0; i < this.carCloudWheels.children.length; i++) {
-          const wheel = this.carCloudWheels.children[i];
-          wheel.center = new THREE.Vector3(0, 0, 0);
-          //wheel.rotation.x = time * Math.PI * 5 * speed;
-          console.log("my angle", turnAngle)
-          // If the wheel is a front wheel, set its y rotation based on the turn direction
-          if ((wheel.name === "topLeftWheel" || wheel.name === "topRightWheel")) {
-            if(turnAngle !== 0){
-              wheel.rotation.y = turnAngle;
-            }
-            else{
-              wheel.rotation.y = 0;
-              wheel.rotation.x = time * Math.PI * 5 * speed;
-            }
-          }else{
-            wheel.rotation.x = time * Math.PI * 5 * speed;
-          }
+      if (this.carController != null ) this.carController.update();
+      if (this.carSphere != null ){
+        let chassisCenter = this.playerCar.getChassisCenter();
+        let x = chassisCenter.x;
+        let y = chassisCenter.y;
+        let z = chassisCenter.z;
+        this.carSphere.position.set(x, y, z);
+        console.log("spherePos", this.carSphere.position)
       }
 
     }

@@ -10,7 +10,7 @@ class MyTrack {
         this.segments = 100;
         this.width = 300;
         this.textureRepeat = 20;
-        this.showWireframe = true;
+        this.showWireframe = false;
         this.showMesh = true;
         this.showLine = true;
         this.closedCurve = true;
@@ -107,7 +107,6 @@ class MyTrack {
         this.curve.scale.set(1, -0.2, 1);
         this.curve.position.set(0, -5.1, 0);
         this.scene.add(this.curve);
-        console.log("spaced points", this.path1.getSpacedPoints(1000));
     }
 }
 export { MyTrack };

@@ -1,8 +1,10 @@
 import * as THREE from 'three';
 
 class CarController {
-    constructor(model) {
+    constructor(model, wheels, track) {
         this.model = model;
+        this.wheels = wheels;
+        this.track = track;
         this.speed = 0;
         this.maxSpeed = 10;
         this.acceleration = 0.5;
@@ -145,16 +147,59 @@ class CarController {
         else if(!this.sIsPressed && this.speed < 0){
             this.sDecelerate();
         }
-
-
-
         if (this.turning) {
             this.model.rotateY(this.turnDirection * this.turnSpeed);
 
         }
 
         this.model.translateZ(this.speed * this.direction);
-        return [this.speed, this.turnSpeed * this.turnDirection];
+
+        const time = (Date.now() % 6000) / 6000;
+
+        const turn = this.turnDirection * this.turnSpeed;
+
+        const turnAngle = turn * Math.PI/2 ; // Adjust this value to get the desired turn angle
+
+        for (let i = 0; i < this.wheels.children.length; i++) {
+            const wheel = this.wheels.children[i];
+            wheel.center = new THREE.Vector3(0, 0, 0);
+            //wheel.rotation.x = time * Math.PI * 5 * speed;
+            //console.log("my angle", turnAngle)
+            // If the wheel is a front wheel, set its y rotation based on the turn direction
+            if ((wheel.name === "topLeftWheel" || wheel.name === "topRightWheel")) {
+              if(turnAngle !== 0){
+                wheel.rotation.y = turnAngle;
+              }
+              else{
+                wheel.rotation.y = 0;
+                wheel.rotation.x = time * Math.PI * 5 * this.speed;
+              }
+            }else{
+              wheel.rotation.x = time * Math.PI * 5 * this.speed;
+            }
+        }
+
+        const arrayPoints = this.track.path1.getSpacedPoints(10000);
+
+        //console.log("arrayPoints", arrayPoints);
+        let closestPointIndex = 0;
+        let closestPointDistance = arrayPoints[0].distanceTo(this.model.position);
+
+        for(let i = 0; i < arrayPoints.length; i++){
+            //get the closest point
+            let currentDistance = arrayPoints[i].distanceTo(this.model.position);
+            if(currentDistance < closestPointDistance){
+                closestPointIndex = i;
+                closestPointDistance = currentDistance;
+            }
+            }
+        //console.log("closestPoint", closestPointDistance);
+        if(closestPointDistance > 250){
+            console.log("you're out of the track");
+        }
+        else{
+            console.log("you're in the track");
+        }
 
     }
 }

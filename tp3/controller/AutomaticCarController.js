@@ -1,8 +1,10 @@
 import * as THREE from 'three';
 
 class AutomaticCarController {
-    constructor(model) {
+    constructor(model, wheels, track) {
         this.model = model;
+        this.wheels = wheels;
+        this.track = track;
         this.speed = 0;
         this.maxSpeed = 10;
         this.acceleration = 0.5;

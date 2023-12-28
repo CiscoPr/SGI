@@ -172,6 +172,7 @@ class MyApp  {
         }
 
 
+        /*
         // Update the camera position to follow the car
         if (this.contents && this.contents.carController) {
             const car = this.contents.carController.model;
@@ -191,7 +192,7 @@ class MyApp  {
             this.controls.target.lerp(lookAtPosition, 0.5); // Smoothly move the target
             this.controls.update();
         }
-
+        */
     }
 
     /**
