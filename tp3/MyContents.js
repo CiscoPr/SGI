@@ -9,6 +9,9 @@ import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { CarController } from './controller/CarController.js';
 import { AutomaticCarController } from './controller/AutomaticCarController.js';
 import { MyCar } from './components/MyCar.js'
+import { CollisionController } from './controller/CollisionController.js';
+import { MyObstacle } from './components/MyObstacle.js';
+import { MyBoost } from './components/MyBoost.js';
 
 /**
  *  This class contains the contents of out application
@@ -30,12 +33,16 @@ class MyContents {
     // components
     this.track = null;
     this.playerCar = null;
+    this.obstacles = [];
+    this.boosts = [];
 
     // helpers
     this.carSphere;
 
     // controllers
     this.player = null;
+	  this.collisionSystem = null;
+
     //this.automaticCarController = new AutomaticCarController(this.carCloud);
     this.keyPoints = [
       new THREE.Vector3(4000, 0, 0),
@@ -78,13 +85,15 @@ class MyContents {
     // build components
     this.track = new MyTrack(this.app.scene);
     this.playerCar = new MyCar("cloud");
+    this.boosts.push(new MyBoost("speed", new THREE.Vector3(4105, 45, 150), this.app.scene));
+    this.obstacles.push(new MyObstacle("speed", new THREE.Vector3(4089, 45, -150), this.app.scene));
 
     // build helpers
     const geometry = new THREE.SphereGeometry(this.playerCar.radius);
-		const material = new THREE.MeshBasicMaterial({color: 0xffff00});
-		material.wireframe = true;
+	  const material = new THREE.MeshBasicMaterial({color: 0xffff00});
+	  material.wireframe = true;
     this.carSphere = new THREE.Mesh(geometry, material);
-		this.app.scene.add(this.carSphere);
+	  this.app.scene.add(this.carSphere);
 
     // place dynamic components
     this.playerCar.car.position.set(4100, 25, 0);
@@ -92,9 +101,9 @@ class MyContents {
 
     // start controllers
     this.carController = new CarController(this.playerCar.car, this.playerCar.carWheels, this.track);
+	  this.collisionSystem = new CollisionController(this.carController, this.playerCar, this.boosts, this.obstacles);
 
     this.debugKeyFrames();
-
 
     const loader = new GLTFLoader().setPath('models/');
 
@@ -226,8 +235,8 @@ class MyContents {
 
 
     update() {
-
       if (this.carController != null ) this.carController.update();
+	    if (this.collisionSystem != null ) this.collisionSystem.update();
       if (this.carSphere != null ){
         let chassisCenter = this.playerCar.getChassisCenter();
         let x = chassisCenter.x;
