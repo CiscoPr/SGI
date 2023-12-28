@@ -7,6 +7,7 @@ import { MyFileReader } from './parser/MyFileReader.js';
 import {MyTrack} from './components/MyTrack.js';
 import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { CarController } from './controller/CarController.js';
+import { AutomaticCarController } from './controller/AutomaticCarController.js';
 
 /**
  *  This class contains the contents of out application
@@ -35,6 +36,22 @@ class MyContents {
     this.carCloud = new THREE.Group();
     this.spotLight = null;
     this.carController = new CarController(this.carCloud);
+    this.automaticCarController = new AutomaticCarController(this.carCloud);
+    this.keyPoints = [
+      new THREE.Vector3(4000, 0, 0),
+      new THREE.Vector3(4000, 0, 6000),
+      new THREE.Vector3(-1500, 0, 6000),
+      new THREE.Vector3(-4000, 0, 6000),
+      new THREE.Vector3(-4000, 0, 2000),
+      new THREE.Vector3(2000, 0, 2000),
+      new THREE.Vector3(2000, 0, -1000),
+      new THREE.Vector3(-5000, 0, -1000),
+      new THREE.Vector3(-5000, 0, -5000),
+      new THREE.Vector3(3000, 0, -5000),
+      new THREE.Vector3(4000, 0, -3500),
+      new THREE.Vector3(4000, 0, -2000),
+      new THREE.Vector3(4000, 0, 0),
+    ]
   }
 
   /**
@@ -68,7 +85,7 @@ class MyContents {
       model.traverse(function (object){
         if (object.isMesh) object.castShadow = true;
       });
-      model.position.set(20, 12, 0);
+      model.position.set(0, 12, 0);
       model.scale.set(20.0, 20.0, 20.0);
       this.carCloud.add(model);
     });
@@ -89,7 +106,7 @@ class MyContents {
         if (object.isMesh) object.castShadow = true;
       }
       );
-      model.position.set(20, 6, 0);
+      model.position.set(0, 6, 0);
       model.scale.set(40.0, 40.0, 40.0);
       this.bottomRightWheel = model.getObjectByName('bottomRightWheel');
       this.bottomLeftWheel = model.getObjectByName('bottomLeftWheel');
@@ -100,7 +117,7 @@ class MyContents {
       this.carCloudWheels.add(this.topRightWheel);
       this.carCloudWheels.add(this.topLeftWheel);
       this.carCloudWheels.scale.set(0.04, 0.04, 0.04);
-      this.carCloudWheels.position.set(20, 6, 0);
+      this.carCloudWheels.position.set(0, 6, 0);
       this.carCloud.add(this.carCloudWheels);
       this.carCloud.add(model);
       const pointLightBack = new THREE.PointLight(0xffffff, 900, 20);
@@ -116,7 +133,7 @@ class MyContents {
         if (object.isMesh) object.receiveShadow = true;
       });
       this.app.scene.add(this.carCloud);
-
+      this.debugKeyFrames();
     });
 
     //build components
@@ -230,11 +247,54 @@ class MyContents {
 
 
 
+    debugKeyFrames(){
+        let spline = new THREE.CatmullRomCurve3([...this.keyPoints]);
+
+        // Setup visual control points
+
+        for (let i = 0; i < this.keyPoints.length; i++) {
+            const geometry = new THREE.SphereGeometry(80, 32, 32)
+            const material = new THREE.MeshBasicMaterial({ color: 0x0000ff })
+            const sphere = new THREE.Mesh(geometry, material)
+            sphere.position.set(... this.keyPoints[i])
+            this.app.scene.add(sphere)
+        }
+
+        const tubeGeometry = new THREE.TubeGeometry(spline, 100, 50, 10, false)
+        const tubeMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 })
+        const tubeMesh = new THREE.Mesh(tubeGeometry, tubeMaterial)
+        this.app.scene.add(tubeMesh);
+    }
+
 
     update() {
       const [speed, turn] = this.carController.update();
       const time = (Date.now() % 6000) / 6000;
       const turnAngle = turn * Math.PI/2 ; // Adjust this value to get the desired turn angle
+
+      const arrayPoints = this.track.path1.getSpacedPoints(10000);
+
+      //console.log("arrayPoints", arrayPoints);
+      let closestPointIndex = 0;
+      let closestPointDistance = arrayPoints[0].distanceTo(this.carCloud.position);
+
+      for(let i = 0; i < arrayPoints.length; i++){
+        //get the closest point
+        let currentDistance = arrayPoints[i].distanceTo(this.carCloud.position);
+        if(currentDistance < closestPointDistance){
+          closestPointIndex = i;
+          closestPointDistance = currentDistance;
+        }
+      }
+
+      console.log("closestPoint", closestPointDistance);
+
+      if(closestPointDistance > 250){
+       console.log("you're out of the track");
+      }
+
+
+
 
       for (let i = 0; i < this.carCloudWheels.children.length; i++) {
           const wheel = this.carCloudWheels.children[i];

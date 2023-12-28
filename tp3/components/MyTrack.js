@@ -9,25 +9,25 @@ class MyTrack {
         this.scene = scene;
         this.segments = 100;
         this.width = 300;
-        this.textureRepeat = 10;
-        this.showWireframe = false;
+        this.textureRepeat = 20;
+        this.showWireframe = true;
         this.showMesh = true;
         this.showLine = true;
         this.closedCurve = true;
 
         this.path1 = new THREE.CatmullRomCurve3([
-            new THREE.Vector3(-4000, 0, 0),
-            new THREE.Vector3(-4000, 0, 6000),
-            new THREE.Vector3(1500, 0, 6000),
+            new THREE.Vector3(4000, 0, 0),
             new THREE.Vector3(4000, 0, 6000),
-            new THREE.Vector3(4000, 0, 2000),
-            new THREE.Vector3(-2000, 0, 2000),
-            new THREE.Vector3(-2000, 0, -1000),
-            new THREE.Vector3(5000, 0, -1000),
-            new THREE.Vector3(5000, 0, -5000),
-            new THREE.Vector3(-3000, 0, -5000),
-            new THREE.Vector3(-4000, 0, -3500),
-            new THREE.Vector3(-4000, 0, -2000),
+            new THREE.Vector3(-1500, 0, 6000),
+            new THREE.Vector3(-4000, 0, 6000),
+            new THREE.Vector3(-4000, 0, 2000),
+            new THREE.Vector3(2000, 0, 2000),
+            new THREE.Vector3(2000, 0, -1000),
+            new THREE.Vector3(-5000, 0, -1000),
+            new THREE.Vector3(-5000, 0, -5000),
+            new THREE.Vector3(3000, 0, -5000),
+            new THREE.Vector3(4000, 0, -3500),
+            new THREE.Vector3(4000, 0, -2000),
         ]);
 
 
@@ -104,10 +104,10 @@ class MyTrack {
         this.curve.add(this.line);
 
 
-        this.curve.rotateZ(Math.PI);
-        this.curve.scale.set(1, 0.2, 1);
+        this.curve.scale.set(1, -0.2, 1);
         this.curve.position.set(0, -5.1, 0);
         this.scene.add(this.curve);
+        console.log("spaced points", this.path1.getSpacedPoints(1000));
     }
 }
 export { MyTrack };

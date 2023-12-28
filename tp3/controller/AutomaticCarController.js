@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-class CarController {
+class AutomaticCarController {
     constructor(model) {
         this.model = model;
         this.speed = 0;
@@ -15,68 +15,54 @@ class CarController {
         this.turning = false;
         this.turnDirection = 0;
 
-        // Add event listeners for keypresses
-        window.addEventListener('keydown', (e) => this.handleKeyDown(e));
-        window.addEventListener('keyup', (e) => this.handleKeyUp(e));
+        this.clock = new THREE.Clock();
+        this.mixerTime = 0;
+        this.mixerPause = false;
+
 
     }
 
-    handleKeyDown(event) {
-        switch (event.key) {
-            case 'w':
-                this.accelerating = true;
-                this.direction = 1;
-                this.accelerate();
-                break;
-            case 's':
-                this.sIsPressed = true;
-                //this.accelerating = true;
-                //this.direction = -1;
-                this.sAccelerate();
-                break;
-            case 'a':
-                this.turnDirection = 1;
-                this.turn();
-                break;
-            case 'd':
-                this.turnDirection = -1;
-                this.turn();
-                break;
-        }
+    init(){
+        this.debugKeyFrames();
+        const positionKF = new THREE.VectorKeyframeTrack('.position', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], [
+            ...this.keyPoints[0],
+            ...this.keyPoints[1],
+            ...this.keyPoints[2],
+            ...this.keyPoints[3],
+            ...this.keyPoints[4],
+            ...this.keyPoints[5],
+            ...this.keyPoints[6],
+            ...this.keyPoints[7],
+            ...this.keyPoints[8],
+            ...this.keyPoints[9],
+            ...this.keyPoints[10]
+        ],
+        THREE.InterpolateSmooth
+        )
+
+
     }
 
-    handleKeyUp(event) {
-        switch (event.key) {
-            case 'w':
-                this.accelerating = false;
-                this.decelerate();
-                break;
-            case 's':
-                this.sIsPressed = false;
-                this.accelerating = false;
-                this.sDecelerate();
-                break;
-            case 'a':
-                this.turning = false;
-                this.turnDirection = 0;
-                this.decelerate();
-                break;
-            case 'd':
-                this.turning = false;
-                this.turnDirection = 0;
-                this.decelerate();
-                break;
-        }
-    }
+    debugKeyFrames(){
+        let spline = new THREE.CatmullRomCurve3([...this.keyPoints]);
 
-    /*
-    const time = (Date.now() % 6000) / 6000;
-        for (let i = 0; i < this.carCloudWheels.children.length; i++) {
-          const wheel = this.carCloudWheels.children[i];
-          wheel.center = new THREE.Vector3(0, 0, 0);
-          wheel.rotation.x = time * Math.PI * 2;
+        // Setup visual control points
+
+        for (let i = 0; i < this.keyPoints.length; i++) {
+            const geometry = new THREE.SphereGeometry(100, 32, 32)
+            const material = new THREE.MeshBasicMaterial({ color: 0x0000ff })
+            const sphere = new THREE.Mesh(geometry, material)
+            sphere.position.set(... this.keyPoints[i])
+
+            this.app.scene.add(sphere)
         }
-    */
+
+        const tubeGeometry = new THREE.TubeGeometry(spline, 100, 0.05, 10, false)
+        const tubeMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 })
+        const tubeMesh = new THREE.Mesh(tubeGeometry, tubeMaterial)
+
+        return tubeMesh
+    }
 
     accelerate() {
 
@@ -159,4 +145,4 @@ class CarController {
     }
 }
 
-export { CarController };
+export { AutomaticCarController };
