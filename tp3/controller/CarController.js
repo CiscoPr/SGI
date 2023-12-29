@@ -2,25 +2,40 @@ import * as THREE from 'three';
 
 class CarController {
     constructor(model, wheels, track) {
+        // objects to control
         this.model = model;
         this.wheels = wheels;
+        
+        // track record 
         this.track = track;
+
+        // timestamp
+        this.lastTime = Date.now();
+
+        // timers
+        this.collisionEffect = 0;
+
+        // default values for car parameters
+        this.maxSpeedDefault = 10;
+
+        // car parameters
         this.speed = 0;
-        this.maxSpeed = 10;
+        this.maxSpeed = this.maxSpeedDefault;
         this.acceleration = 0.5;
-        this.accelerating = false;
-        this.sIsPressed = false;
         this.deceleration = 0.5;
         this.turnSpeed = 0;
         this.maxTurnSpeed = 0.03;
         this.direction = 1;
-        this.turning = false;
         this.turnDirection = 0;
+
+        // event flags
+        this.accelerating = false;
+        this.sIsPressed = false;
+        this.turning = false;
 
         // Add event listeners for keypresses
         window.addEventListener('keydown', (e) => this.handleKeyDown(e));
         window.addEventListener('keyup', (e) => this.handleKeyUp(e));
-
     }
 
     handleKeyDown(event) {
@@ -136,6 +151,41 @@ class CarController {
         this.turning = true;
     }
 
+    boostCollision(type) {
+        switch (type) {
+            case 'speed':
+                this.maxSpeed = this.maxSpeedDefault * 2;
+                this.collisionEffect = 5000;
+                break;
+            default:
+                break;
+        }
+    }
+
+    obstacleCollision(type) {
+        switch (type) {
+            case 'speed':
+                this.maxSpeed = this.maxSpeedDefault / 2;
+                this.collisionEffect = 5000;
+                break;
+            default:
+                break;
+        }
+    }
+
+    updateCollisionEffect() {
+        let elapsedTime = Date.now() - this.lastTime;
+        this.lastTime = Date.now();
+
+        if (this.collisionEffect > 0) this.collisionEffect -= elapsedTime;
+        else {
+            this.maxSpeed = this.maxSpeedDefault;
+            this.collisionEffect = 0;
+        }
+
+        console.log("hello", this.collisionEffect);
+    }
+
     update() {
         if (this.accelerating) {
             this.accelerate();
@@ -200,6 +250,9 @@ class CarController {
         else{
             console.log("you're in the track");
         }
+
+        // update collision effect
+        this.updateCollisionEffect();
 
     }
 }

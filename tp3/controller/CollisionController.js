@@ -12,14 +12,14 @@ class CollisionController {
         let chassisCenter = this.playerCar.getChassisCenter();
         let boost = this.boosts.find(boost => boost.position.distanceTo(chassisCenter) < boost.radius + this.playerCar.radius);
 
-        if(boost) console.log("hit boost");
+        if(boost) this.carControler.boostCollision(boost.type);
     }
 
     checkObstacles() {
         let chassisCenter = this.playerCar.getChassisCenter();
         let obstacle = this.obstacles.find(obstacle => obstacle.position.distanceTo(chassisCenter) < obstacle.radius + this.playerCar.radius);
 
-        if(obstacle) console.log("hit obstacle");
+        if(obstacle) this.carControler.obstacleCollision(obstacle.type);
     }
 
     checkCollisions() {
