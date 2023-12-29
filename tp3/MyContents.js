@@ -13,6 +13,7 @@ import { MyBoost } from './components/MyBoost.js';
 import { ItemsController } from './controller/ItemsController.js';
 import { LapController } from './controller/LapController.js';
 import { BuildingsController } from './controller/ScenarioModelsController.js';
+import { Menu } from './controller/Menu.js';
 /**
  *  This class contains the contents of out application
  */
@@ -33,6 +34,7 @@ class MyContents {
     // components
     this.track = null;
     this.playerCar = null;
+    this.gameMenu = null;
     this.obstacles = [];
     this.boosts = [];
 
@@ -44,6 +46,8 @@ class MyContents {
     this.itemsController = null;
 	  this.collisionSystem = null;
     this.buildings = null;
+
+
   }
 
   /**
@@ -69,38 +73,52 @@ class MyContents {
 
     // build components
     this.track = new MyTrack(this.app.scene);
-    this.playerCar = new MyCar("cloud");
-    this.boosts.push(new MyBoost("speed", new THREE.Vector3(4105, 45, 150), this.app.scene));
-    this.boosts.push(new MyBoost("time", new THREE.Vector3(4040, 45, -150), this.app.scene));
-    this.obstacles.push(new MyObstacle("speed", new THREE.Vector3(4089, 45, -150), this.app.scene));
-    this.obstacles.push(new MyObstacle("time", new THREE.Vector3(4150, 45, 150), this.app.scene));
+    this.buildings = new BuildingsController(this.app.scene);
 
+    this.gameMenu = new Menu(this.app);
+
+    //this will only execute once the player is out of the menu
+
+    this.buildCar();
+    this.buildBoosts();
+    this.buildObstacles();
+    this.startControllers();
+
+  }
+
+  buildCar(){
+    this.playerCar = new MyCar("cloud");
     // build helpers
     const geometry = new THREE.SphereGeometry(this.playerCar.radius);
-	  const material = new THREE.MeshBasicMaterial({color: 0xffff00});
-	  material.wireframe = true;
+    const material = new THREE.MeshBasicMaterial({color: 0xffff00});
+    material.wireframe = true;
     this.carSphere = new THREE.Mesh(geometry, material);
-	  this.app.scene.add(this.carSphere);
+    this.app.scene.add(this.carSphere);
 
     // place dynamic components
     this.playerCar.car.position.set(4100, 25, 0);
     this.app.scene.add(this.playerCar.car);
-
-    // start controllers
-    this.carController = new CarController(this.playerCar.car, this.playerCar.carWheels, this.track);
-    this.itemsController = new ItemsController(this.boosts, this.obstacles);
-    this.collisionSystem = new CollisionController(this.carController, this.itemsController, this.playerCar, this.boosts, this.obstacles);
-
-    //this.automaticCarController = new AutomaticCarController(this.app, this.playerCar.car, this.playerCar.carWheels, this.track);
-    this.lapController = new LapController(this.app, this.playerCar, this.track);
-
-    this.buildings = new BuildingsController(this.app.scene);
-
-
-
   }
 
+  buildBoosts(){
+    this.boosts.push(new MyBoost("speed", new THREE.Vector3(4105, 45, 150), this.app.scene));
+    this.boosts.push(new MyBoost("time", new THREE.Vector3(4040, 45, -150), this.app.scene));
+  }
 
+  buildObstacles(){
+    this.obstacles.push(new MyObstacle("speed", new THREE.Vector3(4089, 45, -150), this.app.scene));
+    this.obstacles.push(new MyObstacle("time", new THREE.Vector3(4150, 45, 150), this.app.scene));
+  }
+
+  startControllers(){
+      // start controllers
+      this.carController = new CarController(this.playerCar.car, this.playerCar.carWheels, this.track);
+      this.itemsController = new ItemsController(this.boosts, this.obstacles);
+      this.collisionSystem = new CollisionController(this.carController, this.itemsController, this.playerCar, this.boosts, this.obstacles);
+
+      //this.automaticCarController = new AutomaticCarController(this.app, this.playerCar.car, this.playerCar.carWheels, this.track);
+      this.lapController = new LapController(this.app, this.playerCar, this.track);
+  }
     readerError() {
         const hasError = this.reader.errorMessage != null ? true : false;
         return hasError;
@@ -177,6 +195,9 @@ class MyContents {
         this.lapController.update();
       }
       */
+
+      if(this.gameMenu != null) this.gameMenu.update();
+
 
 
       if (this.carController != null ){

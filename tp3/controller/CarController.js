@@ -193,7 +193,7 @@ class CarController {
         let elapsedTime = Date.now() - this.lastTime;
         this.raceTime += elapsedTime;
 
-        console.log("hello", this.raceTime);
+        //console.log("hello", this.raceTime);
     }
 
     update() {
@@ -276,8 +276,8 @@ class CarController {
         // update timestamp
         this.lastTime = Date.now();
 
-        console.log("collisionEffect", this.collisionEffect);
-        console.log("maxSpeed", this.maxSpeed);
+        //console.log("collisionEffect", this.collisionEffect);
+        //console.log("maxSpeed", this.maxSpeed);
     }
 }
 

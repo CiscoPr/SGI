@@ -30,7 +30,6 @@ class MyApp  {
         this.axis = null
         this.contents == null
 
-        this.menu = true;
     }
     /**
      * initializes the application
@@ -174,17 +173,18 @@ class MyApp  {
         }
 
         //spinning camera in menu
-        if(this.menu){
+        if(this.contents && this.contents.gameMenu){
             this.activeCamera.position.x = 1000 * Math.cos(0.0001 * Date.now());
             this.activeCamera.position.z = 1000 * Math.sin(0.0001 * Date.now());
-            this.activeCamera.position.y = 100;
-            this.activeCamera.lookAt(0,0,0);
+            this.activeCamera.position.y = 800;
+
+            this.activeCamera.lookAt(0, 800, 0);
         }
 
-        /*
+
 
         // Update the camera position to follow the car
-        if (this.contents && this.contents.carController) {
+        if (this.contents && this.contents.carController && (this.contents.gameMenu.done === true)) {
             const car = this.contents.carController.model;
             const carPosition = car.position;
             let offset = new THREE.Vector3(0, 15, -50);
@@ -205,7 +205,7 @@ class MyApp  {
 
 
         /*
-        if (this.contents && this.contents.automaticCarController) {
+        if (this.contents && this.contents.automaticCarController && (this.contents.gameMenu == null)) {
             const car = this.contents.automaticCarController.model;
             const carPosition = car.position;
             let offset = new THREE.Vector3(0, 15, -50);
