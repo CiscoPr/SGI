@@ -46,6 +46,7 @@ class MyContents {
     this.itemsController = null;
 	  this.collisionSystem = null;
     this.buildings = null;
+    this.counter = 0;
 
 
   }
@@ -77,12 +78,7 @@ class MyContents {
 
     this.gameMenu = new Menu(this.app);
 
-    //this will only execute once the player is out of the menu
 
-    this.buildCar();
-    this.buildBoosts();
-    this.buildObstacles();
-    this.startControllers();
 
   }
 
@@ -196,8 +192,23 @@ class MyContents {
       }
       */
 
-      if(this.gameMenu != null) this.gameMenu.update();
+      if(this.gameMenu != null){
+        this.gameMenu.update();
+        if(this.gameMenu.done){
+          this.counter++;
+          this.gameMenu = null;
+        }
+      }
 
+          //this will only execute once the player is out of the menu
+      if(this.counter == 1){
+        this.counter++;
+        this.buildCar();
+        this.buildBoosts();
+        this.buildObstacles();
+        this.startControllers();
+      }
+      console.log("this counter", this.counter)
 
 
       if (this.carController != null ){
