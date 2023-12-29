@@ -1,11 +1,9 @@
 import * as THREE from 'three';
 import { MyAxis } from './MyAxis.js';
-import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MyEngine } from './engine/MyEngine.js';
 import { MyFileReader } from './parser/MyFileReader.js';
-import {MyTrack} from './components/MyTrack.js';
-import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
+import {MyTrack} from './components/MyTrack.js';;
 import { CarController } from './controller/CarController.js';
 import { AutomaticCarController } from './controller/AutomaticCarController.js';
 import { MyCar } from './components/MyCar.js'
@@ -14,7 +12,7 @@ import { MyObstacle } from './components/MyObstacle.js';
 import { MyBoost } from './components/MyBoost.js';
 import { ItemsController } from './controller/ItemsController.js';
 import { LapController } from './controller/LapController.js';
-
+import { BuildingsController } from './controller/BuildingsController.js';
 /**
  *  This class contains the contents of out application
  */
@@ -45,6 +43,7 @@ class MyContents {
     this.carController = null;
     this.itemsController = null;
 	  this.collisionSystem = null;
+    this.buildings = null;
   }
 
   /**
@@ -95,48 +94,9 @@ class MyContents {
     //this.automaticCarController = new AutomaticCarController(this.app, this.playerCar.car, this.playerCar.carWheels, this.track);
     this.lapController = new LapController(this.app, this.playerCar, this.track);
 
-    const loader = new GLTFLoader().setPath('models/');
-
-    loader.load('buildings.glb', async (gltf) => {
-      const model = gltf.scene;
-      model.traverse(function (object){
-        if (object.isMesh) object.castShadow = true;
-      });
+    this.buildings = new BuildingsController(this.app.scene);
 
 
-      model.rotation.y = -Math.PI/2;
-      model.position.set(6000, 350, -4500);
-      model.scale.set(1500.0, 1500.0, 1500.0);
-      this.app.scene.add(model);
-      const model2 = gltf.scene.clone();
-      model2.traverse(function (object){
-        if (object.isMesh) object.castShadow = true;
-      });
-      model2.rotation.y = -Math.PI/2;
-      model2.position.set(-6000, 350, -4500);
-      model2.scale.set(1500.0, 1500.0, 1500.0);
-      this.app.scene.add(model2);
-
-    });
-
-    loader.load('buildings2.glb', async (gltf) => {
-
-      const model = gltf.scene;
-      model.traverse(function (object){
-        if (object.isMesh) object.castShadow = true;
-      });
-      model.position.set(-14000, 1360, -25000);
-      model.scale.set(-70000.0, 70000.0, 70000.0);
-      this.app.scene.add(model);
-      const model2 = gltf.scene.clone();
-      model2.traverse(function (object){
-        if (object.isMesh) object.castShadow = true;
-      });
-      model2.position.set(14000, 1390, 25500);
-      model2.scale.set(71000.0, 71000.0, -71000.0);
-      this.app.scene.add(model2);
-
-    });
 
   }
 

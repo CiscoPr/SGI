@@ -172,6 +172,7 @@ class MyApp  {
         }
 
 
+        /*
 
         // Update the camera position to follow the car
         if (this.contents && this.contents.carController) {
