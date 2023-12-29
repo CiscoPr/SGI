@@ -239,6 +239,9 @@ class CarController {
             }
         }
 
+        // update collision effect
+        this.updateCollisionEffect();
+
         const arrayPoints = this.track.path1.getSpacedPoints(10000);
 
         //console.log("arrayPoints", arrayPoints);
@@ -254,21 +257,24 @@ class CarController {
             }
             }
         //console.log("closestPoint", closestPointDistance);
-        if(closestPointDistance > 250){
+        if(closestPointDistance > 250 && (this.model.position.x > 4300 || this.model.position.x < 3700)){
             console.log("you're out of the track");
+
+            this.maxSpeed = 5;
         }
         else{
+            if (this.collisionEffect == 0) this.maxSpeed = 10;
             console.log("you're in the track");
         }
-
-        // update collision effect
-        this.updateCollisionEffect();
 
         // update race timer
         this.updateRaceTime();
 
         // update timestamp
         this.lastTime = Date.now();
+
+        console.log("collisionEffect", this.collisionEffect);
+        console.log("maxSpeed", this.maxSpeed);
     }
 }
 
