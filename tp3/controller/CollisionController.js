@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 
 class CollisionController {
-    constructor(carControler, playerCar, boosts, obstacles) {
+    constructor(carControler, itemsControler, playerCar, boosts, obstacles) {
         this.carControler = carControler;
+        this.itemsControler = itemsControler;
         this.playerCar = playerCar;
         this.boosts = boosts;
         this.obstacles = obstacles;
@@ -10,16 +11,25 @@ class CollisionController {
 
     checkBoosts() {
         let chassisCenter = this.playerCar.getChassisCenter();
-        let boost = this.boosts.find(boost => boost.position.distanceTo(chassisCenter) < boost.radius + this.playerCar.radius);
+        let boost = this.boosts.find(boost => 
+            (boost.position.distanceTo(chassisCenter) < boost.radius + this.playerCar.radius) && boost.active);
 
-        if(boost) this.carControler.boostCollision(boost.type);
+        if(boost) {
+            this.carControler.boostCollision(boost.type);
+            this.itemsControler.deactivateBoost(boost);
+        } 
+        
     }
 
     checkObstacles() {
         let chassisCenter = this.playerCar.getChassisCenter();
-        let obstacle = this.obstacles.find(obstacle => obstacle.position.distanceTo(chassisCenter) < obstacle.radius + this.playerCar.radius);
+        let obstacle = this.obstacles.find(obstacle => 
+            (obstacle.position.distanceTo(chassisCenter) < obstacle.radius + this.playerCar.radius) && obstacle.active);
 
-        if(obstacle) this.carControler.obstacleCollision(obstacle.type);
+        if(obstacle) {
+            this.carControler.obstacleCollision(obstacle.type);
+            this.itemsControler.deactivateObstacle(obstacle);
+        }
     }
 
     checkCollisions() {

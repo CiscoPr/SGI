@@ -7,6 +7,7 @@ class MyObstacle {
         this.type = type;
         this.position = position;
         this.radius = 20;
+        this.active = true;
 
         this.build(scene);
     }    
@@ -15,8 +16,9 @@ class MyObstacle {
         if (this.type === 'speed') {
             const geometry = new THREE.OctahedronGeometry( this.radius - 1, 0 );
             this.mesh = new THREE.Mesh( geometry, new THREE.MeshPhongMaterial({color: '#ff0000'}) );
-        } else {
-            // include second type of Obstacle
+        } else if (this.type === 'time') {
+            const geometry = new THREE.OctahedronGeometry( this.radius - 1, 0 );
+            this.mesh = new THREE.Mesh( geometry, new THREE.MeshPhongMaterial({color: '#ffa500'}) );
         }
         this.helper.add(this.mesh);
 

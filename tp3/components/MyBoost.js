@@ -7,6 +7,7 @@ class MyBoost {
         this.type = type;
         this.position = position;
         this.radius = 20;
+        this.active = true;
 
         this.build(scene);
     }    
@@ -15,8 +16,9 @@ class MyBoost {
         if (this.type === 'speed') {
             const geometry = new THREE.IcosahedronGeometry( this.radius - 1, 0 );
             this.mesh = new THREE.Mesh( geometry, new THREE.MeshPhongMaterial({color: '#00ff00'}) );
-        } else {
-            // include second type of boost
+        } else if (this.type === 'time') {
+            const geometry = new THREE.IcosahedronGeometry( this.radius - 1, 0 );
+            this.mesh = new THREE.Mesh( geometry, new THREE.MeshPhongMaterial({color: '#0000ff'}) );
         }
         this.helper.add(this.mesh);
 

@@ -12,6 +12,7 @@ import { MyCar } from './components/MyCar.js'
 import { CollisionController } from './controller/CollisionController.js';
 import { MyObstacle } from './components/MyObstacle.js';
 import { MyBoost } from './components/MyBoost.js';
+import { ItemsController } from './controller/ItemsController.js';
 
 /**
  *  This class contains the contents of out application
@@ -41,6 +42,7 @@ class MyContents {
 
     // controllers
     this.player = null;
+    this.itemsController = null;
 	  this.collisionSystem = null;
 
     //this.automaticCarController = new AutomaticCarController(this.carCloud);
@@ -86,7 +88,9 @@ class MyContents {
     this.track = new MyTrack(this.app.scene);
     this.playerCar = new MyCar("cloud");
     this.boosts.push(new MyBoost("speed", new THREE.Vector3(4105, 45, 150), this.app.scene));
+    this.boosts.push(new MyBoost("time", new THREE.Vector3(4040, 45, -150), this.app.scene));
     this.obstacles.push(new MyObstacle("speed", new THREE.Vector3(4089, 45, -150), this.app.scene));
+    this.obstacles.push(new MyObstacle("time", new THREE.Vector3(4150, 45, 150), this.app.scene));
 
     // build helpers
     const geometry = new THREE.SphereGeometry(this.playerCar.radius);
@@ -101,7 +105,8 @@ class MyContents {
 
     // start controllers
     this.carController = new CarController(this.playerCar.car, this.playerCar.carWheels, this.track);
-	  this.collisionSystem = new CollisionController(this.carController, this.playerCar, this.boosts, this.obstacles);
+    this.itemsController = new ItemsController(this.boosts, this.obstacles);
+    this.collisionSystem = new CollisionController(this.carController, this.itemsController, this.playerCar, this.boosts, this.obstacles);
 
     this.debugKeyFrames();
 
@@ -237,6 +242,7 @@ class MyContents {
     update() {
       if (this.carController != null ) this.carController.update();
 	    if (this.collisionSystem != null ) this.collisionSystem.update();
+      if (this.itemsController != null ) this.itemsController.update();
       if (this.carSphere != null ){
         let chassisCenter = this.playerCar.getChassisCenter();
         let x = chassisCenter.x;

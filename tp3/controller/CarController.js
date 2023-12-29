@@ -14,6 +14,7 @@ class CarController {
 
         // timers
         this.collisionEffect = 0;
+        this.raceTime = 0;
 
         // default values for car parameters
         this.maxSpeedDefault = 10;
@@ -157,6 +158,9 @@ class CarController {
                 this.maxSpeed = this.maxSpeedDefault * 2;
                 this.collisionEffect = 5000;
                 break;
+            case 'time':
+                this.raceTime -= 3000;
+                if (this.raceTime < 0) this.raceTime = 0;
             default:
                 break;
         }
@@ -165,9 +169,11 @@ class CarController {
     obstacleCollision(type) {
         switch (type) {
             case 'speed':
-                this.maxSpeed = this.maxSpeedDefault / 2;
+                this.maxSpeed = this.maxSpeedDefault * 0.70;
                 this.collisionEffect = 5000;
                 break;
+            case 'time':
+                this.raceTime += 3000;
             default:
                 break;
         }
@@ -175,15 +181,19 @@ class CarController {
 
     updateCollisionEffect() {
         let elapsedTime = Date.now() - this.lastTime;
-        this.lastTime = Date.now();
 
         if (this.collisionEffect > 0) this.collisionEffect -= elapsedTime;
         else {
             this.maxSpeed = this.maxSpeedDefault;
             this.collisionEffect = 0;
         }
+    }
 
-        console.log("hello", this.collisionEffect);
+    updateRaceTime() {
+        let elapsedTime = Date.now() - this.lastTime;
+        this.raceTime += elapsedTime;
+
+        console.log("hello", this.raceTime);
     }
 
     update() {
@@ -254,6 +264,11 @@ class CarController {
         // update collision effect
         this.updateCollisionEffect();
 
+        // update race timer
+        this.updateRaceTime();
+
+        // update timestamp
+        this.lastTime = Date.now();
     }
 }
 
