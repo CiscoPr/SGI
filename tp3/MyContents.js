@@ -12,7 +12,7 @@ import { MyObstacle } from './components/MyObstacle.js';
 import { MyBoost } from './components/MyBoost.js';
 import { ItemsController } from './controller/ItemsController.js';
 import { LapController } from './controller/LapController.js';
-import { BuildingsController } from './controller/BuildingsController.js';
+import { BuildingsController } from './controller/ScenarioModelsController.js';
 /**
  *  This class contains the contents of out application
  */
