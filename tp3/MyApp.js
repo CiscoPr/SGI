@@ -29,6 +29,8 @@ class MyApp  {
         this.gui = null
         this.axis = null
         this.contents == null
+
+        this.menu = true;
     }
     /**
      * initializes the application
@@ -171,6 +173,13 @@ class MyApp  {
             }
         }
 
+        //spinning camera in menu
+        if(this.menu){
+            this.activeCamera.position.x = 1000 * Math.cos(0.0001 * Date.now());
+            this.activeCamera.position.z = 1000 * Math.sin(0.0001 * Date.now());
+            this.activeCamera.position.y = 100;
+            this.activeCamera.lookAt(0,0,0);
+        }
 
         /*
 

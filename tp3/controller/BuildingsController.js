@@ -18,7 +18,7 @@ class BuildingsController {
 
 
             model.rotation.y = -Math.PI/2;
-            model.position.set(6000, 350, -4500);
+            model.position.set(6000, 340, -4500);
             model.scale.set(1500.0, 1500.0, 1500.0);
             this.scene.add(model);
             const model2 = gltf.scene.clone();
@@ -26,7 +26,7 @@ class BuildingsController {
               if (object.isMesh) object.castShadow = true;
             });
             model2.rotation.y = -Math.PI/2;
-            model2.position.set(-6000, 350, -4500);
+            model2.position.set(-6000, 340, -4500);
             model2.scale.set(1500.0, 1500.0, 1500.0);
             this.scene.add(model2);
 
