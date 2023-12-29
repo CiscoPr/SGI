@@ -9,6 +9,7 @@ import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { CarController } from './controller/CarController.js';
 import { AutomaticCarController } from './controller/AutomaticCarController.js';
 import { MyCar } from './components/MyCar.js'
+import { LapController } from './controller/LapController.js';
 
 /**
  *  This class contains the contents of out application
@@ -77,8 +78,9 @@ class MyContents {
     this.app.scene.add(this.playerCar.car);
 
     // start controllers
-    // this.carController = new CarController(this.playerCar.car, this.playerCar.carWheels, this.track);
+    //this.carController = new CarController(this.playerCar.car, this.playerCar.carWheels, this.track);
     this.automaticCarController = new AutomaticCarController(this.app, this.playerCar.car, this.playerCar.carWheels, this.track);
+    this.lapController = new LapController(this.app, this.playerCar, this.track);
 
     const loader = new GLTFLoader().setPath('models/');
 
@@ -193,8 +195,18 @@ class MyContents {
 
 
     update() {
-      if(this.automaticCarController != null) this.automaticCarController.update();
-      //if (this.carController != null ) this.carController.update();
+
+    if(this.automaticCarController != null){
+        this.automaticCarController.update();
+        this.lapController.update();
+    }
+
+    /*
+      if (this.carController != null ){
+        this.carController.update();
+        this.lapController.update();
+      }
+      */
       if (this.carSphere != null ){
         let chassisCenter = this.playerCar.getChassisCenter();
         let x = chassisCenter.x;
