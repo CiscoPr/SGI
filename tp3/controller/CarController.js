@@ -5,8 +5,8 @@ class CarController {
         // objects to control
         this.model = model;
         this.wheels = wheels;
-        
-        // track record 
+
+        // track record
         this.track = track;
 
         // timestamp
@@ -207,9 +207,12 @@ class CarController {
         else if(!this.sIsPressed && this.speed < 0){
             this.sDecelerate();
         }
-        if (this.turning) {
+        if (this.turning && this.accelerating) {
             this.model.rotateY(this.turnDirection * this.turnSpeed);
-
+        }
+        else if (this.turning && !this.accelerating) {
+            this.decelerate();
+            this.model.rotateY(this.turnDirection * this.turnSpeed);
         }
 
         this.model.translateZ(this.speed * this.direction);

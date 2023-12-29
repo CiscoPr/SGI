@@ -218,12 +218,12 @@ class MyContents {
       }
       */
 
-      
+
       if (this.carController != null ){
         this.carController.update();
         this.lapController.update();
       }
-      
+
       if (this.carSphere != null ){
         let chassisCenter = this.playerCar.getChassisCenter();
         let x = chassisCenter.x;
