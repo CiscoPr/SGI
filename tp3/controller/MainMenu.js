@@ -2,17 +2,15 @@ import * as THREE from 'three';
 import { InputMenu } from './InputMenu.js';
 import { PickingController } from './PickingController.js';
 
-class Menu{
-    constructor(app, contents){
+class MainMenu{
+    constructor(app){
         this.app = app;
-        this.contents = contents;
-        console.log(this.contents);
         this.gameTitle = null;
 
         //this flag will be used for when the user is done with the menu
         // so the app can build the rest of the scene and dispose of the menu
-        this.mainMenu = false;
-        this.done = false;
+        this.mainMenuDone = false;
+
 
         this.raycaster = new THREE.Raycaster();
         this.raycaster.near = 1;
@@ -59,7 +57,7 @@ class Menu{
                 //console.log("Position x: " + this.pointer.x + " y: " + this.pointer.y);
                 // if the mouse clicks on the start game button
                 if(this.pointer.x > -0.281 && this.pointer.x < 0.278 && this.pointer.y > -0.42 && this.pointer.y < -0.1){
-                    this.mainMenu = true;
+                    this.mainMenuDone = true;
                 }
                 break;
         }
@@ -176,37 +174,15 @@ class Menu{
         this.gameTitle.lookAt(this.app.activeCamera.position.x, this.gameTitle.position.y, this.app.activeCamera.position.z);
         this.startGame.lookAt(this.app.activeCamera.position.x, this.startGame.position.y, this.app.activeCamera.position.z);
         this.authors.lookAt(this.app.activeCamera.position.x, this.authors.position.y, this.app.activeCamera.position.z);
-        if(this.mainMenu === true){
+        if(this.mainMenuDone === true){
             this.app.scene.remove(this.gameTitle);
             this.app.scene.remove(this.startGame);
             this.app.scene.remove(this.authors);
             //only way for the picker to work correctly
-            this.raycaster.far = 1;
-            this.mainMenu = true;
-            this.inputCounter++;
-        }
-
-
-
-
-        if(this.inputMenu != null){
-
-            this.inputMenu.update();
-            this.inputCounter = 0;
-            if(this.inputMenu.inputDone){
-                this.inputCounter++;
-                this.inputMenu.raycaster.far = 0;
-                this.raycaster.far = 0;
-                this.inputMenu = null;
-            }
-        }
-
-        if(this.inputCounter === 1){
-            this.inputCounter++;
-            this.inputMenu = new InputMenu(this.app, this);
-            //console.log("inputMenu", this.inputMenu);
+            this.raycaster.near = 0;
+            this.raycaster.far = 0;
         }
 
     }
 }
-export {Menu};
+export {MainMenu};

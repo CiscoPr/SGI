@@ -162,7 +162,7 @@ class MyApp  {
         }
 
         //spinning camera in menu
-        if(this.contents && this.contents.gameMenu){
+        if(this.contents && (!this.contents.mainController.mainMenuFlag) || (!this.contents.mainController.inputMenuFlag)){
             this.activeCamera.position.x = 1000 * Math.cos(0.0001 * Date.now());
             this.activeCamera.position.z = 1000 * Math.sin(0.0001 * Date.now());
             this.activeCamera.position.y = 800;
@@ -171,7 +171,7 @@ class MyApp  {
         }
 
 
-
+/*
         // Update the camera position to follow the car
         if (this.contents && this.contents.carController && (this.contents.gameMenu == null)) {
             const car = this.contents.carController.model;

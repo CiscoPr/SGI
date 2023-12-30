@@ -12,8 +12,8 @@ import { MyObstacle } from './components/MyObstacle.js';
 import { MyBoost } from './components/MyBoost.js';
 import { ItemsController } from './controller/ItemsController.js';
 import { LapController } from './controller/LapController.js';
-import { BuildingsController } from './controller/ScenarioModelsController.js';
-import { Menu } from './controller/MainMenu.js';
+import { ScenarioModelsController } from './controller/ScenarioModelsController.js';
+import { MainController } from './controller/MainController.js';
 /**
  *  This class contains the contents of out application
  */
@@ -34,23 +34,25 @@ class MyContents {
     // components
     this.track = null;
     this.playerCar = null;
-    this.gameMenu = null;
-    this.obstacles = [];
-    this.boosts = [];
+
+    /*we will use these later when the refactor is done
+    //this.gameMenu = null;
+    //this.obstacles = [];
+    //this.boosts = [];
 
     // helpers
-    this.carSphere;
+    //this.carSphere;
 
     // controllers
-    this.carController = null;
-    this.itemsController = null;
-	  this.collisionSystem = null;
+    //this.carController = null;
+    //this.itemsController = null;
+	  //this.collisionSystem = null;
+    */
     this.buildings = null;
 
-    //we'll use this counter to know when the player is out of the menu and
-    //since we only want to execute this code once
-    this.menuCounter = 0;
-
+    //onto the main controller of the app
+    //it will be used to guide the user to the menus and game
+    this.mainController = new MainController(this.app);
 
   }
 
@@ -77,13 +79,14 @@ class MyContents {
 
     // build components
     this.track = new MyTrack(this.app.scene);
-    this.buildings = new BuildingsController(this.app.scene);
+    this.buildings = new ScenarioModelsController(this.app.scene);
 
-    this.gameMenu = new Menu(this.app);
 
 
 
   }
+
+  /*
 
   buildCar(){
     this.playerCar = new MyCar("cloud");
@@ -118,6 +121,7 @@ class MyContents {
       //this.automaticCarController = new AutomaticCarController(this.app, this.playerCar.car, this.playerCar.carWheels, this.track);
       this.lapController = new LapController(this.app, this.playerCar, this.track);
   }
+  */
     readerError() {
         const hasError = this.reader.errorMessage != null ? true : false;
         return hasError;
@@ -185,15 +189,20 @@ class MyContents {
 
 
     update() {
+      if(this.mainController != null){
+        this.mainController.update();
+      }
+
+      /*
 	    if (this.collisionSystem != null ) this.collisionSystem.update();
       if (this.itemsController != null ) this.itemsController.update();
 
-      /*
+
       if(this.automaticCarController != null){
         this.automaticCarController.update();
         this.lapController.update();
       }
-      */
+
 
       if(this.gameMenu != null){
         this.gameMenu.update();
@@ -229,7 +238,7 @@ class MyContents {
         this.carSphere.position.set(x, y, z);
         //console.log("spherePos", this.carSphere.position)
       }
-
+      */
     }
 }
 

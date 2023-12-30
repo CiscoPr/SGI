@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-class BuildingsController {
+class ScenarioModelsController {
     constructor(scene) {
         this.scene = scene;
         this.build();
@@ -51,4 +51,4 @@ class BuildingsController {
 
           });
     }
-} export { BuildingsController };
+} export { ScenarioModelsController };

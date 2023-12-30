@@ -2,9 +2,8 @@ import * as THREE from 'three';
 import { PickingController } from './PickingController.js';
 
 class InputMenu {
-    constructor(app, menu){
+    constructor(app){
         this.app = app;
-        this.menu = menu;
         this.input = "";
         this.spriteGroup = null;
 
@@ -153,8 +152,9 @@ class InputMenu {
         this.spriteGroup.lookAt(this.app.activeCamera.position.x, this.spriteGroup.position.y, this.app.activeCamera.position.z);
         if(this.inputDone === true){
             this.app.scene.remove(this.spriteGroup);
-            this.app.scene.remove(this.next);
-            this.raycaster.far = 1;
+            this.app.scene.remove(this.nextButton);
+            this.raycaster.near = 0;
+            this.raycaster.far = 0;
         }
     }
 
