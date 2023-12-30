@@ -7,6 +7,7 @@ class Menu{
         this.contents = contents;
         console.log(this.contents);
         this.gameTitle = null;
+        
         //this flag will be used for when the user is done with the menu
         // so the app can build the rest of the scene and dispose of the menu
         this.mainMenu = false;
