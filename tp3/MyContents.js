@@ -202,6 +202,7 @@ class MyContents {
           this.menuCounter++;
           this.gameMenu = null;
         }
+
       }
 
           //this will only execute once the player is out of the menu
