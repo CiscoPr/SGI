@@ -194,6 +194,7 @@ class MyContents {
 
       if(this.gameMenu != null){
         this.gameMenu.update();
+        this.counter = 0;
         if(this.gameMenu.done){
           this.counter++;
           this.gameMenu = null;
