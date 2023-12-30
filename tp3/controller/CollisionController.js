@@ -40,6 +40,7 @@ class CollisionController {
     checkMapBounds() {
         let chassisCenter = this.playerCar.getChassisCenter();
 
+        // update map bounds
         if(chassisCenter.x > 5000) this.playerCar.car.position.x -= chassisCenter.x - 5000;
         else if(chassisCenter.x < -6000) this.playerCar.car.position.x -= chassisCenter.x + 6000;
         else if(chassisCenter.z > 6500) this.playerCar.car.position.z -= chassisCenter.z - 6500;

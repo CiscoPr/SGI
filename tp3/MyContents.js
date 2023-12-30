@@ -14,6 +14,7 @@ import { MyObstacle } from './components/MyObstacle.js';
 import { MyBoost } from './components/MyBoost.js';
 import { ItemsController } from './controller/ItemsController.js';
 import { LapController } from './controller/LapController.js';
+import { MyText } from './components/MyText.js';
 
 /**
  *  This class contains the contents of out application
@@ -138,6 +139,10 @@ class MyContents {
 
     });
 
+    // in the origin
+    let mytext = new MyText();
+    mytext.init("HELLO WORLD 123456789!");
+    this.app.scene.add(mytext.group);
   }
 
 
