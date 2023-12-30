@@ -14,7 +14,7 @@ class MyCar {
     }
 
     build() {
-        const loader = new GLTFLoader().setPath('models/');
+        const loader = new GLTFLoader().setPath('models/characters/');
 
 		loader.load(this.characterModel, async (gltf) => {
 			const model = gltf.scene;
@@ -26,8 +26,8 @@ class MyCar {
 			this.car.add(model);
 		});
 
-
-		loader.load(this.carModel, async (gltf) => {
+		const loader2 = new GLTFLoader().setPath('models/cars/');
+		loader2.load(this.carModel, async (gltf) => {
 			const model = gltf.scene;
 			model.traverse(function (object){
 				if (object.isMesh) object.castShadow = true;
