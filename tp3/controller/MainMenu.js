@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { InputMenu } from './InputMenu.js';
 
 class Menu{
     constructor(app, contents){
@@ -24,6 +25,12 @@ class Menu{
 
         this.notPickableObjIds = ["gameTitle", "authors"]
 
+        this.inputMenu = null;
+
+        //this counter will be used to know when the user is done with the menu
+        //so we can go to the input menu only once
+        this.inputCounter = 0;
+
         this.build();
 
         this.mousePressed = false;
@@ -45,7 +52,7 @@ class Menu{
         switch (event.button) {
             case 0:
                 this.mousePressed = true;
-                console.log("Position x: " + this.pointer.x + " y: " + this.pointer.y);
+                //console.log("Position x: " + this.pointer.x + " y: " + this.pointer.y);
                 // if the mouse clicks on the start game button
                 if(this.pointer.x > -0.281 && this.pointer.x < 0.278 && this.pointer.y > -0.42 && this.pointer.y < -0.1){
                     this.mainMenu = true;
@@ -154,7 +161,7 @@ class Menu{
             sound.play();
         } );
 
-        console.log("listening", this.audioLoader)
+        //console.log("listening", this.audioLoader)
     }
 
 
@@ -277,8 +284,16 @@ class Menu{
             this.app.scene.remove(this.gameTitle);
             this.app.scene.remove(this.startGame);
             this.app.scene.remove(this.authors);
+            this.inputCounter++;
+        }
 
+        if(this.inputCounter === 1){
+            this.inputMenu = new InputMenu(this.app, this);
+            //console.log("inputMenu", this.inputMenu);
+        }
 
+        if(this.inputMenu != null){
+            this.inputMenu.update();
         }
     }
 }

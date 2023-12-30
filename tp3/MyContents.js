@@ -46,7 +46,10 @@ class MyContents {
     this.itemsController = null;
 	  this.collisionSystem = null;
     this.buildings = null;
-    this.counter = 0;
+
+    //we'll use this counter to know when the player is out of the menu and
+    //since we only want to execute this code once
+    this.menuCounter = 0;
 
 
   }
@@ -194,22 +197,22 @@ class MyContents {
 
       if(this.gameMenu != null){
         this.gameMenu.update();
-        this.counter = 0;
+        this.menuCounter = 0;
         if(this.gameMenu.done){
-          this.counter++;
+          this.menuCounter++;
           this.gameMenu = null;
         }
       }
 
           //this will only execute once the player is out of the menu
-      if(this.counter == 1){
-        this.counter++;
+      if(this.menuCounter == 1){
+        this.menuCounter++;
         this.buildCar();
         this.buildBoosts();
         this.buildObstacles();
         this.startControllers();
       }
-      //console.log("this counter", this.counter)
+      //console.log("this counter", this.menuCounter)
 
 
       if (this.carController != null ){
