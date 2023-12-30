@@ -9,6 +9,9 @@ class Menu{
         //this flag will be used for when the user is done with the menu
         // so the app can build the rest of the scene and dispose of the menu
         this.done = false;
+        this.listener = null;
+        this.sound = null;
+        this.audioLoader = null;
         this.build();
 
         window.addEventListener('keydown', (e) => this.handleKeyDown(e));
@@ -78,6 +81,22 @@ class Menu{
         this.authors.material.map = texture3;
         this.authors.material.side = THREE.DoubleSide;
         this.app.scene.add(this.authors);
+
+        this.listener = new THREE.AudioListener();
+        this.app.activeCamera.add( this.listener );
+
+        this.audioLoader = new THREE.AudioLoader();
+
+        const sound = new THREE.Audio( this.listener );
+
+        this.audioLoader.load('./scene/audio/FightOn.mp3', function( buffer ) {
+            sound.setBuffer( buffer );
+            sound.setLoop( true );
+            sound.setVolume( 0.1);
+            sound.play();
+        } );
+
+        console.log("listening", this.audioLoader)
     }
 
     update(){
@@ -92,6 +111,9 @@ class Menu{
             this.app.scene.remove(this.gameTitle);
             this.app.scene.remove(this.startGame);
             this.app.scene.remove(this.authors);
+            const sound = new THREE.Audio( this.listener );
+
+
         }
     }
 }

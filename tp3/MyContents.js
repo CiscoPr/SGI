@@ -208,7 +208,7 @@ class MyContents {
         this.buildObstacles();
         this.startControllers();
       }
-      console.log("this counter", this.counter)
+      //console.log("this counter", this.counter)
 
 
       if (this.carController != null ){

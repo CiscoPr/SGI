@@ -69,7 +69,6 @@ class MyApp  {
      * initializes all the cameras
      */
     initCameras() {
-        const listener = new THREE.AudioListener();
         const aspect = window.innerWidth / window.innerHeight;
 
         // Create a basic perspective camera
@@ -126,21 +125,11 @@ class MyApp  {
      * @param {String} cameraName
      */
     setActiveCamera(cameraName) {
-        const listener = new THREE.AudioListener();
         this.activeCameraName = cameraName
         this.activeCamera = this.cameras[this.activeCameraName]
-        this.activeCamera.add( listener );
 
-        const audioLoader = new THREE.AudioLoader();
 
-        const sound = new THREE.Audio( listener );
-
-        audioLoader.load('./scene/audio/FightOn.mp3', function( buffer ) {
-            sound.setBuffer( buffer );
-            sound.setLoop( true );
-            sound.setVolume( 0.1);
-            sound.play();
-        } );
+        console.log("activeCameraName: ", this.activeCamera)
     }
 
     /**
