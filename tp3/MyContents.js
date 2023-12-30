@@ -13,7 +13,7 @@ import { MyBoost } from './components/MyBoost.js';
 import { ItemsController } from './controller/ItemsController.js';
 import { LapController } from './controller/LapController.js';
 import { BuildingsController } from './controller/ScenarioModelsController.js';
-import { Menu } from './controller/Menu.js';
+import { Menu } from './controller/MainMenu.js';
 /**
  *  This class contains the contents of out application
  */

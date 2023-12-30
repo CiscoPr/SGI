@@ -8,6 +8,7 @@ class Menu{
         this.gameTitle = null;
         //this flag will be used for when the user is done with the menu
         // so the app can build the rest of the scene and dispose of the menu
+        this.mainMenu = false;
         this.done = false;
 
         this.raycaster = new THREE.Raycaster();
@@ -25,22 +26,43 @@ class Menu{
 
         this.build();
 
+        this.mousePressed = false;
+
         document.addEventListener(
             'pointermove',
             this.onPointerMove.bind(this)
         );
 
-        window.addEventListener('keydown', (e) => this.handleKeyDown(e));
-
+        window.addEventListener('mousedown', (e) => this.handleMouseDown(e));
+        window.addEventListener('mouseup', (e) => this.handleMouseUp(e));
     }
 
-    handleKeyDown(event) {
-        switch (event.key) {
-            case 'w':
-                this.done = true;
+
+    handleMouseDown(event) {
+        //of the screen is the origin
+        this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+        this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        switch (event.button) {
+            case 0:
+                this.mousePressed = true;
+                console.log("Position x: " + this.pointer.x + " y: " + this.pointer.y);
+                // if the mouse clicks on the start game button
+                if(this.pointer.x > -0.281 && this.pointer.x < 0.278 && this.pointer.y > -0.42 && this.pointer.y < -0.1){
+                    this.mainMenu = true;
+                }
                 break;
         }
     }
+
+    handleMouseUp(event) {
+        switch (event.button) {
+            case 0:
+                this.mousePressed = false;
+                break;
+        }
+    }
+
+
 
     build(){
         this.buildGameTitle("gameTitle", this.availableLayers[1]);
@@ -150,15 +172,6 @@ class Menu{
     }
 
     /*
-    * Update the texture
-    *
-    */
-    updatePickingColor(value) {
-        this.pickingColor = value.replace('#', '0x');
-    }
-
-
-    /*
     * Change the color of the first intersected object
     *
     */
@@ -183,6 +196,8 @@ class Menu{
         this.lastPickedObj = null;
     }
 
+
+
     /*
     * Helper to visualize the intersected object
     *
@@ -197,6 +212,7 @@ class Menu{
             }
             else{
                 this.changeColorOfFirstPickedObj(obj)
+
             }
         } else {
             this.restoreColorOfFirstPickedObj()
@@ -204,6 +220,8 @@ class Menu{
     }
 
 
+
+        //
 
     /**
      * Print to console information about the intersected objects
@@ -224,7 +242,6 @@ class Menu{
                 */
             }
         }
-
 
 
     onPointerMove(event) {
@@ -256,7 +273,7 @@ class Menu{
         this.gameTitle.lookAt(this.app.activeCamera.position.x, this.gameTitle.position.y, this.app.activeCamera.position.z);
         this.startGame.lookAt(this.app.activeCamera.position.x, this.startGame.position.y, this.app.activeCamera.position.z);
         this.authors.lookAt(this.app.activeCamera.position.x, this.authors.position.y, this.app.activeCamera.position.z);
-        if(this.done === true){
+        if(this.mainMenu === true){
             this.app.scene.remove(this.gameTitle);
             this.app.scene.remove(this.startGame);
             this.app.scene.remove(this.authors);
