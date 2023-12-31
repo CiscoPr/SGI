@@ -72,7 +72,7 @@ class CarSelector {
         const planeGeometryCloud = new THREE.PlaneGeometry(250, 365);
         const planeMaterialCloud = new THREE.MeshBasicMaterial({color: 0xffffff});
         planeMaterialCloud.transparent = true;
-        planeMaterialCloud.opacity = 0.5;
+        planeMaterialCloud.opacity = 0.35;
 
         const planeCloud = new THREE.Mesh(planeGeometryCloud, planeMaterialCloud);
         planeCloud.position.set(this.initialCarPosX+60, this.initialCarPosY + 75, this.initialCarPosZ + 75);
@@ -85,7 +85,7 @@ class CarSelector {
         const planeGeometryTifa = new THREE.PlaneGeometry(250, 365);
         const planeMaterialTifa = new THREE.MeshBasicMaterial({color: 0xffffff});
         planeMaterialTifa.transparent = true;
-        planeMaterialTifa.opacity = 0.5;
+        planeMaterialTifa.opacity = 0.35;
 
         const planeTifa = new THREE.Mesh(planeGeometryTifa, planeMaterialTifa);
         planeTifa.position.set(this.initialCarPosX+ 430, this.initialCarPosY + 75, this.initialCarPosZ + 75);
