@@ -29,6 +29,9 @@ class MainController{
         // 3 = enemy selector and so on...
         this.phaseCounter = 0;
 
+        //this will be used to keep track of the user name
+        this.userName = "";
+
         //this will be used to keep track of the player character and the enemy character
         this.playersCharacter = "";
         this.enemyCharacter = "";
@@ -88,7 +91,9 @@ class MainController{
         }
 
         else if (this.inputMenuFlag == true && this.phaseCounter == 2) {
+            this.userName = this.inputMenu.getInputName();
             this.inputMenu = null; // might remove later
+            console.log("The user name is:", this.userName)
             this.build();
         }
 
