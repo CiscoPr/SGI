@@ -167,6 +167,8 @@ class EnemySelector {
                 this.app.scene.remove(this.carModels[i]);
                 this.app.scene.remove(this.charsModels[i]);
                 this.app.scene.remove(this.planes[i]);
+                this.raycaster.near = 0;
+                this.raycaster.far = 0;
             }
         }
     }
