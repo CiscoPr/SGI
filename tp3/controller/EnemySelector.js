@@ -2,11 +2,11 @@ import * as THREE from 'three';
 import { PickingController } from './PickingController.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-class CarSelector {
-    constructor(app) {
+class EnemySelector {
+        constructor(app) {
         this.app = app;
 
-        this.carSelectorDone = false;
+        this.enemySelectorDone = false;
         this.carModels = [];
         this.charsModels = [];
         this.planes = [];
@@ -15,12 +15,12 @@ class CarSelector {
         //initial car positions
         this.initialCarPosX = -8200;
         this.initialCarPosY = 70;
-        this.initialCarPosZ = -1050;
+        this.initialCarPosZ = 150;
 
         //initial character positions
         this.initialCharPosX = -8200;
         this.initialCharPosY = 62.5;
-        this.initialCharPosZ = -1050;
+        this.initialCharPosZ = 150;
 
         this.raycaster = new THREE.Raycaster();
         this.raycaster.near = 1;
@@ -28,12 +28,12 @@ class CarSelector {
 
         this.pointer = new THREE.Vector2();
         this.intersectedObj = null;
-        this.pickingColor = "0xfff000";
+        this.pickingColor = "0xfc2020";
 
         this.availableLayers = ['none', 1, 2]
         this.selectedLayer = this.availableLayers[0]
 
-        this.notPickableObjIds = ["parking3", "terrain"]
+        this.notPickableObjIds = ["parking2", "terrain"]
         this.carWithCharacter = null;
         this.pickingController = new PickingController(this.app, this.raycaster, this.pointer, this.intersectedObj, this.pickingColor, this.availableLayers, this.selectedLayer, this.notPickableObjIds);
 
@@ -59,12 +59,12 @@ class CarSelector {
                 if (this.pointer.x > -0.64 && this.pointer.x < -0.34 && this.pointer.y > -0.94 && this.pointer.y < -0.1) {
                     console.log("Cloud selected");
                     this.selectedCharacter = "cloud";
-                    this.carSelectorDone = true;
+                    this.enemySelectorDone = true;
                 }
                 else if (this.pointer.x > -0.17 && this.pointer.x < 0.12 && this.pointer.y > -0.94 && this.pointer.y < -0.1) {
                     console.log("Tifa selected");
                     this.selectedCharacter = "tifa";
-                    this.carSelectorDone = true;
+                    this.enemySelectorDone = true;
                 }
 
                 break;
@@ -159,17 +159,16 @@ class CarSelector {
     }
 
     update() {
-        //TODO: make the user be able to select if the car is manual or automatic
+        //TODO: make the user be able to select the level of dificulty
+        //      of the enemy
 
-        if (this.carSelectorDone) {
+        if (this.enemySelectorDone) {
             for(let i = 0; i < this.carModels.length; i++){
                 this.app.scene.remove(this.carModels[i]);
                 this.app.scene.remove(this.charsModels[i]);
                 this.app.scene.remove(this.planes[i]);
-                this.raycaster.near = 0;
-                this.raycaster.far = 0;
             }
         }
     }
 }
-export {CarSelector};
+export { EnemySelector };

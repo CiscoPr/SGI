@@ -127,6 +127,33 @@
                 shadowmapsize = "1024"
                 />
 
+                <spotlight id="parkingLight3" enabled="true"
+                color="1.0 1.0 1.0 1"
+                intensity="50.0"
+                angle="0.5"
+                distance="1000"
+                decay="0.2"
+                castshadow="true"
+                position="-8225 500 250"
+                target="-8225 0 250"
+                shadowfar = "1000"
+                shadowmapsize = "1024"
+                />
+
+                <spotlight id="parkingLight4" enabled="true"
+                color="1.0 1.0 1.0 1"
+                intensity="50.0"
+                angle="0.5"
+                distance="1000"
+                decay="0.2"
+                castshadow="true"
+                position="-7775 500 250"
+                target="-7775 0 250"
+                shadowfar = "1000"
+                shadowmapsize = "1024"
+                />
+
+
 
                 <pointlight id="tube1Light" enabled="true"
                 color="1.0 1.0 1.0 1"

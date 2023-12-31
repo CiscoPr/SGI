@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { MainMenu } from './MainMenu.js';
 import { InputMenu } from './InputMenu.js';
 import { CarSelector } from './CarSelector.js';
+import { EnemySelector } from './EnemySelector.js';
 // import the rest of the menus
 
 class MainController{
@@ -28,6 +29,11 @@ class MainController{
         // 3 = enemy selector and so on...
         this.phaseCounter = 0;
 
+        //this will be used to keep track of the player character and the enemy character
+        this.playersCharacter = "";
+        this.enemyCharacter = "";
+
+
         this.game = null;
         this.build();
     }
@@ -45,7 +51,7 @@ class MainController{
                 this.carSelector = new CarSelector(this.app);
                 break;
             case 3:
-                //this.enemySelector = new EnemySelector(this.app);
+                this.enemySelector = new EnemySelector(this.app);
                 break;
             case 4:
                 //this.objectsSelector = new ObjectsSelector(this.app);
@@ -69,7 +75,8 @@ class MainController{
             //console.log("the main:", this.mainMenuFlag);
         }
 
-        else if(this.mainMenuFlag == true && this.phaseCounter == 1){
+        else if (this.mainMenuFlag == true && this.phaseCounter == 1) {
+            this.mainMenu = null; // might remove later
             this.build();
         }
 
@@ -80,18 +87,36 @@ class MainController{
             //console.log("the input:", this.inputMenuFlag);
         }
 
-        else if(this.inputMenuFlag == true && this.phaseCounter == 2){
+        else if (this.inputMenuFlag == true && this.phaseCounter == 2) {
+            this.inputMenu = null; // might remove later
             this.build();
         }
 
         //then we go to the car selector
-        else if(this.carSelectorFlag == false && this.phaseCounter == 3){
+        else if (this.carSelectorFlag == false && this.phaseCounter == 3) {
             this.carSelector.update();
             this.carSelectorFlag = this.carSelector.carSelectorDone;
             //console.log("the car:", this.carSelectorFlag);
         }
 
-        else if(this.carSelectorFlag == true && this.phaseCounter == 3){
+        else if (this.carSelectorFlag == true && this.phaseCounter == 3) {
+            this.playersCharacter = this.carSelector.getSelectedCharacter();
+            console.log("The player selected:", this.playersCharacter)
+            this.carSelector = null; // might remove later
+            this.build();
+        }
+
+        //then we go to the enemy selector
+        else if (this.enemySelectorFlag == false && this.phaseCounter == 4) {
+            this.enemySelector.update();
+            this.enemySelectorFlag = this.enemySelector.enemySelectorDone;
+            //console.log("the enemy:", this.enemySelectorFlag);
+        }
+
+        else if (this.enemySelectorFlag == true && this.phaseCounter == 4) {
+            this.enemyCharacter = this.enemySelector.getSelectedCharacter();
+            console.log("The enemy selected:", this.enemyCharacter)
+            this.enemySelector = null; // might remove later
             this.build();
         }
 
