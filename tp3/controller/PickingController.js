@@ -86,7 +86,7 @@ class PickingController {
     transverseRaycastProperties(intersects) {
         for (var i = 0; i < intersects.length; i++) {
 
-            console.log(intersects[i]);
+            //console.log(intersects[i]);
 
             /*
             An intersection has the following properties :

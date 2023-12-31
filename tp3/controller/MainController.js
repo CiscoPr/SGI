@@ -42,7 +42,7 @@ class MainController{
                 this.inputMenu = new InputMenu(this.app);
                 break;
             case 2:
-                //this.carSelector = new CarSelector(this.app);
+                this.carSelector = new CarSelector(this.app);
                 break;
             case 3:
                 //this.enemySelector = new EnemySelector(this.app);
@@ -66,7 +66,7 @@ class MainController{
         if(this.mainMenuFlag == false && this.phaseCounter == 1){
             this.mainMenu.update();
             this.mainMenuFlag = this.mainMenu.mainMenuDone;
-            console.log("the main:", this.mainMenuFlag);
+            //console.log("the main:", this.mainMenuFlag);
         }
 
         else if(this.mainMenuFlag == true && this.phaseCounter == 1){
@@ -77,7 +77,22 @@ class MainController{
         else if(this.inputMenuFlag == false && this.phaseCounter == 2){
             this.inputMenu.update();
             this.inputMenuFlag = this.inputMenu.inputDone;
-            console.log("the input:", this.inputMenuFlag);
+            //console.log("the input:", this.inputMenuFlag);
+        }
+
+        else if(this.inputMenuFlag == true && this.phaseCounter == 2){
+            this.build();
+        }
+
+        //then we go to the car selector
+        else if(this.carSelectorFlag == false && this.phaseCounter == 3){
+            this.carSelector.update();
+            this.carSelectorFlag = this.carSelector.carSelectorDone;
+            //console.log("the car:", this.carSelectorFlag);
+        }
+
+        else if(this.carSelectorFlag == true && this.phaseCounter == 3){
+            this.build();
         }
 
     }

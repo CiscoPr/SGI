@@ -15,7 +15,7 @@ class InputMenu {
         this.intersectedObj = null;
         this.pickingColor = "0xCFE6FF";
 
-        this.availableLayers = ['none', 5, 6]
+        this.availableLayers = ['none', 1, 2]
         this.selectedLayer = this.availableLayers[0]
 
         this.notPickableObjIds = ["inputBox"]
@@ -67,8 +67,8 @@ class InputMenu {
 
     build(){
 
-        this.buildInput("inputBox", 5);
-        this.buildNextButton("nextButton", 6);
+        this.buildInput("inputBox", 1);
+        this.buildNextButton("nextButton", 2);
 
     }
 

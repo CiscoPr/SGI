@@ -170,6 +170,13 @@ class MyApp  {
             this.activeCamera.lookAt(0, 800, 0);
         }
 
+        else if(this.contents && (!this.contents.mainController.carSelectorFlag)){
+            this.activeCamera.position.x = -7750
+            this.activeCamera.position.y = 700;
+            this.activeCamera.position.z = -1200
+
+            this.activeCamera.lookAt(-7750, 0, -1200);
+        }
 
 /*
         // Update the camera position to follow the car

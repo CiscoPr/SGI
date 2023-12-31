@@ -25,11 +25,7 @@ class MainMenu{
 
         this.notPickableObjIds = ["gameTitle", "authors"]
         this.pickingController = new PickingController(this.app, this.raycaster, this.pointer, this.intersectedObj, this.pickingColor, this.availableLayers, this.selectedLayer, this.notPickableObjIds);
-        this.inputMenu = null;
 
-        //this counter will be used to know when the user is done with the menu
-        //so we can go to the input menu only once
-        this.inputCounter = 0;
 
         this.build();
 
@@ -39,11 +35,6 @@ class MainMenu{
 
         window.addEventListener('mousedown', (e) => this.handleMouseDown(e));
         window.addEventListener('mouseup', (e) => this.handleMouseUp(e));
-    }
-
-    removeEventListeners() {
-        window.removeEventListener('mousedown', (e) => this.handleMouseDown(e));
-        window.removeEventListener('mouseup', (e) => this.handleMouseUp(e));
     }
 
 
