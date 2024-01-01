@@ -36,6 +36,12 @@ class MainController{
         this.playersCharacter = "";
         this.enemyCharacter = "";
 
+        //this will be used to keep track of automatic/manual player mode (manual by default)
+        this.manual = true;
+
+        //this will be used to keep track of the diffculty level of the enemy (1 by default)
+        this.difficulty = 1;
+
 
         this.game = null;
         this.build();
@@ -100,6 +106,7 @@ class MainController{
         //then we go to the car selector
         else if (this.carSelectorFlag == false && this.phaseCounter == 3) {
             this.carSelector.update();
+            console.log("The user name is:", this.userName)
             this.carSelectorFlag = this.carSelector.carSelectorDone;
             //console.log("the car:", this.carSelectorFlag);
         }

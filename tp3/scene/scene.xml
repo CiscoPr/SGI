@@ -225,7 +225,7 @@
 
             <children>
                 <primitive>
-                    <rectangle xy1="15000.0 15000.0" xy2="-15000.0 -15000.0" />
+                    <rectangle xy1="15000.0 15000.0" xy2="-15000.0 -15000.0" name="terrain"/>
                 </primitive>
             </children>
         </node>
@@ -329,7 +329,7 @@
             <materialref id="parkingApp" />
             <children>
                 <primitive>
-                    <rectangle xy1="140.0 100.0" xy2="-140.0 -100.0" />
+                    <rectangle xy1="140.0 100.0" xy2="-140.0 -100.0" name="parking1"/>
                 </primitive>
             </children>
         </node>
@@ -343,7 +343,7 @@
             <materialref id="parkingApp" />
             <children>
                 <primitive>
-                    <rectangle xy1="140.0 100.0" xy2="-140.0 -100.0" />
+                    <rectangle xy1="140.0 100.0" xy2="-140.0 -100.0" name="parking2"/>
                 </primitive>
             </children>
         </node>
@@ -357,7 +357,7 @@
             <materialref id="parkingApp" />
             <children>
                 <primitive>
-                    <rectangle xy1="140.0 100.0" xy2="-140.0 -100.0" />
+                    <rectangle xy1="140.0 100.0" xy2="-140.0 -100.0" name="parking3"/>
                 </primitive>
             </children>
         </node>

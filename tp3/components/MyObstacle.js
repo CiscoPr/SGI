@@ -26,7 +26,7 @@ class MyObstacle {
         const geometry = new THREE. SphereGeometry(this.radius);
         const material = new THREE.MeshBasicMaterial({color: 0xff0000});
         material.wireframe = true;
-        this.helper.add(new THREE.Mesh(geometry, material));
+        //this.helper.add(new THREE.Mesh(geometry, material));
 
         // set position
         let x = this.position.x;

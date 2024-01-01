@@ -130,7 +130,8 @@ class MySceneData  {
 			{name: "xy2", type: "vector2"},
             {name: "parts_x", type: "integer", required: false, default: 1},
 			{name: "parts_y", type: "integer", required: false, default: 1},
-            {name: "distance", type: "float", required: false, default: 0.0}, // The distance at which to display this level of detail. Default 0.0.
+            { name: "distance", type: "float", required: false, default: 0.0 }, // The distance at which to display this level of detail. Default 0.0.
+            {name: "name", type:"string", required: false, default: ""},
 		]
 
 		this.descriptors["triangle"] = [

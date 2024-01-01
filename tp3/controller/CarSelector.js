@@ -24,7 +24,7 @@ class CarSelector {
 
         this.raycaster = new THREE.Raycaster();
         this.raycaster.near = 1;
-        this.raycaster.far = 700;
+        this.raycaster.far = 1000;
 
         this.pointer = new THREE.Vector2();
         this.intersectedObj = null;
@@ -81,7 +81,7 @@ class CarSelector {
 
     build() {
         //add a plan for picking
-        const planeGeometryCloud = new THREE.PlaneGeometry(250, 365);
+        const planeGeometryCloud = new THREE.CircleGeometry(200, 32);
         const planeMaterialCloud = new THREE.MeshBasicMaterial({color: 0xffffff});
         planeMaterialCloud.transparent = true;
         planeMaterialCloud.opacity = 0.35;
@@ -95,7 +95,7 @@ class CarSelector {
         this.loadCarModel("carCloud.glb")
 
         //add a plan
-        const planeGeometryTifa = new THREE.PlaneGeometry(250, 365);
+        const planeGeometryTifa = new THREE.CircleGeometry(200, 32);
         const planeMaterialTifa = new THREE.MeshBasicMaterial({color: 0xffffff});
         planeMaterialTifa.transparent = true;
         planeMaterialTifa.opacity = 0.35;
