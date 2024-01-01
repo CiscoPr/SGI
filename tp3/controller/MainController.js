@@ -37,9 +37,6 @@ class MainController{
         this.playersCharacter = "";
         this.enemyCharacter = "";
 
-        //this will be used to keep track of automatic/manual player mode (manual by default)
-        this.manual = true;
-
         //this will be used to keep track of the diffculty level of the enemy (1 by default)
         this.difficulty = 1;
 
