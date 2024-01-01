@@ -53,12 +53,6 @@ class CarSelector {
         this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
         this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-        /*
-                            if(this.pointer.x > 0.55 && this.pointer.x < 0.71 && this.pointer.y > -0.38 && this.pointer.y < -0.31){
-                        this.selectedCharacter = "cloud";
-                        this.carSelectorDone = true;
-                    }
-        */
         switch (event.button) {
             case 0:
                 this.mousePressed = true;
