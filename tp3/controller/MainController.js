@@ -3,6 +3,7 @@ import { MainMenu } from './MainMenu.js';
 import { InputMenu } from './InputMenu.js';
 import { CarSelector } from './CarSelector.js';
 import { EnemySelector } from './EnemySelector.js';
+import { ObstacleSelector } from './ObstacleSelector.js';
 // import the rest of the menus
 
 class MainController{
@@ -13,14 +14,14 @@ class MainController{
         this.inputMenu = null;
         this.carSelector = null;
         this.enemySelector = null;
-        this.objectsSelector = null;
+        this.obstacleSelector = null;
 
         //flags to check if the user is done with each of the menus
         this.mainMenuFlag = false;
         this.inputMenuFlag = false;
         this.carSelectorFlag = false;
         this.enemySelectorFlag = false;
-        this.objectsSelectorFlag = false;
+        this.obstacleSelectorFlag = false;
 
         //this counter will keep track of which menu we are in. For example:
         // 0 = main menu
@@ -63,7 +64,7 @@ class MainController{
                 this.enemySelector = new EnemySelector(this.app);
                 break;
             case 4:
-                //this.objectsSelector = new ObjectsSelector(this.app);
+                this.obstacleSelector = new ObstacleSelector(this.app);
                 break;
             case 5:
                 //this.game = new Game(this.app);
@@ -129,6 +130,17 @@ class MainController{
             this.enemyCharacter = this.enemySelector.getSelectedCharacter();
             console.log("The enemy selected:", this.enemyCharacter)
             this.enemySelector = null; // might remove later
+            this.build();
+        }
+
+        //then we go to the obstacle selector
+        else if (this.obstacleSelectorFlag == false && this.phaseCounter == 5) {
+            this.obstacleSelector.update();
+            this.obstacleSelectorFlag = this.obstacleSelector.obsSelectorDone;
+        }
+
+        else if (this.obstacleSelectorFlag == true && this.phaseCounter == 5) {
+            this.obstacleSelector = null; // might remove later
             this.build();
         }
 

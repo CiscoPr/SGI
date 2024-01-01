@@ -42,7 +42,6 @@ class PickingController {
             this.lastPickedObj = obj;
             this.lastPickedObj.currentHex = this.lastPickedObj.material.color.getHex();
             this.lastPickedObj.material.color.setHex(this.pickingColor);
-            console.log("object is", obj)
         }
     }
 

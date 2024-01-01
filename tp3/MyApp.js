@@ -188,6 +188,15 @@ class MyApp  {
             this.activeCamera.lookAt(-7750, 0, 0);
         }
 
+        //camera for obstacle selection
+        else if (this.contents && (!this.contents.mainController.obstacleSelectorFlag)) {
+            this.activeCamera.position.x = -7750
+            this.activeCamera.position.y = 700;
+            this.activeCamera.position.z = 1200
+
+            this.activeCamera.lookAt(-7750, 0, 1200);
+        }
+
 /*
         // Update the camera position to follow the car
         if (this.contents && this.contents.carController && (this.contents.gameMenu == null)) {
