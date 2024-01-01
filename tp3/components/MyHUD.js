@@ -4,7 +4,7 @@ import { MyText } from './MyText.js';
 class MyHUD {
     constructor(player, lapController) {
         // attributes
-        this.width = screen.availWidth / 100;
+        this.width = screen.availWidth /  100;
         this.height = screen.availHeight / 100;
         this.offsetX = this.width / 7;
         this.offsetY = this.height / 14;
@@ -102,7 +102,6 @@ class MyHUD {
         let seconds = Math.floor((time - minutes * 60000) / 1000);
 
         return minutes + ":" + seconds;
-
     }
 
     convertEffect(effect) {
@@ -132,7 +131,8 @@ class MyHUD {
     
             // place plane in front of the camera
             let planePos = cameraPos.clone();
-            planePos.add(cameraDir.multiplyScalar(5.5));
+            let scale = this.width > this.height ? this.width / 2.8 : this.height / 2.8;
+            planePos.add(cameraDir.multiplyScalar(scale));
             this.hud.position.set(planePos.x, planePos.y, planePos.z);
             this.hud.lookAt(cameraPos);
         }
