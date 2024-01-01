@@ -11,6 +11,7 @@ class CarController {
 
         // timestamp
         this.lastTime = Date.now();
+        this.lastPos = this.model.position.clone();
 
         // timers
         this.collisionEffect = 0;
@@ -21,6 +22,7 @@ class CarController {
 
         // car parameters
         this.speed = 0;
+        this.realSpeed = 0;
         this.maxSpeed = this.maxSpeedDefault;
         this.acceleration = 0.5;
         this.deceleration = 0.5;
@@ -33,6 +35,7 @@ class CarController {
         this.accelerating = false;
         this.sIsPressed = false;
         this.turning = false;
+        this.outTracks = false;
 
         // Add event listeners for keypresses
         window.addEventListener('keydown', (e) => this.handleKeyDown(e));
@@ -196,6 +199,13 @@ class CarController {
         console.log("hello", this.raceTime);
     }
 
+    updateRealSpeed() {
+        let elapsedTime = Date.now() - this.lastTime;
+        elapsedTime = elapsedTime / 3600000;
+        this.realSpeed = (this.model.position.distanceTo(this.lastPos) / 1000) / elapsedTime;
+        this.lastPos = this.model.position.clone();
+    }
+
     update() {
         if (this.accelerating) {
             this.accelerate();
@@ -263,6 +273,7 @@ class CarController {
         // ask about this
         if(closestPointDistance > 250 && (this.model.position.x > 4300 || this.model.position.x < 3700)){
             console.log("you're out of the track");
+            this.outTracks = true;
 
             this.maxSpeed = 5;
         }
@@ -270,13 +281,20 @@ class CarController {
             // fix the max speed
             if (this.collisionEffect == 0) this.maxSpeed = 10;
             console.log("you're in the track");
+            this.outTracks = false;
         }
 
         // update race timer
         this.updateRaceTime();
 
+        // update realSpeed and lastPos
+        this.updateRealSpeed();
+
         // update timestamp
         this.lastTime = Date.now();
+
+        console.log("speed", this.realSpeed.toString());
+
 
         console.log("collisionEffect", this.collisionEffect);
         console.log("maxSpeed", this.maxSpeed);

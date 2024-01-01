@@ -14,7 +14,7 @@ import { MyObstacle } from './components/MyObstacle.js';
 import { MyBoost } from './components/MyBoost.js';
 import { ItemsController } from './controller/ItemsController.js';
 import { LapController } from './controller/LapController.js';
-import { MyText } from './components/MyText.js';
+import { MyHUD } from './components/MyHUD.js';
 
 /**
  *  This class contains the contents of out application
@@ -92,9 +92,11 @@ class MyContents {
     this.carController = new CarController(this.playerCar.car, this.playerCar.carWheels, this.track);
     this.itemsController = new ItemsController(this.boosts, this.obstacles);
     this.collisionSystem = new CollisionController(this.carController, this.itemsController, this.playerCar, this.boosts, this.obstacles);
-
-    //this.automaticCarController = new AutomaticCarController(this.app, this.playerCar.car, this.playerCar.carWheels, this.track);
     this.lapController = new LapController(this.app, this.playerCar, this.track);
+    //this.automaticCarController = new AutomaticCarController(this.app, this.playerCar.car, this.playerCar.carWheels, this.track);
+
+    this.hud = new MyHUD(this.carController, this.lapController);
+    this.hud.init(this.app.scene);
 
     const loader = new GLTFLoader().setPath('models/');
 
@@ -138,11 +140,6 @@ class MyContents {
       this.app.scene.add(model2);
 
     });
-
-    // in the origin
-    let mytext = new MyText();
-    mytext.init("HELLO WORLD 123456789!");
-    this.app.scene.add(mytext.group);
   }
 
 
@@ -207,14 +204,10 @@ class MyContents {
         }
     }
 
-
-
-
-
-
     update() {
 	    if (this.collisionSystem != null ) this.collisionSystem.update();
       if (this.itemsController != null ) this.itemsController.update();
+      if (this.hud != null && this.carController != null && this.lapController != null ) this.hud.update(this.app.activeCamera);
 
       /*
       if(this.automaticCarController != null){
