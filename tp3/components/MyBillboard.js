@@ -1,17 +1,13 @@
 import * as THREE from 'three';
 import { MyText } from './MyText.js';
 
-class MyHUD {
+class MyBillboard {
     constructor(player, lapController) {
         // attributes
-        this.width = screen.availWidth / 100;
-        this.height = screen.availHeight / 100;
+        this.width = 16;
+        this.height = 8;
         this.offsetX = this.width / 7;
-        this.offsetY = this.height / 14;
-        if (this.width < this.height) {
-            offsetX = this.width / 14;
-            offsetY = this.height / 7;
-        } 
+        this.offsetY = this.height / 7;
         
         // components
         this.hud = null;
@@ -29,19 +25,21 @@ class MyHUD {
 
     init(scene) {
         this.hud = new THREE.Group();
-        
+
+        this.initBorder();
+
         // speedometer
         let speedSMG = new THREE.Group();
         speedSMG.name = "number";
-        speedSMG.position.set(-this.width / 2 + this.offsetX, -this.height / 2 + this.offsetY, 0);
-        let speedHandler = new MyText(20);
+        speedSMG.position.set(-this.width / 2 + this.offsetX, -this.height / 2 + this.offsetY, 0.2);
+        let speedHandler = new MyText(7);
         speedHandler.init(speedSMG);
         this.hudElements.set(speedSMG, speedHandler);
 
         // timer
         let timerSMG = new THREE.Group();
         timerSMG.name = "timer";
-        timerSMG.position.set(this.width / 2 - this.offsetX * 2, -this.height / 2 + this.offsetY, 0);
+        timerSMG.position.set(this.width / 2 - this.offsetX * 2, -this.height / 2 + this.offsetY, 0.2);
         let timerHandler = new MyText(20);
         timerHandler.init(timerSMG);
         this.hudElements.set(timerSMG, timerHandler);
@@ -49,15 +47,15 @@ class MyHUD {
         // lap
         let lapSMG = new THREE.Group();
         lapSMG.name = "lap";
-        lapSMG.position.set(-this.width / 2 + this.offsetX, this.height / 2 - this.offsetY, 0);
-        let lapHandler = new MyText(20);
+        lapSMG.position.set(-this.width / 2 + this.offsetX, this.height / 2 - this.offsetY, 0.2);
+        let lapHandler = new MyText(7);
         lapHandler.init(lapSMG);
         this.hudElements.set(lapSMG, lapHandler);
 
         // add effect timer
         let effectSMG = new THREE.Group();
         effectSMG.name = "effect";
-        effectSMG.position.set(this.width / 2 - this.offsetX * 2, this.height / 2 - this.offsetY, 0);
+        effectSMG.position.set(this.width / 2 - this.offsetX * 2, this.height / 2 - this.offsetY, 0.2);
         let effectHandler = new MyText(20);
         effectHandler.init(effectSMG);
         this.hudElements.set(effectSMG, effectHandler);
@@ -77,11 +75,11 @@ class MyHUD {
         this.gArrow = new THREE.Mesh(geometry, material_green);
         this.rArrow = new THREE.Mesh(geometry, material_red);
         this.yArrow = new THREE.Mesh(geometry, material_yellow);
-        this.gArrow.position.set(-this.width / 2 + this.offsetX - 1, -this.height / 2 + this.offsetY, 0);
+        this.gArrow.position.set(-this.width / 2 + this.offsetX - 1, -this.height / 2 + this.offsetY, 0.2);
         this.gArrow.rotation.z = -Math.PI / 2;
-        this.rArrow.position.set(-this.width / 2 + this.offsetX - 1, -this.height / 2 + this.offsetY, 0);
+        this.rArrow.position.set(-this.width / 2 + this.offsetX - 1, -this.height / 2 + this.offsetY, 0.2);
         this.rArrow.rotation.z = Math.PI / 2;
-        this.yArrow.position.set(-this.width / 2 + this.offsetX - 1, -this.height / 2 + this.offsetY, 0); 
+        this.yArrow.position.set(-this.width / 2 + this.offsetX - 1, -this.height / 2 + this.offsetY, 0.2); 
         this.yArrow.rotation.z = Math.PI / 2;
         this.removeArrows();
 
@@ -94,6 +92,53 @@ class MyHUD {
         this.hud.add(this.rArrow);
         this.hud.add(this.yArrow);
         scene.add(this.hud);
+    }
+
+    initBorder() {
+        // add panel helper
+        let plane = new THREE.PlaneGeometry(this.width, this.height);
+        let material = new THREE.MeshBasicMaterial({color: 0xffffff});
+        let mesh = new THREE.Mesh(plane, material);
+        this.hud.add(mesh);
+
+        // create borders
+        let border = new THREE.BoxGeometry(this.width, 0.1, 0.1);
+        let materialBorder = new THREE.MeshBasicMaterial({color: 0x000000});
+        let meshBorder = new THREE.Mesh(border, materialBorder);
+        meshBorder.position.set(0, this.height / 2, 0);
+        this.hud.add(meshBorder);
+
+        border = new THREE.BoxGeometry(this.width, 0.1, 0.1);
+        materialBorder = new THREE.MeshBasicMaterial({color: 0x000000});
+        meshBorder = new THREE.Mesh(border, materialBorder);
+        meshBorder.position.set(0, -this.height / 2, 0);
+        this.hud.add(meshBorder);
+
+        border = new THREE.BoxGeometry(0.1, this.height, 0.1);
+        materialBorder = new THREE.MeshBasicMaterial({color: 0x000000});
+        meshBorder = new THREE.Mesh(border, materialBorder);
+        meshBorder.position.set(this.width / 2, 0, 0);
+        this.hud.add(meshBorder);
+
+        border = new THREE.BoxGeometry(0.1, this.height, 0.1);
+        materialBorder = new THREE.MeshBasicMaterial({color: 0x000000});
+        meshBorder = new THREE.Mesh(border, materialBorder);
+        meshBorder.position.set(-this.width / 2, 0, 0);
+        this.hud.add(meshBorder);
+
+        // add support
+        let support = new THREE.BoxGeometry(1, 4, 1);
+        let materialSupport = new THREE.MeshBasicMaterial({color: 0x000000});
+        let meshSupport = new THREE.Mesh(support, materialSupport);
+        meshSupport.position.set(this.width / 2 - 2, -this.height / 2 - 1, -0.6);
+        this.hud.add(meshSupport);
+
+        // add support
+        support = new THREE.BoxGeometry(1, 4, 1);
+        materialSupport = new THREE.MeshBasicMaterial({color: 0x000000});
+        meshSupport = new THREE.Mesh(support, materialSupport);
+        meshSupport.position.set(-this.width / 2 + 2, -this.height / 2 -1, -0.6);
+        this.hud.add(meshSupport);
     }
 
     convertTime(time) {
@@ -124,19 +169,7 @@ class MyHUD {
         else if (color == "yellow") this.yArrow.visible = true;
     }
 
-    update(camera) {        
-        if (camera != null){
-            // get camera position and camare direction
-            let cameraPos = camera.position;
-            let cameraDir = camera.getWorldDirection(new THREE.Vector3());
-    
-            // place plane in front of the camera
-            let planePos = cameraPos.clone();
-            planePos.add(cameraDir.multiplyScalar(5.5));
-            this.hud.position.set(planePos.x, planePos.y, planePos.z);
-            this.hud.lookAt(cameraPos);
-        }
-
+    update() {        
         let keys = this.hudElements.keys();
         for (let key of keys) if (key == null) return;
         
@@ -169,4 +202,4 @@ class MyHUD {
 
 }
 
-export { MyHUD };
+export { MyBillboard };

@@ -15,6 +15,7 @@ import { MyBoost } from './components/MyBoost.js';
 import { ItemsController } from './controller/ItemsController.js';
 import { LapController } from './controller/LapController.js';
 import { MyHUD } from './components/MyHUD.js';
+import { MyBillboard } from './components/MyBillboard.js';
 
 /**
  *  This class contains the contents of out application
@@ -97,6 +98,11 @@ class MyContents {
 
     this.hud = new MyHUD(this.carController, this.lapController);
     this.hud.init(this.app.scene);
+    this.billboard = new MyBillboard(this.carController, this.lapController);
+    this.billboard.init(this.app.scene);
+    // place billboards
+    this.billboard.hud.scale.set(6, 6, 6);
+
 
     const loader = new GLTFLoader().setPath('models/');
 
@@ -208,6 +214,7 @@ class MyContents {
 	    if (this.collisionSystem != null ) this.collisionSystem.update();
       if (this.itemsController != null ) this.itemsController.update();
       if (this.hud != null && this.carController != null && this.lapController != null ) this.hud.update(this.app.activeCamera);
+      if (this.billboard != null && this.carController != null && this.lapController != null ) this.billboard.update();
 
       /*
       if(this.automaticCarController != null){
