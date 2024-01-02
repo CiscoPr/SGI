@@ -14,6 +14,8 @@ import { ItemsController } from './controller/ItemsController.js';
 import { LapController } from './controller/LapController.js';
 import { ScenarioModelsController } from './controller/ScenarioModelsController.js';
 import { MainController } from './controller/MainController.js';
+import { MyText } from './components/MyText.js';
+
 /**
  *  This class contains the contents of out application
  */
