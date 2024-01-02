@@ -11,6 +11,8 @@ class ObstaclePlacing{
 
         this.obstacle = null;
 
+        this.obsPlacerDone = false;
+
         this.pointer = new THREE.Vector2();
 
         // intersection point between the ray and the plane
@@ -24,7 +26,6 @@ class ObstaclePlacing{
 
         this.raycaster = new THREE.Raycaster();
 
-        this.build();
 
         window.addEventListener('keydown', (e) => this.handleKeyDown(e));
         window.addEventListener('mousedown', (e) => this.handleMouseDown(e));
@@ -36,6 +37,10 @@ class ObstaclePlacing{
                 this.escapePressed = true;
                 break;
         }
+    }
+
+    getEscapePressed(){
+        return this.escapePressed;
     }
 
     handleMouseDown(event) {
@@ -55,31 +60,24 @@ class ObstaclePlacing{
         // get the intersection point between the ray and the plane
         this.raycaster.ray.intersectPlane(this.plane, this.intersectionPoint);
 
-        if(this.escapePressed) return;
+        if(this.escapePressed || this.obsPlacerDone) return;
         switch (event.button) {
             case 0:
                 this.mousePressed = true;
-
-
                 console.log("Position x: " + this.pointer.x + " y: " + this.pointer.y);
                 if(this.pointer.x > -0.42 && this.pointer.x < 0.335 && this.pointer.y > -0.94 && this.pointer.y < 0.95){
                     this.obstacle = new MyObstacle(this.obsName, new THREE.Vector3(this.intersectionPoint.x, 45, this.intersectionPoint.z), this.app.scene)
                     console.log("Obstacle placed");
-                    this.
+                    this.obsPlacerDone = true;
                 }
                 else{
                     console.log("Can't place obstacle here")
                 }
 
-
-
                 break;
         }
     }
 
-    build(){
-
-    }
 
 
 
