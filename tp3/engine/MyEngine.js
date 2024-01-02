@@ -211,6 +211,7 @@ class MyEngine  {
         const params = this.data.getMaterial(id);
         if (params == null) return null;
         let bumpMap = null;
+        let displacementMap = null;
 
         // gets the bump texture if it exists
         if(params.bumpref == null || this.showBumpTexture == false)
@@ -220,6 +221,18 @@ class MyEngine  {
                 texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
             } );
         }
+
+        if(params.displaceref == null){
+            console.log("no displacement texture");
+        }
+        else{
+            console.log("i found a displacement texture");
+            displacementMap = new THREE.TextureLoader().load(params.displaceref, function (texture){
+                texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+            } );
+        }
+
+        console.log("displaceMap: ", displacementMap);
         const texture = this.getTexture(params.textureref);
         const side = params.twosided ? THREE.DoubleSide : THREE.FrontSide;
         const flatShading = params.shading == "flat" ? true : false;
@@ -234,6 +247,8 @@ class MyEngine  {
             wireframe: params.wireframe,
             bumpMap: bumpMap,
             bumpScale: params.bumpscale * 1.0,
+            displacementMap: displacementMap,
+            displacementScale: params.displacescale * 1.0,
             flatShading: flatShading,
             map: texture,
             side: side,

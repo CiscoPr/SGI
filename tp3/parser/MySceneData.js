@@ -80,6 +80,8 @@ class MySceneData  {
             {name: "bumpscale", type: "float", required: false, default: 1.0},
             {name: "specularref", type: "string", required: false, default: null}, // specular map is to be used in later classes
             {name: "transparent", type: "boolean", required: false, default: false},
+            {name: "displaceref", type: "string", required: false, default: null}, // displacement map
+            {name: "displacescale", type: "float", required: false, default: 1.0},
         ]
 
         this.descriptors["orthogonal"] = [

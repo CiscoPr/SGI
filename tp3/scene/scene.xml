@@ -49,12 +49,11 @@
         specular="0 0 0 0"
         shininess="0"
         textureref="terrainTex"
-        texlength_s = "200.0"
-        texlength_t = "200.0"
+        texlength_s = "20.0"
+        texlength_t = "20.0"
         twosided = "true"
         transparent="false"
-        bumpref="scene/textures/elements/terrain.png"
-        bumpscale="0.2"
+        displaceref="scene/textures/elements/terrain_displace.png"
         />
 
         <material id="shinraApp"
@@ -245,13 +244,14 @@
             <transforms>
                 <translate value3="0 15 0" />
                 <rotate value3="1.57079632679489661923 0.0 0.0" />
+                <scale value3="1100.0 1100.0 1100.0" />
             </transforms>
 
             <materialref id="terrainApp" />
 
             <children>
                 <primitive>
-                    <rectangle xy1="15000.0 15000.0" xy2="-15000.0 -15000.0" name="terrain"/>
+                    <rectangle xy1="10.0 10.0" xy2="-10.0 -10.0" parts_x ="60" parts_y="120" name="terrain"/>
                 </primitive>
             </children>
         </node>

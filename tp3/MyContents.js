@@ -56,6 +56,26 @@ class MyContents {
     //it will be used to guide the user to the menus and game
     this.mainController = new MainController(this.app);
 
+    /*
+    // add a testing plane
+    const geometry = new THREE.PlaneGeometry(10, 10, 60, 120);
+    const material = new THREE.MeshPhongMaterial();
+    const texture = new THREE.TextureLoader().load("scene/textures/elements/terrain.png");
+    material.map = texture;
+    //material.side = THREE.DoubleSide;
+
+    const displacementMap = new THREE.TextureLoader().load("scene/textures/elements/terrain_displace.png");
+
+
+    material.displacementMap = displacementMap;
+    material.displacementScale = 0.8;
+    material.displacementBias = 0.05;
+    const plane = new THREE.Mesh(geometry, material);
+    plane.rotation.x = -Math.PI / 2;
+    plane.position.y = 0;
+    plane.scale.set(1000, 1000, 1000);
+    this.app.scene.add(plane);
+    */
   }
 
   /**
