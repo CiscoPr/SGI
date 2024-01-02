@@ -4,6 +4,7 @@ import { InputMenu } from './InputMenu.js';
 import { CarSelector } from './CarSelector.js';
 import { EnemySelector } from './EnemySelector.js';
 import { ObstacleSelector } from './ObstacleSelector.js';
+import { ObstaclePlacing } from './ObstaclePlacing.js';
 // import the rest of the menus
 
 class MainController{
@@ -15,6 +16,7 @@ class MainController{
         this.carSelector = null;
         this.enemySelector = null;
         this.obstacleSelector = null;
+        this.obstaclePlacer = null;
         this.game = null;
 
         //flags to check if the user is done with each of the menus
@@ -23,6 +25,7 @@ class MainController{
         this.carSelectorFlag = false;
         this.enemySelectorFlag = false;
         this.obstacleSelectorFlag = false;
+        this.obstaclePlacerFlag = false;
 
         //this counter will keep track of which menu we are in. For example:
         // 0 = main menu
@@ -37,6 +40,7 @@ class MainController{
         //this will be used to keep track of the player character and the enemy character
         this.playersCharacter = "";
         this.enemyCharacter = "";
+        this.obstacleName = "";
 
         //this will be used to keep track of the data of the selected player car
         this.playerMaxSpeed = 0;
@@ -76,6 +80,8 @@ class MainController{
                 this.obstacleSelector = new ObstacleSelector(this.app);
                 break;
             case 5:
+                this.obstaclePlacer = new ObstaclePlacing(this.app, this.obstacleName);
+            case 6:
                 //this.game = new Game(this.app);
                 break;
         }
@@ -186,6 +192,7 @@ class MainController{
         else if (this.obstacleSelectorFlag == false && this.phaseCounter == 5) {
             this.obstacleSelector.update();
             this.obstacleSelectorFlag = this.obstacleSelector.obsSelectorDone;
+            this.obstacleName = this.obstacleSelector.getObsSelected();
             if(this.obstacleSelector.getEscapePressed()) this.reset();
         }
 
@@ -194,7 +201,19 @@ class MainController{
             this.build();
         }
 
-        console.log("everything:", this.userName, this.playersCharacter, this.playerMaxSpeed, this.playerAcceleration, this.playerBrakeSpeed, this.enemyCharacter, this.difficulty, this.enemyAcceleration)
+        //then we go to the obstacle placer
+        else if (this.obstaclePlacerFlag == false && this.phaseCounter == 6) {
+            this.obstaclePlacer.update();
+            this.obstaclePlacerFlag = this.obstaclePlacer.obsPlacerDone;
+            if(this.obstaclePlacer.getEscapePressed()) this.reset();
+        }
+
+        else if (this.obstaclePlacerFlag == true && this.phaseCounter == 6) {
+            this.obstaclePlacer = null; // might remove later
+            this.build();
+        }
+
+        console.log("everything:", this.userName, this.playersCharacter, this.playerMaxSpeed, this.playerAcceleration, this.playerBrakeSpeed, this.enemyCharacter, this.difficulty, this.enemyAcceleration, this.obstacleName)
 
     }
 

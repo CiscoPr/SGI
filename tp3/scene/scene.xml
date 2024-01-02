@@ -244,7 +244,7 @@
         <node id="terrain" receiveshadows="true">
             <transforms>
                 <translate value3="0 15 0" />
-                <rotate value3="1.57079632679 0.0 0.0" />
+                <rotate value3="1.57079632679489661923 0.0 0.0" />
             </transforms>
 
             <materialref id="terrainApp" />

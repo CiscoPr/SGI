@@ -10,7 +10,7 @@ class ObstacleSelector{
         this.obsSelectorDone = false;
         this.obstacleModels = [];
         this.planes = [];
-        this.selectedCharacter = "";
+        this.selectedObstacle = "";
 
         // TODO: we probably will need to add flags to change in between
         // obstacle selection and its position in the track
@@ -21,6 +21,7 @@ class ObstacleSelector{
         this.initialObsPosZ = 1350;
         this.ob1 = new MyObstacle('speed', new THREE.Vector3(this.initialObsPosX, this.initialObsPosY, this.initialObsPosZ), this.app.scene);
         this.ob2 = new MyObstacle('time', new THREE.Vector3(this.initialObsPosX + 425, this.initialObsPosY, this.initialObsPosZ), this.app.scene);
+        this.infoCard = null;
 
         this.raycaster = new THREE.Raycaster();
         this.raycaster.near = 1;
@@ -30,10 +31,10 @@ class ObstacleSelector{
         this.intersectedObj = null;
         this.pickingColor = "0x6afc6f";
 
-        this.availableLayers = ['none', 1, 2]
+        this.availableLayers = ['none', 1, 2, 3]
         this.selectedLayer = this.availableLayers[0]
 
-        this.notPickableObjIds = ["parking1", "terrain"]
+        this.notPickableObjIds = ["parking1", "terrain", "ob1", "ob2"]
         this.pickingController = new PickingController(this.app, this.raycaster, this.pointer, this.intersectedObj, this.pickingColor, this.availableLayers, this.selectedLayer, this.notPickableObjIds);
 
         this.build();
@@ -68,15 +69,28 @@ class ObstacleSelector{
                 console.log("Position x: " + this.pointer.x + " y: " + this.pointer.y);
                 // if the mouse clicks on the start game button
                 if (this.pointer.x > -0.64 && this.pointer.x < -0.34 && this.pointer.y > -0.94 && this.pointer.y < -0.1) {
-                    console.log("Ob1 selected");
-                    this.obsSelectorDone = true;
+                    console.log("Speed Obstacle selected");
+                    if(this.infoCard != null) this.app.scene.remove(this.infoCard);
+                    this.buildObsInfoCard("ob1");
+                    this.selectedObstacle = "speed";
+                    //this.obsSelectorDone = true;
                 }
                 else if (this.pointer.x > -0.17 && this.pointer.x < 0.12 && this.pointer.y > -0.94 && this.pointer.y < -0.1) {
-                    console.log("Ob2 selected");
-                    this.obsSelectorDone = true;
+                    console.log("Time Obstacle selected");
+                    if(this.infoCard != null) this.app.scene.remove(this.infoCard);
+                    this.buildObsInfoCard("ob2");
+                    this.selectedObstacle = "time";
+                    //this.obsSelectorDone = true;
+                }
+                else if(this.pointer.x > 0.49 && this.pointer.x < 0.82 && this.pointer.y > -0.49 && this.pointer.y < -0.32){
+                    if(this.infoCard != null){
+                        //TODO: add the obstacle to the track
+                        this.obsSelectorDone = true;
+                    }
                 }
                 break;
         }
+        console.log("here is the mouse:", event.clientX)
     }
 
     handleMouseUp(event) {
@@ -86,6 +100,35 @@ class ObstacleSelector{
                 break;
         }
     }
+
+    buildObsInfoCard(obsName){
+        //add a plan for picking
+        const planeGeometry = new THREE.PlaneGeometry(400, 600);
+        const planeMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
+        planeMaterial.transparent = true;
+
+        // add texture
+        const loader = new THREE.TextureLoader();
+        const texture = loader.load('./scene/textures/elements/'+ obsName +'ObsCard.png');
+        planeMaterial.map = texture;
+
+        const planeChar = new THREE.Mesh(planeGeometry, planeMaterial);
+
+        planeChar.name = obsName;
+        planeChar.layers.enable(3);
+
+        this.infoCard = new THREE.Group();
+        this.infoCard.add(planeChar);
+
+        //this.infoCard.add(planeSelect);
+        this.infoCard.position.set(this.initialObsPosX + 1050, this.initialObsPosY + 80, this.initialObsPosZ - 150);
+        this.infoCard.rotation.x = -Math.PI / 2;
+        this.infoCard.name = obsName;
+        this.infoCard.layers.enable(3);
+        this.planes.push(this.infoCard);
+        this.app.scene.add(this.infoCard);
+    }
+
 
     build() {
         //add a plan for picking
@@ -120,6 +163,10 @@ class ObstacleSelector{
         return this.escapePressed;
     }
 
+    getObsSelected(){
+        return this.obsSelectorDone;
+    }
+
     update() {
         // TODO: alter between changing from obstacle selection to obstacle position
         // in the track
@@ -127,7 +174,7 @@ class ObstacleSelector{
         if (this.obsSelectorDone || this.escapePressed) {
             this.app.scene.remove(this.planes[0]);
             this.app.scene.remove(this.planes[1]);
-
+            if(this.infoCard != null) this.app.scene.remove(this.infoCard);
             this.raycaster.near = 0;
             this.raycaster.far = 0;
         }
