@@ -136,7 +136,9 @@ class MainController{
 
         else if (this.enemySelectorFlag == true && this.phaseCounter == 4) {
             this.enemyCharacter = this.enemySelector.getSelectedCharacter();
-            console.log("The enemy selected:", this.enemyCharacter)
+            this.difficulty = this.enemySelector.getDifficulty();
+            this.enemyAcceleration = this.enemySelector.getAcceleration();
+            console.log("The enemy selected:", this.enemyCharacter, this.difficulty, this.enemyAcceleration)
             this.enemySelector = null; // might remove later
             this.build();
         }

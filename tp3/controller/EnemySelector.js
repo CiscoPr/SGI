@@ -13,6 +13,8 @@ class EnemySelector {
         this.selectedCharacter = "";
         this.infoCard = null;
 
+        this.acceleration = 0;
+        this.dificculty = 1;
 
         //initial car positions
         this.initialCarPosX = -8200;
@@ -72,9 +74,34 @@ class EnemySelector {
                     //this.carSelectorDone = true;
                 }
 
-                else if(this.pointer.x > 0.55 && this.pointer.x < 0.71 && this.pointer.y > -0.38 && this.pointer.y < -0.31){
+                else if(this.pointer.x > 0.42 && this.pointer.x < 0.66 && this.pointer.y > -0.17 && this.pointer.y < -0.09){
                     if(this.infoCard != null){
                         this.selectedCharacter = this.infoCard.name.toString();
+                        if(this.selectedCharacter == "cloud") this.acceleration = 0.5;
+                        else if(this.selectedCharacter == "tifa") this.acceleration = 0.3;
+                        this.dificculty = 1;
+                        console.log("name: " + this.selectedCharacter);
+                        this.enemySelectorDone = true;
+                    }
+                }
+
+                else if(this.pointer.x > 0.42 && this.pointer.x < 0.66 && this.pointer.y > -0.40 && this.pointer.y < -0.29){
+                    if(this.infoCard != null){
+                        this.selectedCharacter = this.infoCard.name.toString();
+                        if(this.selectedCharacter == "cloud") this.acceleration = 1.0;
+                        else if(this.selectedCharacter == "tifa") this.acceleration = 0.8;
+                        this.dificculty = 2;
+                        console.log("name: " + this.selectedCharacter);
+                        this.enemySelectorDone = true;
+                    }
+                }
+
+                else if(this.pointer.x > 0.42 && this.pointer.x < 0.66 && this.pointer.y > -0.63 && this.pointer.y < -0.52){
+                    if(this.infoCard != null){
+                        this.selectedCharacter = this.infoCard.name.toString();
+                        if(this.selectedCharacter == "cloud") this.acceleration = 1.5;
+                        else if(this.selectedCharacter == "tifa") this.acceleration = 1.3;
+                        this.dificculty = 3;
                         console.log("name: " + this.selectedCharacter);
                         this.enemySelectorDone = true;
                     }
@@ -100,7 +127,7 @@ class EnemySelector {
 
         // add texture
         const loader = new THREE.TextureLoader();
-        const texture = loader.load('./scene/textures/elements/'+character+'InfoCard.png');
+        const texture = loader.load('./scene/textures/elements/'+character+'EnemyInfoCard.png');
         planeMaterial.map = texture;
 
         const planeChar = new THREE.Mesh(planeGeometry, planeMaterial);
@@ -197,6 +224,14 @@ class EnemySelector {
 
     getSelectedCharacter() {
         return this.selectedCharacter;
+    }
+
+    getDifficulty(){
+        return this.dificculty;
+    }
+
+    getAcceleration(){
+        return this.acceleration;
     }
 
     update() {
