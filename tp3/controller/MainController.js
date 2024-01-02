@@ -203,9 +203,9 @@ class MainController{
 
         //then we go to the obstacle placer
         else if (this.obstaclePlacerFlag == false && this.phaseCounter == 6) {
-            this.obstaclePlacer.update();
+            //this.obstaclePlacer.update();
             this.obstaclePlacerFlag = this.obstaclePlacer.obsPlacerDone;
-            if(this.obstaclePlacer.getEscapePressed()) this.reset();
+            //if(this.obstaclePlacer.getEscapePressed()) this.reset();
         }
 
         else if (this.obstaclePlacerFlag == true && this.phaseCounter == 6) {

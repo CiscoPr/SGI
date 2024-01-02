@@ -12,7 +12,7 @@ class MyTrack {
         this.textureRepeat = 20;
         this.showWireframe = false;
         this.showMesh = true;
-        this.showLine = true;
+        this.showLine = false;
         this.closedCurve = true;
 
         this.path1 = new THREE.CatmullRomCurve3([

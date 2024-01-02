@@ -164,7 +164,7 @@ class ObstacleSelector{
     }
 
     getObsSelected(){
-        return this.obsSelectorDone;
+        return this.selectedObstacle;
     }
 
     update() {
