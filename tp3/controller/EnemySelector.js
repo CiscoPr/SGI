@@ -45,10 +45,21 @@ class EnemySelector {
 
         this.mousePressed = false;
 
+        //flag to check if the escape key has been pressed
+        this.escapePressed = false;
 
+        window.addEventListener('keydown', (e) => this.handleKeyDown(e));
 
-        window.addEventListener('mousedown', (e) => this.handleMouseDown(e));
-        window.addEventListener('mouseup', (e) => this.handleMouseUp(e));
+        document.addEventListener('mousedown', (e) => this.handleMouseDown(e));
+        document.addEventListener('mouseup', (e) => this.handleMouseUp(e));
+    }
+
+    handleKeyDown(event) {
+        switch (event.key) {
+            case 'Escape':
+                this.escapePressed = true;
+                break;
+        }
     }
 
     handleMouseDown(event) {
@@ -56,6 +67,7 @@ class EnemySelector {
         this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
         this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
+        if(this.enemySelectorDone || this.escapePressed) return;
         switch (event.button) {
             case 0:
                 this.mousePressed = true;
@@ -234,11 +246,15 @@ class EnemySelector {
         return this.acceleration;
     }
 
+    getEscapePressed(){
+        return this.escapePressed;
+    }
+
     update() {
         //TODO: make the user be able to select the level of dificulty
         //      of the enemy
 
-        if (this.enemySelectorDone) {
+        if (this.enemySelectorDone || this.escapePressed) {
             for(let i = 0; i < this.carModels.length; i++){
                 this.app.scene.remove(this.carModels[i]);
                 this.app.scene.remove(this.charsModels[i]);

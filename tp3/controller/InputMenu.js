@@ -24,6 +24,8 @@ class InputMenu {
         //the usual flag to check it is done
         this.inputDone = false;
 
+        //flag to check if the escape key has been pressed
+        this.escapePressed = false;
 
         this.pickingController = new PickingController(this.app, this.raycaster, this.pointer, this.intersectedObj, this.pickingColor, this.availableLayers, this.selectedLayer, this.notPickableObjIds);
 
@@ -42,6 +44,7 @@ class InputMenu {
         //of the screen is the origin
         this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
         this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        if(this.inputDone || this.escapePressed) return;
         switch (event.button) {
             case 0:
                 this.mousePressed = true;
@@ -55,8 +58,12 @@ class InputMenu {
     }
 
     handleKeyDown(event) {
+        if(this.inputDone || this.escapePressed) return;
         console.log("key activated")
         switch (event.key) {
+            case "Escape":
+                this.escapePressed = true;
+                break;
             case "Backspace":
                 if(this.input.length > 0)
                 this.input = this.input.slice(0, -1);
@@ -311,18 +318,22 @@ class InputMenu {
         return this.input;
     }
 
+    getEscapePressed(){
+        return this.escapePressed;
+    }
 
     update(){
         this.nextButton.lookAt(this.app.activeCamera.position.x, this.nextButton.position.y, this.app.activeCamera.position.z);
         this.spriteGroup.lookAt(this.app.activeCamera.position.x, this.spriteGroup.position.y, this.app.activeCamera.position.z);
         if(this.inputGroup!= null)this.inputGroup.lookAt(this.app.activeCamera.position.x, this.inputGroup.position.y, this.app.activeCamera.position.z);
-        if(this.inputDone === true){
+        if(this.inputDone === true || this.escapePressed === true){
             this.app.scene.remove(this.spriteGroup);
             this.app.scene.remove(this.inputGroup);
             this.app.scene.remove(this.nextButton);
             this.raycaster.near = 0;
             this.raycaster.far = 0;
         }
+
     }
 
 }

@@ -46,10 +46,23 @@ class CarSelector {
 
         this.mousePressed = false;
 
+        //flag to check if the escape key has been pressed
+        this.escapePressed = false;
+
+
+        window.addEventListener('keydown', (e) => this.handleKeyDown(e));
 
 
         window.addEventListener('mousedown', (e) => this.handleMouseDown(e));
         window.addEventListener('mouseup', (e) => this.handleMouseUp(e));
+    }
+
+    handleKeyDown(event) {
+        switch (event.key) {
+            case 'Escape':
+                this.escapePressed = true;
+                break;
+        }
     }
 
     handleMouseDown(event) {
@@ -57,6 +70,7 @@ class CarSelector {
         this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
         this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
+        if(this.carSelectorDone || this.escapePressed) return;
         switch (event.button) {
             case 0:
                 this.mousePressed = true;
@@ -225,9 +239,13 @@ class CarSelector {
         return this.selectedBrakeSpeed;
     }
 
+    getEscapePressed(){
+        return this.escapePressed;
+    }
+
     update() {
 
-        if (this.carSelectorDone) {
+        if (this.carSelectorDone || this.escapePressed) {
             for(let i = 0; i < this.carModels.length; i++){
                 this.app.scene.remove(this.carModels[i]);
                 this.app.scene.remove(this.charsModels[i]);

@@ -15,6 +15,7 @@ class MainController{
         this.carSelector = null;
         this.enemySelector = null;
         this.obstacleSelector = null;
+        this.game = null;
 
         //flags to check if the user is done with each of the menus
         this.mainMenuFlag = false;
@@ -48,9 +49,12 @@ class MainController{
         //this will be used to keep track of the enemy acceleration
         this.enemyAcceleration = 0;
 
+        //this will be used as the counter for how many times the escape key has been pressed
+        //the instruction will only be valid if the escape key has been pressed 1 time
+        this.escapeCounter = 0;
 
-        this.game = null;
         this.build();
+
     }
 
     build(){
@@ -81,6 +85,38 @@ class MainController{
 
     }
 
+    reset(){
+        this.mainMenu = null;
+        this.inputMenu = null;
+        this.carSelector = null;
+        this.enemySelector = null;
+        this.obstacleSelector = null;
+        this.game = null;
+
+        this.mainMenuFlag = false;
+        this.inputMenuFlag = false;
+        this.carSelectorFlag = false;
+        this.enemySelectorFlag = false;
+        this.obstacleSelectorFlag = false;
+
+        this.phaseCounter = 0;
+        this.userName = "";
+
+        this.playersCharacter = "";
+        this.enemyCharacter = "";
+
+        this.playerMaxSpeed = 0;
+        this.playerAcceleration = 0;
+        this.playerBrakeSpeed = 0;
+
+        this.difficulty = 1;
+
+        this.enemyAcceleration = 0;
+
+
+        this.build();
+    }
+
     update(){
 
         //we start with the main menu
@@ -99,6 +135,7 @@ class MainController{
         else if(this.inputMenuFlag == false && this.phaseCounter == 2){
             this.inputMenu.update();
             this.inputMenuFlag = this.inputMenu.inputDone;
+            if(this.inputMenu.getEscapePressed()) this.reset();
             //console.log("the input:", this.inputMenuFlag);
         }
 
@@ -114,6 +151,7 @@ class MainController{
             this.carSelector.update();
             console.log("The user name is:", this.userName)
             this.carSelectorFlag = this.carSelector.carSelectorDone;
+            if(this.carSelector.getEscapePressed()) this.reset();
             //console.log("the car:", this.carSelectorFlag);
         }
 
@@ -131,6 +169,7 @@ class MainController{
         else if (this.enemySelectorFlag == false && this.phaseCounter == 4) {
             this.enemySelector.update();
             this.enemySelectorFlag = this.enemySelector.enemySelectorDone;
+            if(this.enemySelector.getEscapePressed()) this.reset();
             //console.log("the enemy:", this.enemySelectorFlag);
         }
 
@@ -147,12 +186,15 @@ class MainController{
         else if (this.obstacleSelectorFlag == false && this.phaseCounter == 5) {
             this.obstacleSelector.update();
             this.obstacleSelectorFlag = this.obstacleSelector.obsSelectorDone;
+            if(this.obstacleSelector.getEscapePressed()) this.reset();
         }
 
         else if (this.obstacleSelectorFlag == true && this.phaseCounter == 5) {
             this.obstacleSelector = null; // might remove later
             this.build();
         }
+
+        console.log("everything:", this.userName, this.playersCharacter, this.playerMaxSpeed, this.playerAcceleration, this.playerBrakeSpeed, this.enemyCharacter, this.difficulty, this.enemyAcceleration)
 
     }
 

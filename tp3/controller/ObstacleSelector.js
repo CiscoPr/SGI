@@ -40,14 +40,28 @@ class ObstacleSelector{
 
         this.mousePressed = false;
 
+        //flag to check if the escape key has been pressed
+        this.escapePressed = false;
+
+        window.addEventListener('keydown', (e) => this.handleKeyDown(e));
+
         window.addEventListener('mousedown', (e) => this.handleMouseDown(e));
         window.addEventListener('mouseup', (e) => this.handleMouseUp(e));
+    }
+
+    handleKeyDown(event) {
+        switch (event.key) {
+            case 'Escape':
+                this.escapePressed = true;
+                break;
+        }
     }
 
     handleMouseDown(event) {
         //of the screen is the origin
         this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
         this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        if(this.obsSelectorDone || this.escapePressed) return;
         switch (event.button) {
             case 0:
                 this.mousePressed = true;
@@ -102,12 +116,15 @@ class ObstacleSelector{
 
     }
 
+    getEscapePressed(){
+        return this.escapePressed;
+    }
 
     update() {
         // TODO: alter between changing from obstacle selection to obstacle position
         // in the track
 
-        if (this.obsSelectorDone) {
+        if (this.obsSelectorDone || this.escapePressed) {
             this.app.scene.remove(this.planes[0]);
             this.app.scene.remove(this.planes[1]);
 

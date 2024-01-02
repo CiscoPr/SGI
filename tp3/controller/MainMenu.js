@@ -42,6 +42,7 @@ class MainMenu{
         //of the screen is the origin
         this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
         this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        if(this.mainMenuDone) return;
         switch (event.button) {
             case 0:
                 this.mousePressed = true;
