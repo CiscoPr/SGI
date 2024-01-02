@@ -11,6 +11,10 @@ class CarSelector {
         this.charsModels = [];
         this.planes = [];
         this.selectedCharacter = "";
+        this.selectedMaxSpeed = 0;
+        this.selectedAcceleration = 0;
+        this.selectedBrakeSpeed = 0;
+
         this.infoCard = null;
 
         //initial car positions
@@ -92,6 +96,17 @@ class CarSelector {
     }
 
     buildCharacterInfoCard(character){
+
+        if(character == "cloud"){
+            this.selectedMaxSpeed = 10;
+            this.selectedAcceleration = 0.5;
+            this.selectedBrakeSpeed = 1.0;
+        } else if(character == "tifa"){
+            this.selectedMaxSpeed = 15;
+            this.selectedAcceleration = 0.3;
+            this.selectedBrakeSpeed = 1.5;
+        }
+
         //add a plan for picking
         const planeGeometry = new THREE.PlaneGeometry(400, 600);
         const planeMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
@@ -196,6 +211,18 @@ class CarSelector {
 
     getSelectedCharacter() {
         return this.selectedCharacter;
+    }
+
+    getSelectedMaxSpeed(){
+        return this.selectedMaxSpeed;
+    }
+
+    getSelectedAcceleration(){
+        return this.selectedAcceleration;
+    }
+
+    getSelectedBrakeSpeed(){
+        return this.selectedBrakeSpeed;
     }
 
     update() {

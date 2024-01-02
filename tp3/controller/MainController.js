@@ -37,8 +37,16 @@ class MainController{
         this.playersCharacter = "";
         this.enemyCharacter = "";
 
+        //this will be used to keep track of the data of the selected player car
+        this.playerMaxSpeed = 0;
+        this.playerAcceleration = 0;
+        this.playerBrakeSpeed = 0;
+
         //this will be used to keep track of the diffculty level of the enemy (1 by default)
         this.difficulty = 1;
+
+        //this will be used to keep track of the enemy acceleration
+        this.enemyAcceleration = 0;
 
 
         this.game = null;
@@ -111,7 +119,10 @@ class MainController{
 
         else if (this.carSelectorFlag == true && this.phaseCounter == 3) {
             this.playersCharacter = this.carSelector.getSelectedCharacter();
-            console.log("The player selected:", this.playersCharacter)
+            this.playerMaxSpeed = this.carSelector.getSelectedMaxSpeed();
+            this.playerAcceleration = this.carSelector.getSelectedAcceleration();
+            this.playerBrakeSpeed = this.carSelector.getSelectedBrakeSpeed();
+            console.log("The player selected:", this.playersCharacter, this.playerMaxSpeed, this.playerAcceleration, this.playerBrakeSpeed)
             this.carSelector = null; // might remove later
             this.build();
         }

@@ -73,11 +73,11 @@ class MyTrack {
 
         // 1st curve
         let geometry = new THREE.TubeGeometry(
-        this.path1,
-        this.segments,
-        this.width,
-        3,
-        this.closedCurve
+            this.path1,
+            this.segments,
+            this.width,
+            3,
+            this.closedCurve
         );
 
         this.mesh = new THREE.Mesh(geometry, this.material);
