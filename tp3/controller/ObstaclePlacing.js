@@ -10,6 +10,7 @@ class ObstaclePlacing{
         this.escapePressed = false;
 
         this.obstacle = null;
+        this.shadermesh = null;
 
         this.obsPlacerDone = false;
 
@@ -66,7 +67,26 @@ class ObstaclePlacing{
                 this.mousePressed = true;
                 console.log("Position x: " + this.pointer.x + " y: " + this.pointer.y);
                 if(this.pointer.x > -0.42 && this.pointer.x < 0.335 && this.pointer.y > -0.94 && this.pointer.y < 0.95){
-                    this.obstacle = new MyObstacle(this.obsName, new THREE.Vector3(this.intersectionPoint.x, 45, this.intersectionPoint.z), this.app.scene)
+
+                    if(this.obsName == 'speed'){
+                        this.shadermesh = new MyShader(this.app, "shader", "no description provided", "shaders/obstacle.vert", "shaders/obstacle.frag", {
+                            time: {type:'f', value: 0.0 },
+                            radius: {type:'f', value: 20.0},
+                            color: {type: 'vec4', value: new THREE.Vector4(255.0, 0.0, 0.0, 1.0)},
+                        });
+                    }else{
+                        this.shadermesh = new MyShader(this.app, "shader", "no description provided", "shaders/obstacle.vert", "shaders/obstacle.frag", {
+                            time: {type:'f', value: 0.0 },
+                            radius: {type:'f', value: 20.0},
+                            color: {type: 'vec4', value: new THREE.Vector4(255.0, 165.0, 0.0, 1.0)},
+                        });
+                    }
+
+                    setTimeout(()=>{
+                        this.obstacle = new MyObstacle(this.obsName, new THREE.Vector3(this.intersectionPoint.x, 45, this.intersectionPoint.z), this.app.scene);
+                        this.obstacle.helper.children[0].material = this.shadermesh.material;
+                        this.obstacle.helper.children[0].needsUpdate = true;
+                    }, 3000);
                     console.log("Obstacle placed");
                     this.obsPlacerDone = true;
                 }

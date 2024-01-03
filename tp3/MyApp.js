@@ -161,6 +161,7 @@ class MyApp  {
             }
         }
 
+        /*
         //spinning camera in menu
         if(this.contents && (!this.contents.mainController.mainMenuFlag) || (!this.contents.mainController.inputMenuFlag)){
             this.activeCamera.position.x = 1000 * Math.cos(0.0001 * Date.now());
@@ -205,6 +206,7 @@ class MyApp  {
 
             this.activeCamera.lookAt(0, 0, 500);
         }
+        */
 
 
         console.log("activeCameraName: ", this.activeCamera.position.y)
