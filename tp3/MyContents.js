@@ -16,6 +16,7 @@ import { ItemsController } from './controller/ItemsController.js';
 import { LapController } from './controller/LapController.js';
 import { MyHUD } from './components/MyHUD.js';
 import { MyBillboard } from './components/MyBillboard.js';
+import { MyTrafficLights } from './components/MyTrafficLights.js';
 
 /**
  *  This class contains the contents of out application
@@ -34,11 +35,28 @@ class MyContents {
     this.engine.init();
     this.modelsrendered = false;
 
+    // gameflow control
+    this.gameState = 0; // 0 - start, 1 - game, 2 - done, 3 - pause
+    window.addEventListener('keyup', (e) => {
+      if (e.keyCode == 32) {
+        if (this.gameState == 1) {
+          this.gameState = 3;
+          console.log("paused");
+        } else if (this.gameState == 3) {
+          this.gameState = 1;
+        }
+      }
+    });
+    this.clock = null;
+
     // components
     this.track = null;
     this.playerCar = null;
     this.obstacles = [];
     this.boosts = [];
+    this.hud = null;
+    this.billboard = null;
+    this.trafficLights = null;
 
     // helpers
     this.carSphere;
@@ -54,7 +72,6 @@ class MyContents {
    */
   init() {
     // create once
-
     if (this.axis === null) {
       // create and attach the axis to the scene
       this.axis = new MyAxis(this);
@@ -62,7 +79,6 @@ class MyContents {
     }
 
     //-------------------------------------------------------------------------------
-
 
     // add an ambient light
     const ambientLight = new THREE.AmbientLight(0x555555);
@@ -96,13 +112,24 @@ class MyContents {
     this.lapController = new LapController(this.app, this.playerCar, this.track);
     //this.automaticCarController = new AutomaticCarController(this.app, this.playerCar.car, this.playerCar.carWheels, this.track);
 
+    // create hud
     this.hud = new MyHUD(this.carController, this.lapController);
     this.hud.init(this.app.scene);
+    
+    // create billboard
     this.billboard = new MyBillboard(this.carController, this.lapController);
     this.billboard.init(this.app.scene);
-    // place billboards
-    this.billboard.hud.scale.set(6, 6, 6);
+    this.billboard.hud.scale.set(12, 12, 12);
+    this.billboard.hud.rotation.y = -Math.PI / 2;
+    this.billboard.hud.position.set(4400, 80, -500);
 
+
+    // create traffic lights
+    this.trafficLights = new MyTrafficLights();
+    this.trafficLights.trafficLight.scale.set(12, 12, 12);
+    this.trafficLights.trafficLight.position.set(4105, 80, 150);
+    this.trafficLights.trafficLight.rotation.y = Math.PI;
+    this.app.scene.add(this.trafficLights.trafficLight);
 
     const loader = new GLTFLoader().setPath('models/');
 
@@ -148,98 +175,119 @@ class MyContents {
     });
   }
 
+  readerError() {
+    const hasError = this.reader.errorMessage != null ? true : false;
+    return hasError;
+  }
 
-    readerError() {
-        const hasError = this.reader.errorMessage != null ? true : false;
-        return hasError;
+  /**
+   * Called when the scene xml file load is complete
+   * @param {MySceneData} data the entire scene data object
+   */
+  onSceneLoaded(data) {
+    console.info("scene data loaded " + data + ". visit MySceneData javascript class to check contents for each data item.");
+    this.onAfterSceneLoadedAndBeforeRender(data);
+  }
+  
+  output(obj, indent = 0) {
+    console.log("" + new Array(indent * 4).join(' ') + " - " + obj.type + " " + (obj.id !== undefined ? "'" + obj.id + "'" : ""));
+  }
+
+  onAfterSceneLoadedAndBeforeRender(data) {
+    // refer to descriptors in class MySceneData.js
+    // to see the data structure for each item
+    this.output(data.options)
+    console.log("textures:")
+    for (var key in data.textures) {
+        let texture = data.textures[key]
+        this.output(texture, 1)
     }
 
-    /**
-     * Called when the scene xml file load is complete
-     * @param {MySceneData} data the entire scene data object
-     */
-    onSceneLoaded(data) {
-        console.info("scene data loaded " + data + ". visit MySceneData javascript class to check contents for each data item.");
-        this.onAfterSceneLoadedAndBeforeRender(data);
+    console.log("materials:")
+    for (var key in data.materials) {
+        let material = data.materials[key]
+        this.output(material, 1)
     }
 
-    output(obj, indent = 0) {
-        console.log("" + new Array(indent * 4).join(' ') + " - " + obj.type + " " + (obj.id !== undefined ? "'" + obj.id + "'" : ""));
+    console.log("cameras:")
+    for (var key in data.cameras) {
+        let camera = data.cameras[key]
+        this.output(camera, 1)
     }
 
-    onAfterSceneLoadedAndBeforeRender(data) {
-
-        // refer to descriptors in class MySceneData.js
-        // to see the data structure for each item
-
-        this.output(data.options)
-        console.log("textures:")
-        for (var key in data.textures) {
-            let texture = data.textures[key]
-            this.output(texture, 1)
-        }
-
-        console.log("materials:")
-        for (var key in data.materials) {
-            let material = data.materials[key]
-            this.output(material, 1)
-        }
-
-        console.log("cameras:")
-        for (var key in data.cameras) {
-            let camera = data.cameras[key]
-            this.output(camera, 1)
-        }
-
-        console.log("nodes:")
-        for (var key in data.nodes) {
-            let node = data.nodes[key]
-            this.output(node, 1)
-            for (let i=0; i< node.children.length; i++) {
-                let child = node.children[i]
-                if (child.type === "primitive") {
-                    console.log("" + new Array(2 * 4).join(' ') + " - " + child.type + " with "  + child.representations.length + " " + child.subtype + " representation(s)")
-                    if (child.subtype === "nurbs") {
-                        console.log("" + new Array(3 * 4).join(' ') + " - " + child.representations[0].controlpoints.length + " control points")
-                    }
+    console.log("nodes:")
+    for (var key in data.nodes) {
+        let node = data.nodes[key]
+        this.output(node, 1)
+        for (let i=0; i< node.children.length; i++) {
+            let child = node.children[i]
+            if (child.type === "primitive") {
+                console.log("" + new Array(2 * 4).join(' ') + " - " + child.type + " with "  + child.representations.length + " " + child.subtype + " representation(s)")
+                if (child.subtype === "nurbs") {
+                    console.log("" + new Array(3 * 4).join(' ') + " - " + child.representations[0].controlpoints.length + " control points")
                 }
-                else {
-                    this.output(child, 2)
-                }
+            }
+            else {
+                this.output(child, 2)
             }
         }
     }
+  }
 
-    update() {
-	    if (this.collisionSystem != null ) this.collisionSystem.update();
-      if (this.itemsController != null ) this.itemsController.update();
-      if (this.hud != null && this.carController != null && this.lapController != null ) this.hud.update(this.app.activeCamera);
-      if (this.billboard != null && this.carController != null && this.lapController != null ) this.billboard.update();
+  updateStartGame() {
+    if (this.trafficLights == null) return;
+    this.trafficLights.update(this.app.scene);
+    if (this.trafficLights.countdown < 0) { this.gameState = 1; }
+  }
 
-      /*
-      if(this.automaticCarController != null){
-        this.automaticCarController.update();
-        this.lapController.update();
-      }
-      */
-
-
-      if (this.carController != null ){
-        this.carController.update();
-        this.lapController.update();
-      }
-
-      if (this.carSphere != null ){
-        let chassisCenter = this.playerCar.getChassisCenter();
-        let x = chassisCenter.x;
-        let y = chassisCenter.y;
-        let z = chassisCenter.z;
-        this.carSphere.position.set(x, y, z);
-        //console.log("spherePos", this.carSphere.position)
-      }
-
+  updateGame() {
+    if (this.collisionSystem != null ) this.collisionSystem.update();
+    if (this.itemsController != null ) this.itemsController.update();
+    if (this.hud != null) this.hud.update(this.app.activeCamera, (this.gameState == 3), false);
+    if (this.trafficLights != null ) this.trafficLights.update(this.app.scene);
+    if (this.billboard != null && this.carController != null && this.lapController != null ) this.billboard.update();
+    
+    /*
+    if(this.automaticCarController != null){
+      this.automaticCarController.update();
+      this.lapController.update();
     }
+    */
+
+    if (this.carController != null ) {
+      this.carController.update();
+      this.lapController.update();
+    }
+
+    if (this.lapController != null && this.lapController.lap == 3) {
+      if (this.clock == null) { this.clock = Date.now(); }
+      if (Date.now() - this.clock > 5000) { this.gameState = 2; }
+    }
+  }
+
+  pause() {
+    if (this.hud != null) this.hud.update(this.app.activeCamera, (this.gameState == 3), true);
+    this.carController.updateClock();
+  }
+
+  update() {
+    if (this.gameState == 0) {
+      this.updateStartGame();
+    } else if (this.gameState == 1 ) {
+      this.updateGame();
+    } else if (this.gameState == 3) {
+      this.pause();
+    }
+
+    if (this.carSphere != null ) {
+      let chassisCenter = this.playerCar.getChassisCenter();
+      let x = chassisCenter.x;
+      let y = chassisCenter.y;
+      let z = chassisCenter.z;
+      this.carSphere.position.set(x, y, z);
+      //console.log("spherePos", this.carSphere.position)
+    }
+  }
 }
 
 export { MyContents };
-

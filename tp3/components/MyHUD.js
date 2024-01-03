@@ -4,7 +4,7 @@ import { MyText } from './MyText.js';
 class MyHUD {
     constructor(player, lapController) {
         // attributes
-        this.width = screen.availWidth /  100;
+        this.width = screen.availWidth / 100;
         this.height = screen.availHeight / 100;
         this.offsetX = this.width / 7;
         this.offsetY = this.height / 14;
@@ -62,6 +62,22 @@ class MyHUD {
         effectHandler.init(effectSMG);
         this.hudElements.set(effectSMG, effectHandler);
 
+        // add end game text
+        let endSMG = new THREE.Group();
+        endSMG.name = "end";
+        endSMG.position.set(-3.5, 0, 0);
+        let endHandler = new MyText(10);
+        endHandler.init(endSMG);
+        this.hudElements.set(endSMG, endHandler);
+
+        // add pause text
+        let pauseSMG = new THREE.Group();
+        pauseSMG.name = "pause";
+        pauseSMG.position.set(-2, -2, 0);
+        let pauseHandler = new MyText(10);
+        pauseHandler.init(pauseSMG);
+        this.hudElements.set(pauseSMG, pauseHandler);
+
         // load arrow textures
         let tex_green = new THREE.TextureLoader().load('scene/textures/elements/arrow_green.png');
         let tex_red = new THREE.TextureLoader().load('scene/textures/elements/arrow_red.png');
@@ -90,6 +106,8 @@ class MyHUD {
         this.hud.add(timerSMG);
         this.hud.add(lapSMG);
         this.hud.add(effectSMG);
+        this.hud.add(endSMG);
+        this.hud.add(pauseSMG);
         this.hud.add(this.gArrow);
         this.hud.add(this.rArrow);
         this.hud.add(this.yArrow);
@@ -123,7 +141,7 @@ class MyHUD {
         else if (color == "yellow") this.yArrow.visible = true;
     }
 
-    update(camera) {        
+    update(camera, pause) {
         if (camera != null){
             // get camera position and camare direction
             let cameraPos = camera.position;
@@ -140,14 +158,14 @@ class MyHUD {
         let keys = this.hudElements.keys();
         for (let key of keys) if (key == null) return;
         
-        if (this.hudElements.size == 4) {
+        if (this.hudElements.size == 6) {
             // get speedometer from hud
             let speedSMG = this.hud.getObjectByName("number");
             let speedHandler = this.hudElements.get(speedSMG);
             speedHandler.load(speedSMG, Math.floor(this.player.realSpeed).toString());
             if (this.player.outTracks) this.showArrow("yellow");
-            else if (this.player.collisionEffect > 0 && this.player.maxSpeed > 10) this.showArrow("green");
-            else if (this.player.collisionEffect > 0 && this.player.maxSpeed < 10) this.showArrow("red");
+            else if (this.player.collisionEffect > 0 && this.player.maxSpeed > this.player.maxSpeedDefault) this.showArrow("green");
+            else if (this.player.collisionEffect > 0 && this.player.maxSpeed < this.player.maxSpeedDefault) this.showArrow("red");
             else this.removeArrows();
 
             // get timer from hud
@@ -164,7 +182,24 @@ class MyHUD {
             let effectSMG = this.hud.getObjectByName("effect");
             let effectHandler = this.hudElements.get(effectSMG);
             effectHandler.load(effectSMG, this.convertEffect(this.player.collisionEffect).toString());
-        }         
+
+            if (pause) {
+                let pauseSMG = this.hud.getObjectByName("pause");
+                let pauseHandler = this.hudElements.get(pauseSMG);
+                pauseHandler.load(pauseSMG, "PAUSE");
+            } else {
+                let pauseSMG = this.hud.getObjectByName("pause");
+                let pauseHandler = this.hudElements.get(pauseSMG);
+                pauseHandler.load(pauseSMG, "");
+            }
+            
+            if (this.lapController.lap == 3) { 
+                let endSMG = this.hud.getObjectByName("end");
+                let endHandler = this.hudElements.get(endSMG);
+                endHandler.load(endSMG, "FINISH");
+            }
+        }
+        
     }
 
 }

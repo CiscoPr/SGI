@@ -10,7 +10,7 @@ class CarController {
         this.track = track;
 
         // timestamp
-        this.lastTime = Date.now();
+        this.lastTime = null;
         this.lastPos = this.model.position.clone();
 
         // timers
@@ -36,6 +36,7 @@ class CarController {
         this.sIsPressed = false;
         this.turning = false;
         this.outTracks = false;
+        this.pause = false;
 
         // Add event listeners for keypresses
         window.addEventListener('keydown', (e) => this.handleKeyDown(e));
@@ -206,7 +207,7 @@ class CarController {
         this.lastPos = this.model.position.clone();
     }
 
-    update() {
+    updatePosition() {
         if (this.accelerating) {
             this.accelerate();
         } else if (!this.accelerating && this.speed > 0) {
@@ -226,11 +227,11 @@ class CarController {
         }
 
         this.model.translateZ(this.speed * this.direction);
+    }
 
+    updateWheels() {
         const time = (Date.now() % 6000) / 6000;
-
         const turn = this.turnDirection * this.turnSpeed;
-
         const turnAngle = turn * Math.PI/2 ; // Adjust this value to get the desired turn angle
 
         for (let i = 0; i < this.wheels.children.length; i++) {
@@ -251,10 +252,9 @@ class CarController {
               wheel.rotation.x = time * Math.PI * 5 * this.speed;
             }
         }
+    }
 
-        // update collision effect
-        this.updateCollisionEffect();
-
+    checkOutOfTrack() {
         const arrayPoints = this.track.path1.getSpacedPoints(10000);
 
         //console.log("arrayPoints", arrayPoints);
@@ -274,30 +274,32 @@ class CarController {
         if(closestPointDistance > 250 && (this.model.position.x > 4300 || this.model.position.x < 3700)){
             console.log("you're out of the track");
             this.outTracks = true;
-
-            this.maxSpeed = 5;
+            this.maxSpeed = this.maxSpeedDefault * 0.5;
         }
         else{
             // fix the max speed
-            if (this.collisionEffect == 0) this.maxSpeed = 10;
+            if (this.collisionEffect == 0) this.maxSpeed = this.maxSpeedDefault;
             console.log("you're in the track");
             this.outTracks = false;
         }
+    }
 
-        // update race timer
-        this.updateRaceTime();
+    updateClock() { this.lastTime = Date.now(); console.log("lastTime", this.lastTime);}
 
-        // update realSpeed and lastPos
-        this.updateRealSpeed();
+    update() {
+        if (this.lastTime == null) { this.lastTime = Date.now(); return; }
+
+        if (!this.pause) {
+            this.updatePosition();
+            this.updateWheels();
+            this.updateCollisionEffect();
+            this.checkOutOfTrack();
+            this.updateRaceTime();
+            this.updateRealSpeed();
+        }
 
         // update timestamp
-        this.lastTime = Date.now();
-
-        console.log("speed", this.realSpeed.toString());
-
-
-        console.log("collisionEffect", this.collisionEffect);
-        console.log("maxSpeed", this.maxSpeed);
+        this.updateClock();
     }
 }
 
