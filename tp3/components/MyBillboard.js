@@ -97,7 +97,7 @@ class MyBillboard {
     initBorder() {
         // add panel helper
         let plane = new THREE.PlaneGeometry(this.width, this.height);
-        let material = new THREE.MeshBasicMaterial({color: 0xffffff});
+        let material = new THREE.MeshBasicMaterial({color: 0xffffff, side: THREE.DoubleSide});
         let mesh = new THREE.Mesh(plane, material);
         this.hud.add(mesh);
 
@@ -125,73 +125,8 @@ class MyBillboard {
         meshBorder = new THREE.Mesh(border, materialBorder);
         meshBorder.position.set(-this.width / 2, 0, 0);
         this.hud.add(meshBorder);
-
-        // add support
-        let support = new THREE.BoxGeometry(1, 4, 1);
-        let materialSupport = new THREE.MeshBasicMaterial({color: 0x000000});
-        let meshSupport = new THREE.Mesh(support, materialSupport);
-        meshSupport.position.set(this.width / 2 - 2, -this.height / 2 - 1, -0.6);
-        this.hud.add(meshSupport);
-
-        // add support
-        support = new THREE.BoxGeometry(1, 4, 1);
-        materialSupport = new THREE.MeshBasicMaterial({color: 0x000000});
-        meshSupport = new THREE.Mesh(support, materialSupport);
-        meshSupport.position.set(-this.width / 2 + 2, -this.height / 2 -1, -0.6);
-        this.hud.add(meshSupport);
     }
 
-    static returnEmptyBillboard() {
-        let billboard = new THREE.Group();
-        billboard.name = "billboard";
-
-        // add panel helper
-        let plane = new THREE.PlaneGeometry(this.width, this.height);
-        let material = new THREE.MeshBasicMaterial({color: 0xffffff});
-        let mesh = new THREE.Mesh(plane, material);
-        billboard.add(mesh);
-
-        // create borders
-        let border = new THREE.BoxGeometry(this.width, 0.1, 0.1);
-        let materialBorder = new THREE.MeshBasicMaterial({color: 0x000000});
-        let meshBorder = new THREE.Mesh(border, materialBorder);
-        meshBorder.position.set(0, this.height / 2, 0);
-        billboard.add(meshBorder);
-
-        border = new THREE.BoxGeometry(this.width, 0.1, 0.1);
-        materialBorder = new THREE.MeshBasicMaterial({color: 0x000000});
-        meshBorder = new THREE.Mesh(border, materialBorder);
-        meshBorder.position.set(0, -this.height / 2, 0);
-        billboard.add(meshBorder);
-
-        border = new THREE.BoxGeometry(0.1, this.height, 0.1);
-        materialBorder = new THREE.MeshBasicMaterial({color: 0x000000});
-        meshBorder = new THREE.Mesh(border, materialBorder);
-        meshBorder.position.set(this.width / 2, 0, 0);
-        billboard.add(meshBorder);
-
-        border = new THREE.BoxGeometry(0.1, this.height, 0.1);
-        materialBorder = new THREE.MeshBasicMaterial({color: 0x000000});
-        meshBorder = new THREE.Mesh(border, materialBorder);
-        meshBorder.position.set(-this.width / 2, 0, 0);
-        billboard.add(meshBorder);
-
-        // add support
-        let support = new THREE.BoxGeometry(1, 4, 1);
-        let materialSupport = new THREE.MeshBasicMaterial({color: 0x000000});
-        let meshSupport = new THREE.Mesh(support, materialSupport);
-        meshSupport.position.set(this.width / 2 - 2, -this.height / 2 - 1, -0.6);
-        billboard.add(meshSupport);
-
-        // add support
-        support = new THREE.BoxGeometry(1, 4, 1);
-        materialSupport = new THREE.MeshBasicMaterial({color: 0x000000});
-        meshSupport = new THREE.Mesh(support, materialSupport);
-        meshSupport.position.set(-this.width / 2 + 2, -this.height / 2 -1, -0.6);
-        billboard.add(meshSupport);
-
-        return billboard;
-    }
 
     convertTime(time) {
         // time is in miliseconds, convert to minutes and seconds

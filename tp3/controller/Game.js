@@ -22,6 +22,8 @@ class Game{
         
 		// gameflow control
 		this.gameState = 0; // 0 - start, 1 - game, 2 - done, 3 - pause
+		this.escapePressed = false;
+		this.cleanedUp = false;
 		window.addEventListener('keyup', (e) => {
 			if (e.key == " ") {
 				if (this.gameState == 1) {
@@ -29,6 +31,8 @@ class Game{
 				} else if (this.gameState == 3) {
 					this.gameState = 1;
 				}
+			} else if (e.key == "Escape") {
+				this.escapePressed = true;
 			}
 		});
 		this.clock = null;
@@ -67,12 +71,40 @@ class Game{
         //}
     }
 
-	buildObstcles() { 
-		// build obstacles
+	buildObstacles() { 
+		const arrayPoints = this.track.path1.getSpacedPoints(10000);
+		const randomPoints = [];
+		while (randomPoints.length < 20) {
+			const randomIndex = Math.floor(Math.random() * arrayPoints.length);
+			if (!randomPoints.includes(randomIndex)) { randomPoints.push(randomIndex); }
+		}
+
+		for (let i = 0; i < randomPoints.length; i++) {
+			const point = arrayPoints[randomPoints[i]];
+			point.add(new THREE.Vector3().random().multiplyScalar(150));
+			point.y = 50;
+			const type = Math.random() > 0.5 ? 'speed' : 'time';
+			const obstacle = new MyObstacle(type, point, this.app.scene);
+			this.obstacles.push(obstacle);
+		}
 	}
 
 	buildBoosts() {
-		// build boosts
+		const arrayPoints = this.track.path1.getSpacedPoints(10000);
+		const randomPoints = [];
+		while (randomPoints.length < 50) {
+			const randomIndex = Math.floor(Math.random() * arrayPoints.length);
+			if (!randomPoints.includes(randomIndex)) { randomPoints.push(randomIndex); }
+		}
+
+		for (let i = 0; i < randomPoints.length; i++) {
+			const point = arrayPoints[randomPoints[i]];
+			point.add(new THREE.Vector3().random().multiplyScalar(150));
+			point.y = 50;
+			const type = Math.random() > 0.5 ? 'speed' : 'time';
+			const boost = new MyBoost(type, point, this.app.scene);
+			this.boosts.push(boost);
+		}
 	}
 	
 	buildHUD() {
@@ -84,13 +116,16 @@ class Game{
 		this.billboard = new MyBillboard(this.carController, this.lapController);
 		this.billboard.init(this.app.scene);
 		// modify position, rotation and scale
+		this.billboard.hud.scale.set(300, 300, 300);
+		this.billboard.hud.position.set(-6100, 1200, 0);
+		this.billboard.hud.rotation.y = Math.PI / 2;
 	}
 
 	buildComponents() {
 		this.playerCar = new MyCar(this.characters[0]);
 		this.enemyCar = new MyCar(this.characters[1]);
 		this.buildBoosts();
-		this.buildObstcles();
+		this.buildObstacles();
 		this.trafficLights = new MyTrafficLights();
 	}
 
@@ -98,14 +133,18 @@ class Game{
 		// player car
 		this.app.scene.add(this.playerCar.car);
 		// modify position, rotation and scale
+		this.playerCar.car.position.set(4060, 25, 0);
 
 		// enemy car
 		this.app.scene.add(this.enemyCar.car);
 		// modify position, rotation and scale
+		this.enemyCar.car.position.set(4000, 25, 0);
 
 		// traffic lights
 		this.app.scene.add(this.trafficLights.trafficLight);
 		// modify position, rotation and scale
+		this.trafficLights.trafficLight.position.set(4050, 50, 0);
+		this.trafficLights.trafficLight.rotation.y = Math.PI;
 
 	}
 	
@@ -113,8 +152,8 @@ class Game{
 		// start controllers
 		this.carController = new CarController(this.playerCar.car, this.playerCar.carWheels, this.track, this.playerStats[0], this.playerStats[1], this.playerStats[2]);
 		this.itemsController = new ItemsController(this.boosts, this.obstacles);
-		this.collisionSystem = new CollisionController(this.carController, this.itemsController, this.playerCar, this.boosts, this.obstacles);
-		this.automaticCarController = new AutomaticCarController(this.app, this.enemyCar.car, this.enemyCar.carWheels, this.track);
+		this.collisionSystem = new CollisionController(this.carController, this.itemsController, this.playerCar, this.enemyCar, this.boosts, this.obstacles);
+		this.automaticCarController = new AutomaticCarController(this.app, this.enemyCar.car, this.enemyCar.carWheels, this.track, this.enemyStats[0]);
 		this.lapController = new LapController(this.app, this.playerCar, this.track);
         this.lapController2 = new LapController(this.app, this.enemyCar, this.track);
 	}
@@ -156,6 +195,27 @@ class Game{
 	}
 
 	update() {
+		if (this.escapePressed) {
+			// delete obstacles and boosts
+			this.obstacles.forEach(obstacle => this.app.scene.remove(obstacle.helper));
+			this.boosts.forEach(boost => this.app.scene.remove(boost.helper));
+
+			// delete hud and billboard
+			this.app.scene.remove(this.hud.hud);
+			this.app.scene.remove(this.billboard.hud);
+
+			// delete cars
+			this.app.scene.remove(this.playerCar.car);
+			this.app.scene.remove(this.enemyCar.car);
+
+			// delete traffic lights
+			this.app.scene.remove(this.trafficLights.trafficLight);
+
+			this.cleanedUp = true;
+
+			return;
+		}
+
 		if (this.gameState == 0) {
 			this.updateStartGame();
 		} else if (this.gameState == 1) {

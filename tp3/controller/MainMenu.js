@@ -69,7 +69,7 @@ class MainMenu{
         this.buildGameTitle("gameTitle", this.availableLayers[1]);
         this.buildStartGameButton("startGame", this.availableLayers[2]);
         this.buildAuthors("authors", this.availableLayers[3]);
-        this.buildListener();
+        //this.buildListener();
 
     }
 

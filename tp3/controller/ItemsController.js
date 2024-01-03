@@ -14,7 +14,7 @@ class ItemsController {
         this.obstacleTimers = new Array();
 
         for (let i = 0; i < this.boosts.length; i++) { this.boostTimers.push(0); }
-        for (let i = 0; i < this.boosts.length; i++) { this.obstacleTimers.push(0); }
+        for (let i = 0; i < this.obstacles.length; i++) { this.obstacleTimers.push(0); }
         
     }
 
@@ -54,6 +54,16 @@ class ItemsController {
                 this.obstacles[index].mesh.visible = true;
             }
         });
+    }
+
+    addObstacle(obstacle) {
+        this.obstacles.push(obstacle);
+        this.obstacleTimers.push(0);
+    }
+
+    addBoost(boost) {
+        this.boosts.push(boost);
+        this.boostTimers.push(0);
     }
 
     update() {

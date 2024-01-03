@@ -2,17 +2,14 @@ import * as THREE from 'three';
 import { WheelController } from './WheelController.js';
 
 class AutomaticCarController {
-    constructor(app, model, wheels, track) {
+    constructor(app, model, wheels, track, acceleration) {
         this.app = app;
         this.model = model;
         this.wheels = wheels;
         this.track = track;
         this.speed = 0;
-        this.maxSpeed = 5;
-        this.acceleration = 0.5;
-        this.accelerating = false;
-        this.sIsPressed = false;
-        this.deceleration = 0.5;
+        this.acceleration = acceleration;
+
         this.turnSpeed = 0;
         this.maxTurnSpeed = 0.03;
         this.direction = 1;
@@ -714,7 +711,7 @@ class AutomaticCarController {
     update() {
         const currentCarAngle = this.model.rotation.y;
         const delta = this.clock.getDelta()
-        this.mixer.update(delta)
+        this.mixer.update(delta * (this.acceleration / 10))
         this.counter += 1;
         const nextCarAngle = this.model.rotation.y;
         if(this.counter >= 25){

@@ -202,6 +202,7 @@ class MainController{
         else if (this.gameFlag != 2 && this.phaseCounter == 5){
             this.game.update();
             this.gameFlag == this.game.gameState;
+            if (this.game.escapePressed && this.game.cleanedUp) this.reset();
         }
 
         else if(this.gameFlag == 2 && this.phaseCounter == 5){

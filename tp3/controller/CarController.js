@@ -12,6 +12,7 @@ class CarController {
         // timestamp
         this.lastTime = null;
         this.lastPos = this.model.position.clone();
+        this.lastMaxSpeed = maxSpeed;
 
         // timers
         this.collisionEffect = 0;
@@ -184,6 +185,11 @@ class CarController {
         }
     }
 
+    enemyCollision() {
+        this.maxSpeed = this.maxSpeedDefault * 0.70;
+        this.collisionEffect = 5000;
+    }
+
     updateCollisionEffect() {
         let elapsedTime = Date.now() - this.lastTime;
 
@@ -202,7 +208,7 @@ class CarController {
     }
 
     updateRealSpeed() {
-        let elapsedTime = Date.now() - this.lastTime;
+        let elapsedTime = 200;
         elapsedTime = elapsedTime / 3600000;
         this.realSpeed = (this.model.position.distanceTo(this.lastPos) / 1000) / elapsedTime;
         this.lastPos = this.model.position.clone();
@@ -272,10 +278,21 @@ class CarController {
             }
         //console.log("closestPoint", closestPointDistance);
         // ask about this
-        if(closestPointDistance > 250 || ((this.model.position.x > 4300 || this.model.position.x < 3700) && (this.model.position.z < 0 && this.model.position.z > -2000 ))){
-            console.log("you're out of the track");
-            this.outTracks = true;
-            this.maxSpeed = this.maxSpeedDefault * 0.5;
+        if(closestPointDistance > 250){
+            if (this.model.position.x < 4300 && this.model.position.x > 3750 && this.model.position.z < 0 && this.model.position.z > -2000)
+            {
+                // fix the max speed
+                if (this.collisionEffect == 0) this.maxSpeed = this.maxSpeedDefault;
+                console.log("you're in the track");
+                this.outTracks = false;
+            }
+            else{
+                console.log("you're out of the track");
+                this.outTracks = true;
+                this.collisionEffect = 0;
+                this.maxSpeed = this.maxSpeedDefault * 0.5;
+            }
+            console.log("my car position: ", this.model.position)
         }
         else{
             // fix the max speed
@@ -299,6 +316,7 @@ class CarController {
             this.updateRealSpeed();
         }
 
+        console.log("Collision effect", this.illegalMove)
         // update timestamp
         this.updateClock();
     }

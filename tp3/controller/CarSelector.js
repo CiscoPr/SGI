@@ -112,11 +112,11 @@ class CarSelector {
     buildCharacterInfoCard(character){
 
         if(character == "cloud"){
-            this.selectedMaxSpeed = 10;
+            this.selectedMaxSpeed = 20;
             this.selectedAcceleration = 0.5;
             this.selectedBrakeSpeed = 1.0;
         } else if(character == "tifa"){
-            this.selectedMaxSpeed = 15;
+            this.selectedMaxSpeed = 25;
             this.selectedAcceleration = 0.3;
             this.selectedBrakeSpeed = 1.5;
         }

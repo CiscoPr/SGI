@@ -54,7 +54,7 @@ class MyContents {
 
 		// build components
 		this.track = new MyTrack(this.app.scene);
-		this.buildings = new ScenarioModelsController(this.app.scene);
+		//this.buildings = new ScenarioModelsController(this.app.scene);
 		this.mainController.setTrack(this.track);
 	}
 
