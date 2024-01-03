@@ -66,7 +66,7 @@ class ComponentsEngine  {
         const receiveShadowFlag = this.params.receiveShadows;
         rectangleMesh.castShadow = castShadowFlag;
         rectangleMesh.receiveShadow = receiveShadowFlag;
-
+        rectangleMesh.name = this.params.representations[0].name;
         rectangleMesh.position.set(this.params.representations[0].xy1[0], this.params.representations[0].xy1[1], 0);
         rectangleMesh.position.x += width / 2;
         rectangleMesh.position.y += height / 2;

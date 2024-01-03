@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 class CarController {
-    constructor(model, wheels, track) {
+    constructor(model, wheels, track, maxSpeed, acceleration, brakeSpeed) {
         // objects to control
         this.model = model;
         this.wheels = wheels;
@@ -18,14 +18,15 @@ class CarController {
         this.raceTime = 0;
 
         // default values for car parameters
-        this.maxSpeedDefault = 10;
+        this.maxSpeedDefault = maxSpeed;
 
         // car parameters
         this.speed = 0;
         this.realSpeed = 0;
         this.maxSpeed = this.maxSpeedDefault;
-        this.acceleration = 0.5;
+        this.acceleration = acceleration;
         this.deceleration = 0.5;
+        this.brakeSpeed = brakeSpeed;
         this.turnSpeed = 0;
         this.maxTurnSpeed = 0.03;
         this.direction = 1;
@@ -115,7 +116,7 @@ class CarController {
     sAccelerate() {
         console.log("sAccelerate", this.speed, this.turnSpeed)
         if (this.speed > 0 && this.turnSpeed > 0) {
-            this.speed -= this.deceleration * 6;
+            this.speed -= this.brakeSpeed;
             this.turnSpeed -= 0.006;
         }
         else if(this.speed <= 0 && this.turnSpeed <= 0){
@@ -197,7 +198,7 @@ class CarController {
         let elapsedTime = Date.now() - this.lastTime;
         this.raceTime += elapsedTime;
 
-        console.log("hello", this.raceTime);
+        //console.log("hello", this.raceTime);
     }
 
     updateRealSpeed() {
@@ -271,7 +272,7 @@ class CarController {
             }
         //console.log("closestPoint", closestPointDistance);
         // ask about this
-        if(closestPointDistance > 250 && (this.model.position.x > 4300 || this.model.position.x < 3700)){
+        if(closestPointDistance > 250 || ((this.model.position.x > 4300 || this.model.position.x < 3700) && (this.model.position.z < 0 && this.model.position.z > -2000 ))){
             console.log("you're out of the track");
             this.outTracks = true;
             this.maxSpeed = this.maxSpeedDefault * 0.5;

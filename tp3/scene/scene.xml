@@ -49,12 +49,11 @@
         specular="0 0 0 0"
         shininess="0"
         textureref="terrainTex"
-        texlength_s = "200.0"
-        texlength_t = "200.0"
+        texlength_s = "20.0"
+        texlength_t = "20.0"
         twosided = "true"
         transparent="false"
-        bumpref="scene/textures/elements/terrain.png"
-        bumpscale="0.2"
+        displaceref="scene/textures/elements/terrain_displace.png"
         />
 
         <material id="shinraApp"
@@ -100,6 +99,86 @@
                 <noderef id="tubes"/>
                 <noderef id="walls"/>
                 <noderef id="parking"/>
+
+                <spotlight id="parkingLight1" enabled="true"
+                color="1.0 1.0 1.0 1"
+                intensity="50.0"
+                angle="0.5"
+                distance="1000"
+                decay="0.2"
+                castshadow="true"
+                position="-8225 500 -950"
+                target="-8225 0 -950"
+                shadowfar = "1000"
+                shadowmapsize = "1024"
+                />
+
+                <spotlight id="parkingLight2" enabled="true"
+                color="1.0 1.0 1.0 1"
+                intensity="50.0"
+                angle="0.5"
+                distance="1000"
+                decay="0.2"
+                castshadow="true"
+                position="-7775 500 -950"
+                target="-7775 0 -950"
+                shadowfar = "1000"
+                shadowmapsize = "1024"
+                />
+
+                <spotlight id="parkingLight3" enabled="true"
+                color="1.0 1.0 1.0 1"
+                intensity="50.0"
+                angle="0.5"
+                distance="1000"
+                decay="0.2"
+                castshadow="true"
+                position="-8225 500 250"
+                target="-8225 0 250"
+                shadowfar = "1000"
+                shadowmapsize = "1024"
+                />
+
+                <spotlight id="parkingLight4" enabled="true"
+                color="1.0 1.0 1.0 1"
+                intensity="50.0"
+                angle="0.5"
+                distance="1000"
+                decay="0.2"
+                castshadow="true"
+                position="-7775 500 250"
+                target="-7775 0 250"
+                shadowfar = "1000"
+                shadowmapsize = "1024"
+                />
+
+                <spotlight id="parkingLight5" enabled="true"
+                color="1.0 1.0 1.0 1"
+                intensity="50.0"
+                angle="0.5"
+                distance="1000"
+                decay="0.2"
+                castshadow="true"
+                position="-8225 500 1450"
+                target="-8225 0 1450"
+                shadowfar = "1000"
+                shadowmapsize = "1024"
+                />
+
+                <spotlight id="parkingLight6" enabled="true"
+                color="1.0 1.0 1.0 1"
+                intensity="50.0"
+                angle="0.5"
+                distance="1000"
+                decay="0.2"
+                castshadow="true"
+                position="-7775 500 1450"
+                target="-7775 0 1450"
+                shadowfar = "1000"
+                shadowmapsize = "1024"
+                />
+
+
 
                 <pointlight id="tube1Light" enabled="true"
                 color="1.0 1.0 1.0 1"
@@ -164,14 +243,15 @@
         <node id="terrain" receiveshadows="true">
             <transforms>
                 <translate value3="0 15 0" />
-                <rotate value3="1.57 0.0 0.0" />
+                <rotate value3="1.57079632679489661923 0.0 0.0" />
+                <scale value3="1100.0 1100.0 1100.0" />
             </transforms>
 
             <materialref id="terrainApp" />
 
             <children>
                 <primitive>
-                    <rectangle xy1="15000.0 15000.0" xy2="-15000.0 -15000.0" />
+                    <rectangle xy1="10.0 10.0" xy2="-10.0 -10.0" parts_x ="60" parts_y="120" name="terrain"/>
                 </primitive>
             </children>
         </node>
@@ -275,7 +355,7 @@
             <materialref id="parkingApp" />
             <children>
                 <primitive>
-                    <rectangle xy1="140.0 100.0" xy2="-140.0 -100.0" />
+                    <rectangle xy1="140.0 100.0" xy2="-140.0 -100.0" name="parking1"/>
                 </primitive>
             </children>
         </node>
@@ -289,7 +369,7 @@
             <materialref id="parkingApp" />
             <children>
                 <primitive>
-                    <rectangle xy1="140.0 100.0" xy2="-140.0 -100.0" />
+                    <rectangle xy1="140.0 100.0" xy2="-140.0 -100.0" name="parking2"/>
                 </primitive>
             </children>
         </node>
@@ -303,7 +383,7 @@
             <materialref id="parkingApp" />
             <children>
                 <primitive>
-                    <rectangle xy1="140.0 100.0" xy2="-140.0 -100.0" />
+                    <rectangle xy1="140.0 100.0" xy2="-140.0 -100.0" name="parking3"/>
                 </primitive>
             </children>
         </node>

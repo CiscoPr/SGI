@@ -12,7 +12,7 @@ class MyTrack {
         this.textureRepeat = 20;
         this.showWireframe = false;
         this.showMesh = true;
-        this.showLine = true;
+        this.showLine = false;
         this.closedCurve = true;
 
         this.path1 = new THREE.CatmullRomCurve3([
@@ -73,11 +73,11 @@ class MyTrack {
 
         // 1st curve
         let geometry = new THREE.TubeGeometry(
-        this.path1,
-        this.segments,
-        this.width,
-        3,
-        this.closedCurve
+            this.path1,
+            this.segments,
+            this.width,
+            3,
+            this.closedCurve
         );
 
         this.mesh = new THREE.Mesh(geometry, this.material);
@@ -106,6 +106,7 @@ class MyTrack {
 
         this.curve.scale.set(1, -0.2, 1);
         this.curve.position.set(0, -5.1, 0);
+        this.curve.name = "track";
         this.scene.add(this.curve);
     }
 }

@@ -10,8 +10,12 @@ class ItemsController {
         this.lastTime = Date.now();
 
         // associate an array of timers to each item
-        this.boostTimers = new Array(this.boosts.length, 0);
-        this.obstacleTimers = new Array(this.obstacles.length, 0);
+        this.boostTimers = new Array();
+        this.obstacleTimers = new Array();
+
+        for (let i = 0; i < this.boosts.length; i++) { this.boostTimers.push(0); }
+        for (let i = 0; i < this.boosts.length; i++) { this.obstacleTimers.push(0); }
+        
     }
 
     deactivateBoost(boost) {

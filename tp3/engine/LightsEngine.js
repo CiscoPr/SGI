@@ -93,7 +93,7 @@ class LightsEngine  {
 
         // create helper
         const helper = new THREE.SpotLightHelper(light);
-        this.app.scene.add(helper);
+        //this.app.scene.add(helper);
 
         // add target to light
 

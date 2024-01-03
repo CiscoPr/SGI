@@ -29,6 +29,7 @@ class MyApp  {
         this.gui = null
         this.axis = null
         this.contents == null
+
     }
     /**
      * initializes the application
@@ -68,7 +69,6 @@ class MyApp  {
      * initializes all the cameras
      */
     initCameras() {
-        const listener = new THREE.AudioListener();
         const aspect = window.innerWidth / window.innerHeight;
 
         // Create a basic perspective camera
@@ -125,21 +125,11 @@ class MyApp  {
      * @param {String} cameraName
      */
     setActiveCamera(cameraName) {
-        const listener = new THREE.AudioListener();
         this.activeCameraName = cameraName
         this.activeCamera = this.cameras[this.activeCameraName]
-        this.activeCamera.add( listener );
 
-        const audioLoader = new THREE.AudioLoader();
 
-        const sound = new THREE.Audio( listener );
-
-        audioLoader.load('./scene/audio/FightOn.mp3', function( buffer ) {
-            sound.setBuffer( buffer );
-            sound.setLoop( true );
-            sound.setVolume( 0.1);
-            sound.play();
-        } );
+        console.log("activeCameraName: ", this.activeCamera)
     }
 
     /**
@@ -171,10 +161,73 @@ class MyApp  {
             }
         }
 
+        //spinning camera in menu
+        if(this.contents && (!this.contents.mainController.mainMenuFlag) || (!this.contents.mainController.inputMenuFlag)){
+            this.activeCamera.position.x = 1000 * Math.cos(0.0001 * Date.now());
+            this.activeCamera.position.z = 1000 * Math.sin(0.0001 * Date.now());
+            this.activeCamera.position.y = 800;
 
-        
+            this.activeCamera.lookAt(0, 800, 0);
+        }
+
+        //camera for car selection a
+        else if(this.contents && (!this.contents.mainController.carSelectorFlag)){
+            this.activeCamera.position.x = -7750
+            this.activeCamera.position.y = 700;
+            this.activeCamera.position.z = -1200
+
+            this.activeCamera.lookAt(-7750, 0, -1200);
+        }
+
+        //camera for enemy selection
+        else if (this.contents && (!this.contents.mainController.enemySelectorFlag)) {
+            this.activeCamera.position.x = -7750
+            this.activeCamera.position.y = 700;
+            this.activeCamera.position.z = 0
+
+            this.activeCamera.lookAt(-7750, 0, 0);
+        }
+
+        /*
+        //camera for obstacle selection
+        else if (this.contents && (!this.contents.mainController.obstacleSelectorFlag)) {
+            this.activeCamera.position.x = -7750
+            this.activeCamera.position.y = 700;
+            this.activeCamera.position.z = 1200
+
+            this.activeCamera.lookAt(-7750, 0, 1200);
+        }
+
+        //camera for obstacle placement
+        else if (this.contents && (!this.contents.mainController.obstaclePlacerFlag)) {
+            this.activeCamera.position.x = 0
+            this.activeCamera.position.y = 11757.087466420322;
+            this.activeCamera.position.z = 500
+
+            this.activeCamera.lookAt(0, 0, 500);
+        }
+        */
+
+        else if(this.contents && (this.contents.mainController.phaseCounter == 5) && this.contents.mainController.game.playerCar.car != null){
+            const car = this.contents.mainController.game.playerCar.car;
+            const carPosition = car.position;
+            let offset = new THREE.Vector3(0, 15, -50);
+
+            // Rotate the offset by the car's rotation
+            offset.applyQuaternion(car.quaternion);
+            const cameraPosition = carPosition.clone().add(offset);
+            this.activeCamera.position.lerp(cameraPosition, 1.0); // Smoothly move the camera
+            let lookAtOffset = new THREE.Vector3(0, 0, 25);
+            lookAtOffset.applyQuaternion(car.quaternion);
+            const lookAtPosition = carPosition.clone().add(lookAtOffset);
+            this.controls.target.lerp(lookAtPosition, 0.5); // Smoothly move the target
+            this.controls.update();
+        }
+
+        console.log("activeCameraName: ", this.activeCamera.position.y)
+/*
         // Update the camera position to follow the car
-        if (this.contents && this.contents.carController) {
+        if (this.contents && this.contents.carController && (this.contents.gameMenu == null)) {
             const car = this.contents.carController.model;
             const carPosition = car.position;
             let offset = new THREE.Vector3(0, 15, -50);
@@ -197,7 +250,7 @@ class MyApp  {
 
 
         /*
-        if (this.contents && this.contents.automaticCarController) {
+        if (this.contents && this.contents.automaticCarController && (this.contents.gameMenu == null)) {
             const car = this.contents.automaticCarController.model;
             const carPosition = car.position;
             let offset = new THREE.Vector3(0, 15, -50);
