@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 class MyObstacle {
-    constructor(type, position, scene) {
+    constructor(type, position, scene, material) {
         this.mesh = null;
         this.helper = new THREE.Group();
         this.type = type;

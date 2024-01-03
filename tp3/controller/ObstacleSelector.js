@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { PickingController } from './PickingController.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MyObstacle } from '../components/MyObstacle.js';
+import { MyShader } from '../components/MyShader.js';
 
 class ObstacleSelector{
     constructor(app) {
@@ -11,6 +12,7 @@ class ObstacleSelector{
         this.obstacleModels = [];
         this.planes = [];
         this.selectedObstacle = "";
+        this.counter = 0;
 
         // TODO: we probably will need to add flags to change in between
         // obstacle selection and its position in the track
@@ -19,8 +21,36 @@ class ObstacleSelector{
         this.initialObsPosX = -8200;
         this.initialObsPosY = 70;
         this.initialObsPosZ = 1350;
-        this.ob1 = new MyObstacle('speed', new THREE.Vector3(this.initialObsPosX, this.initialObsPosY, this.initialObsPosZ), this.app.scene);
-        this.ob2 = new MyObstacle('time', new THREE.Vector3(this.initialObsPosX + 425, this.initialObsPosY, this.initialObsPosZ), this.app.scene);
+
+
+
+
+
+        this.shadermesh = new MyShader(this.app, "shader", "no description provided", "shaders/obstacle.vert", "shaders/obstacle.frag", {
+            time: {type:'f', value: 0.0 },
+            radius: {type:'f', value: 20.0},
+            color: {type: 'vec4', value: new THREE.Vector4(255.0, 0.0, 0.0, 1.0)},
+        });
+
+        this.shadermesh2 = new MyShader(this.app, "shader", "no description provided", "shaders/obstacle.vert", "shaders/obstacle.frag", {
+            time: {type:'f', value: 0.0 },
+            radius: {type:'f', value: 20.0},
+            color: {type: 'vec4', value: new THREE.Vector4(255.0, 165.0, 0.0, 1.0)},
+        });
+
+        setTimeout(() => {
+            this.ob1 = new MyObstacle('speed', new THREE.Vector3(this.initialObsPosX, this.initialObsPosY, this.initialObsPosZ), this.app.scene);
+            this.ob1.helper.children[0].material = this.shadermesh.material;
+            this.ob1.helper.children[0].needsUpdate = true;
+
+            this.ob2 = new MyObstacle('time', new THREE.Vector3(this.initialObsPosX + 425, this.initialObsPosY, this.initialObsPosZ), this.app.scene);
+            this.ob2.helper.children[0].material = this.shadermesh2.material;
+            this.ob2.helper.children[0].needsUpdate = true;
+
+        }, 3000);
+
+
+
         this.infoCard = null;
 
         this.raycaster = new THREE.Raycaster();
@@ -168,8 +198,14 @@ class ObstacleSelector{
     }
 
     update() {
-        // TODO: alter between changing from obstacle selection to obstacle position
-        // in the track
+
+        if(this.shadermesh != null){
+            this.shadermesh.uniformValues.time.value += 0.01;
+        }
+
+        if(this.shadermesh2 != null){
+            this.shadermesh2.uniformValues.time.value += 0.01;
+        }
 
         if (this.obsSelectorDone || this.escapePressed) {
             this.app.scene.remove(this.planes[0]);
