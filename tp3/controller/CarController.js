@@ -167,7 +167,7 @@ class CarController {
                 this.collisionEffect = 5000;
                 break;
             case 'time':
-                this.raceTime -= 3000;
+                this.raceTime -= 7000;
                 if (this.raceTime < 0) this.raceTime = 0;
             default:
                 break;
@@ -181,7 +181,7 @@ class CarController {
                 this.collisionEffect = 5000;
                 break;
             case 'time':
-                this.raceTime += 3000;
+                this.raceTime += 7000;
             default:
                 break;
         }
