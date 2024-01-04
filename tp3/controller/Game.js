@@ -25,6 +25,9 @@ class Game{
 		this.escapePressed = false;
 		this.cleanedUp = false;
 		this.powerUp = false;
+		this.clock = null;
+		this.victory = false;
+		this.raceTime = -1;
 		window.addEventListener('keyup', (e) => {
 			if (e.key == " ") {
 				if (this.gameState == 1) {
@@ -36,7 +39,6 @@ class Game{
 				this.escapePressed = true;
 			}
 		});
-		this.clock = null;
 
 		// components
 		this.playerCar = null;
@@ -168,7 +170,7 @@ class Game{
 
 	updateGame() {
 	
-		if (this.collisionSystem != null) this.powerUp = this.collisionSystem.update();
+		if (this.collisionSystem != null && this.lapController.lap < 3) this.powerUp = this.collisionSystem.update();
 		if (this.itemsController != null) this.itemsController.update();
 		if (this.hud != null) this.hud.update(this.app.activeCamera, false);
 		if (this.trafficLights != null) this.trafficLights.update(this.app.scene);
@@ -188,8 +190,13 @@ class Game{
 			this.lapController2.update();
 		}
 
-		if (this.lapController != null && this.lapController.lap == 3) {
-			if (this.clock == null) { this.clock = Date.now(); }
+		if (this.lapController != null && this.lapController.lap > 2) {
+			if (this.clock == null) { 
+				this.clock = Date.now();
+				if (this.lapController2.lap < 3) { this.victory = true; }
+				this.raceTime = this.carController.raceTime;
+			}
+
 			if (Date.now() - this.clock > 5000) { this.gameState = 2; console.log("Game Over"); }
 		}
 	}
@@ -211,25 +218,28 @@ class Game{
 		this.automaticCarController.update();
 	}
 
+	clean() {
+		// delete obstacles and boosts
+		this.obstacles.forEach(obstacle => this.app.scene.remove(obstacle.helper));
+		this.boosts.forEach(boost => this.app.scene.remove(boost.helper));
+
+		// delete hud and billboard
+		this.app.scene.remove(this.hud.hud);
+		this.app.scene.remove(this.billboard.hud);
+
+		// delete cars
+		this.app.scene.remove(this.playerCar.car);
+		this.app.scene.remove(this.enemyCar.car);
+
+		// delete traffic lights
+		this.app.scene.remove(this.trafficLights.trafficLight);
+
+		this.cleanedUp = true;
+	}
+
 	update() {
 		if (this.escapePressed) {
-			// delete obstacles and boosts
-			this.obstacles.forEach(obstacle => this.app.scene.remove(obstacle.helper));
-			this.boosts.forEach(boost => this.app.scene.remove(boost.helper));
-
-			// delete hud and billboard
-			this.app.scene.remove(this.hud.hud);
-			this.app.scene.remove(this.billboard.hud);
-
-			// delete cars
-			this.app.scene.remove(this.playerCar.car);
-			this.app.scene.remove(this.enemyCar.car);
-
-			// delete traffic lights
-			this.app.scene.remove(this.trafficLights.trafficLight);
-
-			this.cleanedUp = true;
-
+			this.clean();
 			return;
 		}
 
