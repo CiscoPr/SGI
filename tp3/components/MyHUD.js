@@ -65,7 +65,7 @@ class MyHUD {
         // add end game text
         let endSMG = new THREE.Group();
         endSMG.name = "end";
-        endSMG.position.set(-3.5, 0, 0);
+        endSMG.position.set(-3.0, 0, 0);
         let endHandler = new MyText(10);
         endHandler.init(endSMG);
         this.hudElements.set(endSMG, endHandler);

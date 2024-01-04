@@ -10,6 +10,8 @@ import { MyCar } from '../components/MyCar.js';
 import { MyTrafficLights } from '../components/MyTrafficLights.js';
 import { MyBillboard } from '../components/MyBillboard.js';
 import { MyHUD } from '../components/MyHUD.js';
+import { MyShader } from '../components/MyShader.js';
+
 
 
 
@@ -19,7 +21,7 @@ class Game{
         this.characters = characters;
         this.playerStats = player;
         this.enemyStats = enemy;
-        
+
 		// gameflow control
 		this.gameState = 0; // 0 - start, 1 - game, 2 - done, 3 - pause
 		this.escapePressed = false;
@@ -47,6 +49,7 @@ class Game{
 		this.boosts = [];
 		this.trafficLights = null;
 		this.track = track;
+		this.shadermesh = null;
 
 		// controllers
 		this.carController = null;
@@ -74,10 +77,10 @@ class Game{
         //}
     }
 
-	buildObstacles() { 
+	buildObstacles() {
 		const arrayPoints = this.track.path1.getSpacedPoints(10000);
 		const randomPoints = [];
-		while (randomPoints.length < 2) {
+		while (randomPoints.length < 20) {
 			const randomIndex = Math.floor(Math.random() * arrayPoints.length);
 			if (!randomPoints.includes(randomIndex)) { randomPoints.push(randomIndex); }
 		}
@@ -87,8 +90,28 @@ class Game{
 			point.add(new THREE.Vector3().random().multiplyScalar(150));
 			point.y = 50;
 			const type = Math.random() > 0.5 ? 'speed' : 'time';
-			const obstacle = new MyObstacle(type, point, this.app.scene);
-			this.obstacles.push(obstacle);
+
+			if(type == 'speed'){
+				this.shadermesh = new MyShader(this.app, "shader", "no description provided", "shaders/obstacle.vert", "shaders/obstacle.frag", {
+					time: {type:'f', value: 0.0 },
+					radius: {type:'f', value: 20.0},
+					color: {type: 'vec4', value: new THREE.Vector4(255.0, 0.0, 0.0, 1.0)},
+				});
+			}else{
+				this.shadermesh = new MyShader(this.app, "shader", "no description provided", "shaders/obstacle.vert", "shaders/obstacle.frag", {
+					time: {type:'f', value: 0.0 },
+					radius: {type:'f', value: 20.0},
+					color: {type: 'vec4', value: new THREE.Vector4(255.0, 165.0, 0.0, 1.0)},
+				});
+			}
+
+			setTimeout(()=>{
+				const obstacle = new MyObstacle(type, point, this.app.scene);
+				obstacle.helper.children[0].material = this.shadermesh.material;
+				obstacle.helper.children[0].needsUpdate = true;
+				this.obstacles.push(obstacle);
+
+			}, 3000);
 		}
 	}
 
@@ -109,7 +132,7 @@ class Game{
 			this.boosts.push(boost);
 		}
 	}
-	
+
 	buildHUD() {
 		// build hud
 		this.hud = new MyHUD(this.carController, this.lapController);
@@ -150,13 +173,13 @@ class Game{
 		this.trafficLights.trafficLight.rotation.y = Math.PI;
 
 	}
-	
+
 	startControllers() {
 		// start controllers
 		this.carController = new CarController(this.playerCar.car, this.playerCar.carWheels, this.track, this.playerStats[0], this.playerStats[1], this.playerStats[2]);
 		this.itemsController = new ItemsController(this.boosts, this.obstacles);
 		this.collisionSystem = new CollisionController(this.carController, this.itemsController, this.playerCar, this.enemyCar, this.boosts, this.obstacles);
-		this.automaticCarController = new AutomaticCarController(this.app, this.enemyCar.car, this.enemyCar.carWheels, this.track, this.enemyStats[0]);
+		this.automaticCarController = new AutomaticCarController(this.app, this.enemyCar.car, this.enemyCar.carWheels, this.track, this.enemyStats[0], this.characters[1]);
 		this.lapController = new LapController(this.app, this.playerCar, this.track);
         this.lapController2 = new LapController(this.app, this.enemyCar, this.track);
 	}
@@ -169,8 +192,8 @@ class Game{
 
 
 	updateGame() {
-	
-		if (this.collisionSystem != null && this.lapController.lap < 3) this.powerUp = this.collisionSystem.update();
+
+		if (this.collisionSystem != null) this.powerUp = this.collisionSystem.update();
 		if (this.itemsController != null) this.itemsController.update();
 		if (this.hud != null) this.hud.update(this.app.activeCamera, false);
 		if (this.trafficLights != null) this.trafficLights.update(this.app.scene);
@@ -183,7 +206,7 @@ class Game{
 			this.lapController.update();
 		}
 
-		
+
 		if (this.automaticCarController != null) {
 			this.automaticCarController.mixerPause = false;
 			this.automaticCarController.update();
@@ -210,7 +233,7 @@ class Game{
 		this.automaticCarController.update();
 	}
 
-	placerPause() { 
+	placerPause() {
 		this.carController.updateClock();
 		this.carController.pause = true;
 		this.itemsController.updateClock();
@@ -238,6 +261,10 @@ class Game{
 	}
 
 	update() {
+		if(this.shadermesh != null){
+            this.shadermesh.uniformValues.time.value += 0.01;
+        }
+
 		if (this.escapePressed) {
 			this.clean();
 			return;

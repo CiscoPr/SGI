@@ -223,6 +223,14 @@ class MyApp  {
             this.activeCamera.lookAt(0, 0, 500);
         }
 
+        else if (this.contents && (this.contents.mainController.phaseCounter == 11)) {
+            this.activeCamera.position.x = 4000;
+            this.activeCamera.position.y = 34;
+            this.activeCamera.position.z = 500;
+
+            this.activeCamera.lookAt(4000, 150, 0);
+        }
+
         console.log("activeCameraName: ", this.activeCamera.position.y)
 /*
         // Update the camera position to follow the car

@@ -6,6 +6,7 @@ import { EnemySelector } from './EnemySelector.js';
 import { ObstacleSelector } from './ObstacleSelector.js';
 import { ObstaclePlacing } from './ObstaclePlacing.js';
 import { Game } from './Game.js';
+import { EndGame } from './EndGame.js';
 // import the rest of the menus
 
 class MainController{
@@ -19,6 +20,7 @@ class MainController{
         this.obstacleSelector = null;
         this.obstaclePlacer = null;
         this.game = null;
+        this.endGame = null;
         this.track = null;
 
         //flags to check if the user is done with each of the menus
@@ -52,6 +54,12 @@ class MainController{
 
         //this will be used to keep track of the diffculty level of the enemy (1 by default)
         this.difficulty = 1;
+
+        // results of game
+        this.result = "";
+        this.time = -1;
+        this.winner = "";
+        this.loser = "";
 
         //this will be used to keep track of the enemy acceleration
         this.enemyAcceleration = 0;
@@ -93,6 +101,9 @@ class MainController{
             case 8:
                 this.obstaclePlacer = new ObstaclePlacing(this.app, this.obstacleName);
                 break;
+            case 10:
+                this.endGame = new EndGame(this.app, this.winner, this.loser, this.result, this.time, this.difficulty, this.userName);
+                break;
             
         }
 
@@ -108,6 +119,8 @@ class MainController{
         this.enemySelector = null;
         this.obstacleSelector = null;
         this.game = null;
+        this.gameFlag = 0;
+        this.endGame = null;
 
         this.mainMenuFlag = false;
         this.inputMenuFlag = false;
@@ -126,6 +139,11 @@ class MainController{
         this.playerBrakeSpeed = 0;
 
         this.difficulty = 1;
+        this.results = "";
+        this.time = -1;
+        this.winner = "";
+        this.loser = "";
+
 
         this.enemyAcceleration = 0;
 
@@ -177,7 +195,6 @@ class MainController{
             this.playerAcceleration = this.carSelector.getSelectedAcceleration();
             this.playerBrakeSpeed = this.carSelector.getSelectedBrakeSpeed();
             console.log("The player selected:", this.playersCharacter, this.playerMaxSpeed, this.playerAcceleration, this.playerBrakeSpeed)
-            this.carSelector = null; // might remove later
             this.build();
         }
 
@@ -194,23 +211,27 @@ class MainController{
             this.difficulty = this.enemySelector.getDifficulty();
             this.enemyAcceleration = this.enemySelector.getAcceleration();
             console.log("The enemy selected:", this.enemyCharacter, this.difficulty, this.enemyAcceleration)
-            this.enemySelector = null; // might remove later
             this.build();
         }
 
         //then we go to the game
         else if (this.gameFlag != 2 && this.phaseCounter == 5){
             this.game.update();
-            this.gameFlag == this.game.gameState;
+            this.gameFlag = this.game.gameState;
             if (this.game.powerUp) {this.phaseCounter++; this.build(); }
             if (this.game.escapePressed && this.game.cleanedUp) this.reset();
         }
 
         else if(this.gameFlag == 2 && this.phaseCounter == 5){
+            this.result = this.game.victory;
+            this.time = this.game.raceTime;
+            this.winner = (this.game.victory) ? this.playersCharacter : this.enemyCharacter;
+            this.loser = (this.game.victory) ? this.enemyCharacter : this.playersCharacter;
+            this.game.clean();
             this.game = null;
+            this.phaseCounter += 5;
             this.build();
         }
-
         
         //then we go to the obstacle selector
         else if (this.obstacleSelectorFlag == false && this.phaseCounter == 7) {
@@ -218,7 +239,10 @@ class MainController{
             this.game.update();
             this.obstacleSelectorFlag = this.obstacleSelector.obsSelectorDone;
             this.obstacleName = this.obstacleSelector.getObsSelected();
-            if(this.obstacleSelector.getEscapePressed()) this.reset();
+            if(this.obstacleSelector.getEscapePressed()) {
+                this.game.clean();
+                this.reset();   
+            }
         }
 
         else if (this.obstacleSelectorFlag == true && this.phaseCounter == 7) {
@@ -232,20 +256,30 @@ class MainController{
         else if (this.obstaclePlacerFlag == false && this.phaseCounter == 9) {
             this.obstaclePlacerFlag = this.obstaclePlacer.obsPlacerDone;
             this.game.update();
-            if(this.obstaclePlacer.getEscapePressed()) this.reset();
+            if(this.obstaclePlacer.getEscapePressed()) {
+                this.game.clean();
+                this.reset();
+            }
         }
 
         else if (this.obstaclePlacerFlag == true && this.phaseCounter == 9) {
-            console.log("I AM HERE")
             console.log(this.game.powerUp)
             this.game.itemsController.addObstacle(this.obstaclePlacer.obstacle);
             this.game.powerUp = false;
             this.game.update();
-            //this.obstaclePlacer = null; // might remove later
-            console.log("FINALLY I CAN PLAY!")
             this.phaseCounter -= 4;
             this.obstaclePlacerFlag = false;
             this.obstacleSelectorFlag = false;
+        }
+
+        else if (this.phaseCounter == 11) {
+            this.endGame.update();
+            if (this.endGame.escapePressed && this.endGame.cleanedUp ) { this.reset(); } 
+            else if (this.endGame.spacePressed && this.endGame.cleanedUp) {
+                this.phaseCounter -= 7;
+                this.gameFlag = 0;
+                this.endGame = null;
+            }
         }
 
         console.log("everything:", this.userName, this.playersCharacter, this.playerMaxSpeed, this.playerAcceleration, this.playerBrakeSpeed, this.enemyCharacter, this.difficulty, this.enemyAcceleration, this.obstacleName)

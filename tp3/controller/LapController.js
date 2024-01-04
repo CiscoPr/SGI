@@ -13,6 +13,8 @@ class LapController{
         this.checkpoints = [];
         this.points = this.track.path1.getSpacedPoints(20);
         this.goal = this.points[0];
+        this.startTime = -1;
+        this.endTime = -1;
         this.init();
 
         // helpers
@@ -60,6 +62,8 @@ class LapController{
     }
 
     update(){
+        if (this.startTime === -1) this.startTime = Date.now();
+
         if (this.carSphere != null ){
             let chassisCenter = this.car.getChassisCenter();
             let x = chassisCenter.x;
@@ -87,6 +91,7 @@ class LapController{
             (this.carSphere.position.x <= this.goal.x + 250 && this.carSphere.position.x >= this.goal.x - 250) &&
             (this.carSphere.position.z <= this.goal.z + 25 && this.carSphere.position.z >= this.goal.z - 25)){
             this.lap++;
+            if (this.lap === 3) this.endTime = Date.now() - this.startTime;
             console.log("lap " + this.lap + " reached");
             for(let i = 0; i < this.checkpoints.length; i++){
                 this.checkpoints[i] = false;

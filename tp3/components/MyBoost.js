@@ -22,12 +22,6 @@ class MyBoost {
         }
         this.helper.add(this.mesh);
 
-        // add sphere helper
-        const geometry = new THREE. SphereGeometry(this.radius);
-        const material = new THREE.MeshBasicMaterial({color: 0x00ff00});
-        material.wireframe = true;
-        this.helper.add(new THREE.Mesh(geometry, material));
-
         // set position
         let x = this.position.x;
         let y = this.position.y;
