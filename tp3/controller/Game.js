@@ -177,7 +177,7 @@ class Game{
 		this.carController = new CarController(this.playerCar.car, this.playerCar.carWheels, this.track, this.playerStats[0], this.playerStats[1], this.playerStats[2]);
 		this.itemsController = new ItemsController(this.boosts, this.obstacles);
 		this.collisionSystem = new CollisionController(this.carController, this.itemsController, this.playerCar, this.enemyCar, this.boosts, this.obstacles);
-		this.automaticCarController = new AutomaticCarController(this.app, this.enemyCar.car, this.enemyCar.carWheels, this.track, this.enemyStats[0]);
+		this.automaticCarController = new AutomaticCarController(this.app, this.enemyCar.car, this.enemyCar.carWheels, this.track, this.enemyStats[0], this.characters[1]);
 		this.lapController = new LapController(this.app, this.playerCar, this.track);
         this.lapController2 = new LapController(this.app, this.enemyCar, this.track);
 	}
