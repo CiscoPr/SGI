@@ -132,12 +132,9 @@ Here is a quick recap of the of the project in the form of screenshots:
 </figure>
 
 
-
-
 ## Issues/Problems
 
-- The GUI is not as complete as we wished for: we tried to implement methods that could change the Bump Scale of certain materials (which had associated bump maps). However, this was not possible due to both time restrictions and the complexity of this process;
-- Although we don't have manual mipmaps on the e XML scene, we still created methods that take care of them, in case they exist;
-- It was a bit complex to implement textures texlength_s and texlength_t. However, we did it to every material that objects with a rectangle primitive, due to its simplicity in comparison to the other kinds of objects;
-- Initially, we had an issue with the rotation angles: we were converting them into degrees. However, this issue has already been corrected in the final version of this project.
-- Finally, to implement the sprite, we changed and added an attribute to the material descriptor so it could apply transparency to the PNG's image format. If necessary, this attribute should be removed from both the MySceneData parser and the XML file.
+- Depending on the machine, the program sometimes can crash the browser due to the amount of models;
+- The shaders could be fully implemented, although this was not the case for the reasons already mentioned above;
+- The scene could be more improved with more objects than the models;
+- Movement could probably be smoother than it is, although we consider already to be good enough for a racing game.
