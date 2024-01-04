@@ -57,14 +57,14 @@ class ItemsController {
     }
 
     addObstacle(obstacle) {
+        console.log("portugal", obstacle);
         this.obstacles.push(obstacle);
+        console.log(this.obstacles);
         this.obstacleTimers.push(0);
     }
 
-    addBoost(boost) {
-        this.boosts.push(boost);
-        this.boostTimers.push(0);
-    }
+
+    updateClock() { this.lastTime = Date.now(); }
 
     update() {
         this.updateBoosts();

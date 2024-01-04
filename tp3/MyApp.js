@@ -188,26 +188,6 @@ class MyApp  {
             this.activeCamera.lookAt(-7750, 0, 0);
         }
 
-        /*
-        //camera for obstacle selection
-        else if (this.contents && (!this.contents.mainController.obstacleSelectorFlag)) {
-            this.activeCamera.position.x = -7750
-            this.activeCamera.position.y = 700;
-            this.activeCamera.position.z = 1200
-
-            this.activeCamera.lookAt(-7750, 0, 1200);
-        }
-
-        //camera for obstacle placement
-        else if (this.contents && (!this.contents.mainController.obstaclePlacerFlag)) {
-            this.activeCamera.position.x = 0
-            this.activeCamera.position.y = 11757.087466420322;
-            this.activeCamera.position.z = 500
-
-            this.activeCamera.lookAt(0, 0, 500);
-        }
-        */
-
         else if(this.contents && (this.contents.mainController.phaseCounter == 5) && this.contents.mainController.game.playerCar.car != null){
             const car = this.contents.mainController.game.playerCar.car;
             const carPosition = car.position;
@@ -222,6 +202,25 @@ class MyApp  {
             const lookAtPosition = carPosition.clone().add(lookAtOffset);
             this.controls.target.lerp(lookAtPosition, 0.5); // Smoothly move the target
             this.controls.update();
+        }
+
+        
+        //camera for obstacle selection
+        else if (this.contents && (!this.contents.mainController.obstacleSelectorFlag) && this.contents.mainController.phaseCounter == 7) {
+            this.activeCamera.position.x = -7750
+            this.activeCamera.position.y = 700;
+            this.activeCamera.position.z = 1200
+
+            this.activeCamera.lookAt(-7750, 0, 1200);
+        }
+
+        //camera for obstacle placement
+        else if (this.contents && (!this.contents.mainController.obstaclePlacerFlag) && this.contents.mainController.phaseCounter == 9) {
+            this.activeCamera.position.x = 0
+            this.activeCamera.position.y = 11757.087466420322;
+            this.activeCamera.position.z = 500
+
+            this.activeCamera.lookAt(0, 0, 500);
         }
 
         console.log("activeCameraName: ", this.activeCamera.position.y)

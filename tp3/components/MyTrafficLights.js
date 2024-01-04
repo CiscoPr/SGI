@@ -5,7 +5,7 @@ class MyTrafficLights  {
     constructor() {
         this.trafficLight = this.createTrafficLight();
         this.lastTime = null;
-        this.countdown = 20000;
+        this.countdown = 10000;
     }
 
     createTrafficLight() {

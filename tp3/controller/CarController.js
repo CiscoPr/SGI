@@ -46,6 +46,7 @@ class CarController {
     }
 
     handleKeyDown(event) {
+        if (this.pause) return;
         switch (event.key) {
             case 'w':
                 this.accelerating = true;
@@ -70,6 +71,7 @@ class CarController {
     }
 
     handleKeyUp(event) {
+        if (this.pause) return;
         switch (event.key) {
             case 'w':
                 this.accelerating = false;

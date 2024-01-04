@@ -18,12 +18,15 @@ class CollisionController {
         if(boost) {
             this.carControler.boostCollision(boost.type);
             this.itemsControler.deactivateBoost(boost);
-        } 
+            return true;
+        }
         
+        return false;
     }
 
     checkObstacles() {
         let chassisCenter = this.playerCar.getChassisCenter();
+        console.log(this.obstacles);
         let obstacle = this.obstacles.find(obstacle => 
             (obstacle.position.distanceTo(chassisCenter) < obstacle.radius + this.playerCar.radius) && obstacle.active);
 
@@ -46,9 +49,9 @@ class CollisionController {
     }
 
     checkCollisions() {
-        this.checkBoosts();
         this.checkObstacles();
         this.checkEnemy();
+        return this.checkBoosts();
     }
 
     checkMapBounds() {
@@ -63,8 +66,8 @@ class CollisionController {
 
 
     update() {
-        this.checkCollisions();
         this.checkMapBounds();
+        return this.checkCollisions();
     }
 
 }

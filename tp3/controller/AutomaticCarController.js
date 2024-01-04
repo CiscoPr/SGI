@@ -8,6 +8,7 @@ class AutomaticCarController {
         this.wheels = wheels;
         this.track = track;
         this.speed = 0;
+        this.defaultAcceleration = acceleration;
         this.acceleration = acceleration;
 
         this.turnSpeed = 0;
@@ -678,14 +679,18 @@ class AutomaticCarController {
     }
 
 
+
+
     /**
      * Start/Stop all animations
      */
     checkAnimationStateIsPause() {
-        if (this.mixerPause)
+        if (this.mixerPause) {
             this.mixer.timeScale = 0
-        else
+        }
+        else {
             this.mixer.timeScale = 1
+        }
     }
 
     /**
@@ -719,8 +724,8 @@ class AutomaticCarController {
             this.wheelController.update();
         }
 
-        //this.checkAnimationStateIsPause()
-        //this.checkTracksEnabled()
+        this.checkAnimationStateIsPause()
+        this.checkTracksEnabled()
     }
 }
 

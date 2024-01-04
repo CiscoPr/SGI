@@ -24,6 +24,7 @@ class Game{
 		this.gameState = 0; // 0 - start, 1 - game, 2 - done, 3 - pause
 		this.escapePressed = false;
 		this.cleanedUp = false;
+		this.powerUp = false;
 		window.addEventListener('keyup', (e) => {
 			if (e.key == " ") {
 				if (this.gameState == 1) {
@@ -74,7 +75,7 @@ class Game{
 	buildObstacles() { 
 		const arrayPoints = this.track.path1.getSpacedPoints(10000);
 		const randomPoints = [];
-		while (randomPoints.length < 20) {
+		while (randomPoints.length < 2) {
 			const randomIndex = Math.floor(Math.random() * arrayPoints.length);
 			if (!randomPoints.includes(randomIndex)) { randomPoints.push(randomIndex); }
 		}
@@ -166,7 +167,8 @@ class Game{
 
 
 	updateGame() {
-		if (this.collisionSystem != null) this.collisionSystem.update();
+	
+		if (this.collisionSystem != null) this.powerUp = this.collisionSystem.update();
 		if (this.itemsController != null) this.itemsController.update();
 		if (this.hud != null) this.hud.update(this.app.activeCamera, false);
 		if (this.trafficLights != null) this.trafficLights.update(this.app.scene);
@@ -174,11 +176,14 @@ class Game{
 
 
 		if (this.carController != null) {
+			this.carController.pause = false;
 			this.carController.update();
 			this.lapController.update();
 		}
 
+		
 		if (this.automaticCarController != null) {
+			this.automaticCarController.mixerPause = false;
 			this.automaticCarController.update();
 			this.lapController2.update();
 		}
@@ -192,6 +197,18 @@ class Game{
 	pause() {
 		if (this.hud != null) this.hud.update(this.app.activeCamera, (this.gameState == 3), true);
 		this.carController.updateClock();
+		this.carController.pause = true;
+		this.itemsController.updateClock();
+		this.automaticCarController.mixerPause = true;
+		this.automaticCarController.update();
+	}
+
+	placerPause() { 
+		this.carController.updateClock();
+		this.carController.pause = true;
+		this.itemsController.updateClock();
+		this.automaticCarController.mixerPause = true;
+		this.automaticCarController.update();
 	}
 
 	update() {
@@ -215,6 +232,8 @@ class Game{
 
 			return;
 		}
+
+		if (this.powerUp) {this.placerPause(); return;}
 
 		if (this.gameState == 0) {
 			this.updateStartGame();
