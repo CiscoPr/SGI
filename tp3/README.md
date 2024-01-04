@@ -42,7 +42,7 @@ We mentioned many interactions on these previous sections as well as the user ma
   <figcaption align="center">Fig.01 - Interaction </figcaption>
 </figure>
 
-Additional notes on visual interaction: The hud besides representing textual daata, it also shows information on the players status, for instance, if the player is outside of the track, the hud will display a yellow arrow besides the speed indicator representing the slow down effect. When the player catchs a speed boost power-up, the hud will display a green arrow besides the speed indicator representing the speed boost effect. The hud also displays a timer which is used to represent the time left for the power-up or obstacle effect to end.
+Additional notes on visual interaction: The hud besides representing textual data, it also shows information on the players status, for instance, if the player is outside of the track, the hud will display a yellow arrow besides the speed indicator representing the slow down effect. When the player catchs a speed boost power-up, the hud will display a green arrow besides the speed indicator representing the speed boost effect. The hud also displays a timer which is used to represent the time left for the power-up or obstacle effect to end.
 
 
 ## Screenshots
@@ -50,24 +50,82 @@ Additional notes on visual interaction: The hud besides representing textual daa
 Here is a quick recap of the of the project in the form of screenshots:
 <figure>
   <img
-  src="screenshots/tp2_v1.png"
+  src="screenshots/tp3_v1.png"
   alt="Version1">
   <figcaption align="center">Fig.01 - First Version </figcaption>
 </figure>
 
 <figure>
   <img
-  src="screenshots/tp2_v2.png"
+  src="screenshots/tp3_v2.png"
   alt="Version1">
   <figcaption align="center">Fig.02 - Second Version </figcaption>
 </figure>
 
 <figure>
   <img
-  src="screenshots/tp2_v3.png"
+  src="screenshots/tp3_mainMenu.png"
   alt="Version1">
-  <figcaption align="center">Fig.03 - Final Version </figcaption>
+  <figcaption align="center">Fig.03 - Final Version's main menu </figcaption>
 </figure>
+
+<figure>
+  <img
+  src="screenshots/tp3_inputMenu.png"
+  alt="Version1">
+  <figcaption align="center">Fig.03 - Final Version's input menu </figcaption>
+</figure>
+
+<figure>
+  <img
+  src="screenshots/tp3_carSelec.png"
+  alt="Version1">
+  <figcaption align="center">Fig.03 - Final Version's player's car selection </figcaption>
+</figure>
+
+
+<figure>
+  <img
+  src="screenshots/tp3_enemySelec.png"
+  alt="Version1">
+  <figcaption align="center">Fig.03 - Final Version's adversary's car selection </figcaption>
+</figure>
+
+<figure>
+  <img
+  src="screenshots/tp3_obsSelec.png"
+  alt="Version1">
+  <figcaption align="center">Fig.03 - Final Version's obstacle selection </figcaption>
+</figure>
+
+<figure>
+  <img
+  src="screenshots/tp3_obsPlacer.png"
+  alt="Version1">
+  <figcaption align="center">Fig.03 - Final Version's obstacle's placer </figcaption>
+</figure>
+
+<figure>
+  <img
+  src="screenshots/tp3_raceStart.png"
+  alt="Version1">
+  <figcaption align="center">Fig.03 - Final Version's beginning of race </figcaption>
+</figure>
+
+<figure>
+  <img
+  src="screenshots/tp3_midrace.png"
+  alt="Version1">
+  <figcaption align="center">Fig.03 - Final Version's during the race out of the tracks </figcaption>
+</figure>
+
+<figure>
+  <img
+  src="screenshots/tp3_raceEnd.png"
+  alt="Version1">
+  <figcaption align="center">Fig.03 - Final Version's end of race with results </figcaption>
+</figure>
+
 
 
 
