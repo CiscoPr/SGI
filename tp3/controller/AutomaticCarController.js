@@ -27,32 +27,32 @@ class AutomaticCarController {
         this.counter = 0;
 
         this.keyPoints = [
-            new THREE.Vector3(4000, 25, 0),
-            new THREE.Vector3(4100, 25, 1000),
-            new THREE.Vector3(4200, 25, 2000),
-            new THREE.Vector3(4300, 25, 3000),
+            new THREE.Vector3(3800, 25, 0),
+            new THREE.Vector3(3900, 25, 1000),
+            new THREE.Vector3(4000, 25, 2000),
+            new THREE.Vector3(4100, 25, 3000),
             new THREE.Vector3(4400, 25, 4000),
             new THREE.Vector3(4400, 25, 5000),
             new THREE.Vector3(4000, 25, 6000),
             new THREE.Vector3(3500, 25, 6300),
-            new THREE.Vector3(3000, 25, 6400),
-            new THREE.Vector3(2000, 25, 6400),
-            new THREE.Vector3(1000, 25, 6300),
-            new THREE.Vector3(0, 25, 6150),
-            new THREE.Vector3(-1000, 25, 6050),
-            new THREE.Vector3(-1500, 25, 6000),
+            new THREE.Vector3(3000, 25, 6200),
+            new THREE.Vector3(2000, 25, 6200),
+            new THREE.Vector3(1000, 25, 6200),
+            new THREE.Vector3(0, 25, 6200),
+            new THREE.Vector3(-1000, 25, 6000),
+            new THREE.Vector3(-1500, 25, 6100),
             new THREE.Vector3(-2500, 25, 6100),
             new THREE.Vector3(-3500, 25, 6200),
             new THREE.Vector3(-4000, 25, 6000),
-            new THREE.Vector3(-4450, 25, 5000),
-            new THREE.Vector3(-4500, 25, 4000),
-            new THREE.Vector3(-4450, 25, 3000),
+            new THREE.Vector3(-4600, 25, 5000),
+            new THREE.Vector3(-4650, 25, 4000),
+            new THREE.Vector3(-4550, 25, 3000),
             new THREE.Vector3(-4000, 25, 2000),
             new THREE.Vector3(-3500, 25, 1750),
             new THREE.Vector3(-3000, 25, 1800),
-            new THREE.Vector3(-2000, 25, 1900),
-            new THREE.Vector3(-1000, 25, 2000),
-            new THREE.Vector3(0, 25, 2100),
+            new THREE.Vector3(-2000, 25, 1600),
+            new THREE.Vector3(-1000, 25, 1810),
+            new THREE.Vector3(0, 25, 2000),
             new THREE.Vector3(1000, 25, 2200),
             new THREE.Vector3(1500, 25, 2250),
             new THREE.Vector3(2000, 25, 2000),
@@ -63,8 +63,8 @@ class AutomaticCarController {
             new THREE.Vector3(1500, 25, -1250),
             new THREE.Vector3(1000, 25, -1200),
             new THREE.Vector3(0, 25, -1100),
-            new THREE.Vector3(-1000, 25, -1000),
-            new THREE.Vector3(-2000, 25, -900),
+            new THREE.Vector3(-1000, 25, -1250),
+            new THREE.Vector3(-2000, 25, -1100),
             new THREE.Vector3(-3000, 25, -800),
             new THREE.Vector3(-4000, 25, -700),
             new THREE.Vector3(-5000, 25, -1000),
@@ -77,19 +77,29 @@ class AutomaticCarController {
             new THREE.Vector3(-2000, 25, -5700),
             new THREE.Vector3(-1000, 25, -5700),
             new THREE.Vector3(0, 25, -5600),
-            new THREE.Vector3(1000, 25, -5500),
-            new THREE.Vector3(2000, 25, -5350),
-            new THREE.Vector3(3000, 25, -5000),
-            new THREE.Vector3(3500, 25, -4500),
+            new THREE.Vector3(1000, 25, -5300),
+            new THREE.Vector3(2000, 25, -5150),
+            new THREE.Vector3(3000, 25, -4700),
+            new THREE.Vector3(3500, 25, -4400),
             new THREE.Vector3(4000, 25, -3500),
             new THREE.Vector3(4000, 25, -2500),
             new THREE.Vector3(4000, 25, -2000),
-            new THREE.Vector3(4000, 25, -1000),
-            new THREE.Vector3(4000, 25, 0),
+            new THREE.Vector3(3850, 25, -1000),
+            new THREE.Vector3(3800, 25, 0),
           ];
 
           this.init();
+
+          window.addEventListener('keydown', (e) => this.handleKeyDown(e));
     }
+
+    handleKeyDown(event) {
+        switch (event.key) {
+            case 's':
+                this.mixerPause = !this.mixerPause
+                break;
+        }}
+
 
 
     init(){
@@ -162,20 +172,20 @@ class AutomaticCarController {
         )
 
         const yAxis = new THREE.Vector3(0, 1, 0)
-        const q1 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(0))
+        const q1 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(5))
         const q2 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(5))
         const q3 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(5))
         const q4 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(5))
-        const q5 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(5))
-        const q6 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-10))
-        const q7 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-35))
-        const q8 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-85))
-        const q9 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-75))
+        const q5 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(15))
+        const q6 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-20))
+        const q7 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-25))
+        const q8 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-95))
+        const q9 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-105))
         const q10 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-95))
         const q11 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-95))
         const q12 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-95))
         const q13 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-95))
-        const q14 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-90))
+        const q14 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-105))
         const q15 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-85))
         const q16 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-85))
         const q17 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-150))
@@ -367,7 +377,7 @@ class AutomaticCarController {
     update() {
         const currentCarAngle = this.model.rotation.y;
         const delta = this.clock.getDelta()
-        this.mixer.update(delta/1.5)
+        this.mixer.update(delta/(this.acceleration) *1.5)
         this.counter += 1;
         const nextCarAngle = this.model.rotation.y;
         if(this.counter >= 20){
@@ -375,7 +385,7 @@ class AutomaticCarController {
             this.wheelController.update();
         }
 
-        //this.checkAnimationStateIsPause()
+        this.checkAnimationStateIsPause()
         //this.checkTracksEnabled()
     }
 }

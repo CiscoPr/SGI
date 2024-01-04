@@ -194,7 +194,7 @@ class MyApp  {
         }
         */
 
-        /*
+
         if (this.contents && this.contents.automaticCarController) {
             const car = this.contents.automaticCarController.model;
             const carPosition = car.position;
@@ -213,7 +213,7 @@ class MyApp  {
             this.controls.target.lerp(lookAtPosition, 1.0); // Smoothly move the target
             this.controls.update();
         }
-        */
+        
     }
 
     /**
