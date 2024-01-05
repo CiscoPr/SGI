@@ -160,6 +160,7 @@ class MyApp  {
                 this.controls.object = this.activeCamera
             }
         }
+        
 
         //spinning camera in menu
         if(this.contents && (!this.contents.mainController.mainMenuFlag) || (!this.contents.mainController.inputMenuFlag)){
@@ -216,11 +217,11 @@ class MyApp  {
 
         //camera for obstacle placement
         else if (this.contents && (!this.contents.mainController.obstaclePlacerFlag) && this.contents.mainController.phaseCounter == 9) {
-            this.activeCamera.position.x = 0
-            this.activeCamera.position.y = 11757.087466420322;
-            this.activeCamera.position.z = 500
+            this.activeCamera.position.x = -0.0003851978972425393
+            this.activeCamera.position.y = 11819.149104025764;
+            this.activeCamera.position.z = 0
 
-            this.activeCamera.lookAt(0, 0, 500);
+            this.activeCamera.lookAt(0, 0, 0);
         }
 
         else if (this.contents && (this.contents.mainController.phaseCounter == 11)) {

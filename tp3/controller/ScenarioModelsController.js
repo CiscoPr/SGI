@@ -1,13 +1,15 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-
+import { MyShader } from '../components/MyShader.js';
 class ScenarioModelsController {
     constructor(scene) {
         this.scene = scene;
+      this.shaderMesh = null;
         this.build();
     }
 
-    build(){
+  build() {
+      /*
         const loader = new GLTFLoader().setPath('models/');
 
         loader.load('buildings.glb', async (gltf) => {
@@ -50,5 +52,32 @@ class ScenarioModelsController {
             this.scene.add(model2);
 
           });
+          */
+    const planeGeometry = new THREE.PlaneGeometry(20, 15, 60, 120);
+    const planeMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+    const texture = new THREE.TextureLoader().load('scene/textures/elements/terrain.png');
+    const displaceMap = new THREE.TextureLoader().load('scene/textures/elements/terrain_displace.png');
+    const bumpScale = -0.5;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set(120, 120);
+    planeMaterial.map = texture;
+    this.shadermesh = new MyShader(this.app, "shader", "no description provided", "shaders/buildings1.vert", "shaders/buildings1.frag", {
+					uSampler1: { type: 'sampler2D', value: displaceMap },
+          uSampler2: { type: 'sampler2D', value: texture },
+          bumpScale: { type: 'float', value: bumpScale },
+				});
+
+    
+    const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+
+    setTimeout(() => {
+      plane.material = this.shadermesh.material;
+      plane.material.needsUpdate = true;
+      plane.position.set(0, 10, 0);
+      plane.rotation.x = -Math.PI / 2;
+      plane.scale.set(1500, 1500, 1500);
+      this.scene.add(plane);
+
+    }, 3000);
     }
 } export { ScenarioModelsController };

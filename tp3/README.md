@@ -11,6 +11,7 @@
 ## Project information
 
 - In this project, we created a 3d fantasy racing game based on the mechanics of the famous game Mario Kart with a Final Fantasy theme. The user is first greeted with a menu where he inputs his name and chooses the character he wants to play with. After that, the user is taken to the game scene where he can race against another character. The game consists of 3 laps and the user can control the character with the keys (WASD). The user can also pause the game by pressing the spacebar or return to the menu by pressing escape. When the game is over, the user is taken to the game-over scene where he can see his time, the result of the match, and the difficulty.
+- The used models were downloaded in the following website: [Models Resource](https://www.models-resource.com/)
 
 ## Game elements
 
@@ -33,7 +34,7 @@ The game implements the following mechanics:
 
 **SpriteSheets**: To display text, such as in the hud, the user's name, or in the game over scene, we used sprite sheets. The sprite sheets are loaded using a predefined texture and we change the text by manipulating the uv attribute of the object's geometry so that we can map the specified letter.
 
-**Shaders**: We implement shaders on the obstacle animation, by changing the visual object radius(not the actual radius used for the collisions). We tried implementing the shaders on the terrain, but we did not have any more time, therefore we tried to mimic the shaders application by using the displacement map. The attempt can be confirmed on the shaders folder for the buildings.
+**Shaders**: We implement shaders on the obstacle animation, by changing the visual object radius(not the actual radius used for the collisions). We  also implemented shaders on the terrain successfully, although we first tried to have this effect with Three.js **displacementMap()** method. We then discarded this option and implemented it with shaders.
 
 **Particle System**: We implemented a particle system to simulate fireworks which were used on the game over scene. The particle system is composed of a group of particles that are randomly generated and have a limited lifespan. After a particle reaches the end of its lifespan it radially explodes in many others which fade away.
 
@@ -135,6 +136,6 @@ Here is a quick recap of the of the project in the form of screenshots:
 ## Issues/Problems
 
 - Depending on the machine, the program sometimes can crash the browser due to the amount of models;
-- The shaders could be fully implemented, although this was not the case for the reasons already mentioned above;
+- The secondary shaders mentioned in the requirements could have been implemented, but, due to time restrictions it was impossible for us to do it.
 - The scene could be more improved with more objects than the models;
 - Movement could probably be smoother than it is, although we consider already to be good enough for a racing game.
