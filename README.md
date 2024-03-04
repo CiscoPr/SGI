@@ -257,5 +257,13 @@ Here is a quick recap of the of the project in the form of screenshots:
 - Depending on the machine, the program sometimes can crash the browser due to the amount of models;
 - The secondary shaders mentioned in the requirements could have been implemented, but, due to time restrictions it was impossible for us to do it.
 - The scene could be more improved with more objects than the models;
-- Movement could probably be smoother than it is, although we consider already to be good enough for a racing game.
+- Movement could probably be smoother than it is, although we consider already to be good enough for a racing game;
+- The background music sometimes bugs out.
 
+## Future work
+- Fix the issues presented above
+- Add more characters, stages and vehicles
+- Polish the game elements
+- Change the game logic so it can have a smoother flow and gameplay
+
+**NOTE:** as mentioned above, none of the character or vehicle models belong to us. They are all from other games such as Final Fantasy VII or Sonic and SEGA All-Stars Racing. The background music is "Fight On!", composed by Nobuo Uematsu, on the game Final Fantasy VII. Again, we don't own it either :)
